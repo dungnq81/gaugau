@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5e9523ccedff95962f6abc075b986201",
+    "content-hash": "42dd2b54ef2526c093c1897d9c61ed60",
     "packages": [
         {
             "name": "composer/installers",
@@ -1125,6 +1125,24 @@
             "homepage": "https://wordpress.org/plugins/akismet/"
         },
         {
+            "name": "wpackagist-plugin/fluent-smtp",
+            "version": "2.2.83",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/fluent-smtp/",
+                "reference": "tags/2.2.83"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/fluent-smtp.2.2.83.zip"
+            },
+            "require": {
+                "composer/installers": "^1.0 || ^2.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/fluent-smtp/"
+        },
+        {
             "name": "wpackagist-theme/twentytwentyfive",
             "version": "1.0",
             "source": {
@@ -2072,8 +2090,7 @@
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
-        "php": ">=8.2",
-        "ext-mysqli": "*"
+        "php": ">=8.2"
     },
     "platform-dev": [],
     "plugin-api-version": "2.6.0"

@@ -41,8 +41,8 @@
     "roots/wp-config": "1.0.0",
     "roots/wp-password-bcrypt": "1.2.0",
     "wpackagist-theme/twentytwentyfive": "^1.0",
-    "ext-mysqli": "*",
-    "wpackagist-plugin/akismet": "^5.3"
+    "wpackagist-plugin/akismet": "^5.3",
+    "wpackagist-plugin/fluent-smtp": "^2.2"
   },
   "require-dev": {
     "roave/security-advisories": "dev-latest",
