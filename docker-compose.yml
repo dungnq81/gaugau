@@ -1,0 +1,81 @@
+version: '3.8'
+
+services:
+    web:
+        # Build the 'web' service from the Dockerfile in the current directory
+        build: .
+        container_name: apache_server
+
+        # Map port 8080 on the host to port 80 in the container
+        ports:
+            - "8080:80"
+
+        # Mount volumes for persistent data and configuration
+        volumes:
+            - ./src:/var/www/html
+            - ./docker/config/apache2:/etc/apache2/sites-available
+            - ./docker/config/php/php.ini:/etc/php/8.2/apache2/conf.d/php.ini
+
+        # Set environment variables for Apache
+        environment:
+            - APACHE_LOG_DIR=/var/log/apache2
+
+        # Restart policy for the container
+        restart: always
+
+        # Connect the 'web' service to a custom network
+        networks:
+            - app-network
+
+        # Specify that 'web' service should start only after 'db' service is ready
+        depends_on:
+            - db
+
+    db:
+        image: mysql:8.0
+        container_name: mysql8
+
+        # MySQL environment variables for database initialization
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: bedrock
+            MYSQL_USER: dbuser
+            MYSQL_PASSWORD: dbuser
+
+        # Volume to persist MySQL data
+        volumes:
+            - ./docker/data/mysql:/var/lib/mysql
+
+        # Expose MySQL port 3306 on host
+        ports:
+            - "3306:3306"
+
+        # Connect the 'db' service to a custom network
+        networks:
+            - app-network
+
+    phpmyadmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: phpmyadmin
+
+        # Environment variables for phpMyAdmin setup
+        environment:
+            PMA_HOST: db
+            MYSQL_ROOT_PASSWORD: root
+
+        # Map port 8081 on the host to port 80 in the container for phpMyAdmin access
+        ports:
+            - "8081:80"
+
+        # Start phpMyAdmin only after the 'db' service is ready
+        depends_on:
+            - db
+
+        # Connect the 'phpmyadmin' service to a custom network
+        networks:
+            - app-network
+
+# Define a custom bridge network for all services
+networks:
+    app-network:
+        driver: bridge
