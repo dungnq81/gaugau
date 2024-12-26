@@ -115,8 +115,6 @@ Config::define( 'NONCE_SALT', env( 'NONCE_SALT' ) );
 /**
  * Custom Settings
  */
-Config::define( 'AUTOMATIC_UPDATER_DISABLED', env( 'AUTOMATIC_UPDATER_DISABLED' ) ?? false );
-Config::define( 'DISABLE_WP_CRON', env( 'DISABLE_WP_CRON' ) ?? false );
 
 // Disable the plugin and theme file editor in the admin
 Config::define( 'DISALLOW_FILE_EDIT', true );
@@ -124,19 +122,13 @@ Config::define( 'DISALLOW_FILE_EDIT', true );
 // Disable plugin and theme updates and installation from the admin
 Config::define( 'DISALLOW_FILE_MODS', true );
 
-// Limit the number of post-revisions
+Config::define( 'WP_AUTO_UPDATE_CORE', env( 'WP_AUTO_UPDATE_CORE' ) ?? false );
+Config::define( 'AUTOMATIC_UPDATER_DISABLED', env( 'AUTOMATIC_UPDATER_DISABLED' ) ?? false );
+
+Config::define( 'DISABLE_WP_CRON', env( 'DISABLE_WP_CRON' ) ?? false );
 Config::define( 'WP_POST_REVISIONS', env( 'WP_POST_REVISIONS' ) ?? true );
-
-// Disable script concatenation
-Config::define( 'CONCATENATE_SCRIPTS', false );
-
-/**
- * Debugging Settings
- */
-Config::define( 'WP_DEBUG_DISPLAY', false );
-Config::define( 'WP_DEBUG_LOG', false );
-Config::define( 'SCRIPT_DEBUG', false );
-ini_set( 'display_errors', '0' );
+Config::define( 'EMPTY_TRASH_DAYS', env( 'EMPTY_TRASH_DAYS' ) ?? 15 );
+Config::define( 'AUTOSAVE_INTERVAL', env( 'AUTOSAVE_INTERVAL' ) ?? 120 );
 
 /** PHP Memory */
 Config::define( 'WP_MEMORY_LIMIT', env( 'WP_MEMORY_LIMIT' ) ?? '512M' );
@@ -146,13 +138,22 @@ Config::define( 'WP_MAX_MEMORY_LIMIT', env( 'WP_MAX_MEMORY_LIMIT' ) ?? '512M' );
 Config::define( 'FORCE_SSL_LOGIN', env( 'FORCE_SSL_LOGIN' ) ?? false );
 Config::define( 'FORCE_SSL_ADMIN', env( 'FORCE_SSL_ADMIN' ) ?? false );
 
-/** Core update */
-Config::define( 'WP_AUTO_UPDATE_CORE', env( 'WP_AUTO_UPDATE_CORE' ) ?? false );
+// Disable script concatenation
+Config::define( 'CONCATENATE_SCRIPTS', false );
 
 /** DISABLED_PLUGINS */
 Config::define( 'DISABLED_PLUGINS', [
 	//'wp-rocket/wp-rocket.php'
 ] );
+
+/**
+ * Debugging Settings
+ */
+Config::define( 'WP_DEBUG_DISPLAY', false );
+Config::define( 'WP_DEBUG_LOG', false );
+Config::define( 'SCRIPT_DEBUG', false );
+
+ini_set( 'display_errors', '0' );
 
 /**
  * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer
@@ -162,6 +163,11 @@ if ( isset( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) && $_SERVER['HTTP_X_FORWARDED_P
 	$_SERVER['HTTPS'] = 'on';
 }
 
+/** session.cookie_secure */
+if ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ) {
+	@ini_set( 'session.cookie_secure', '1' );
+}
+
 $env_config = __DIR__ . '/environments/' . WP_ENV . '.php';
 
 if ( file_exists( $env_config ) ) {
@@ -169,11 +175,6 @@ if ( file_exists( $env_config ) ) {
 }
 
 Config::apply();
-
-/** session.cookie_secure */
-if ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ) {
-	@ini_set( 'session.cookie_secure', '1' );
-}
 
 /** FS_METHOD */
 if ( ! defined( 'FS_METHOD' ) ) {

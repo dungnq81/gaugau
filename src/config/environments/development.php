@@ -16,6 +16,8 @@ Config::define( 'WP_DISABLE_FATAL_ERROR_HANDLER', true );
 Config::define( 'SCRIPT_DEBUG', true );
 Config::define( 'DISALLOW_INDEXING', true );
 
+#Config::define( 'WP_ALLOW_REPAIR', true );
+
 ini_set( 'display_errors', '1' );
 
 // Enable plugin and theme updates and installation from the admin
