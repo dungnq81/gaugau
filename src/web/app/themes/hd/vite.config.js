@@ -48,6 +48,7 @@ const jsFiles = [
     'components/social-share',
 
     // (site)
+    'workbox',
     'swiper2',
     'woocommerce2',
     'app2',

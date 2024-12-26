@@ -74,8 +74,34 @@ if ( ! function_exists( '__critical_css' ) ) {
 
 // -----------------------------------------------
 
+if ( ! function_exists( '__external_custom' ) ) {
+	add_action( 'wp_head', '__external_custom', 98 );
+
+	function __external_custom(): void {
+        // Manifest
+		$manifest_url = Helper::home( 'manifest.json' );
+		if ( file_exists( $manifest_url ) ) {
+			echo '<link rel="manifest" href="' . esc_url( $manifest_url ) . '">';
+		}
+
+		// Theme color
+		$theme_color = Helper::getThemeMod( 'theme_color_setting' );
+		if ( $theme_color ) {
+			echo '<meta name="theme-color" content="' . esc_attr( $theme_color ) . '" />';
+		}
+
+		// Fb app_id
+		$fb_appid = Helper::getThemeMod( 'social_fb_setting' );
+		if ( $fb_appid ) {
+			echo '<meta property="fb:app_id" content="' . esc_attr( $fb_appid ) . '" />';
+		}
+	}
+}
+
+// -----------------------------------------------
+
 if ( ! function_exists( '__external_fonts' ) ) {
-	add_action( 'wp_head', '__external_fonts', 12 );
+	add_action( 'wp_head', '__external_fonts', 99 );
 
 	function __external_fonts(): void {
 		ob_start();
@@ -173,22 +199,22 @@ if ( ! function_exists( '_masthead_top_header' ) ) {
 		$top_header_container = Helper::getThemeMod( 'top_header_container_setting' );
 
 		if ( $top_header_cols > 0 ) :
-        ?>
-        <div id="top-header" class="top-header">
-            <?php
-            echo \_toggle_container_open( $top_header_container );
+			?>
+            <div id="top-header" class="top-header">
+				<?php
+				echo \_toggle_container_open( $top_header_container );
 
-            for ( $i = 1; $i <= $top_header_cols; $i ++ ) :
-                if ( is_active_sidebar( 'top-header-' . $i . '-sidebar' ) ) :
-                    echo '<div class="cell cell-' . $i . '">';
-                    dynamic_sidebar( 'top-header-' . $i . '-sidebar' );
-                    echo '</div>';
-                endif;
-            endfor;
+				for ( $i = 1; $i <= $top_header_cols; $i ++ ) :
+					if ( is_active_sidebar( 'top-header-' . $i . '-sidebar' ) ) :
+						echo '<div class="cell cell-' . $i . '">';
+						dynamic_sidebar( 'top-header-' . $i . '-sidebar' );
+						echo '</div>';
+					endif;
+				endfor;
 
-            echo \_toggle_container_close( $top_header_container );
-            ?>
-        </div><!-- #top-header -->
+				echo \_toggle_container_close( $top_header_container );
+				?>
+            </div><!-- #top-header -->
 		<?php
 		endif;
 	}
@@ -204,22 +230,22 @@ if ( ! function_exists( '_masthead_header' ) ) {
 		$header_container = Helper::getThemeMod( 'header_container_setting' );
 
 		if ( $header_cols > 0 ) :
-        ?>
-        <div id="inside-header" class="inside-header">
-            <?php
-            echo \_toggle_container_open( $header_container );
+			?>
+            <div id="inside-header" class="inside-header">
+				<?php
+				echo \_toggle_container_open( $header_container );
 
-            for ( $i = 1; $i <= $header_cols; $i ++ ) :
-                if ( is_active_sidebar( 'header-' . $i . '-sidebar' ) ) :
-                    echo '<div class="cell cell-' . $i . '">';
-                    dynamic_sidebar( 'header-' . $i . '-sidebar' );
-                    echo '</div>';
-                endif;
-            endfor;
+				for ( $i = 1; $i <= $header_cols; $i ++ ) :
+					if ( is_active_sidebar( 'header-' . $i . '-sidebar' ) ) :
+						echo '<div class="cell cell-' . $i . '">';
+						dynamic_sidebar( 'header-' . $i . '-sidebar' );
+						echo '</div>';
+					endif;
+				endfor;
 
-            echo \_toggle_container_close( $header_container );
-            ?>
-        </div><!-- #inside-header -->
+				echo \_toggle_container_close( $header_container );
+				?>
+            </div><!-- #inside-header -->
 		<?php
 		endif;
 	}
@@ -235,22 +261,22 @@ if ( ! function_exists( '_masthead_bottom_header' ) ) {
 		$bottom_header_container = Helper::getThemeMod( 'bottom_header_container_setting' );
 
 		if ( $bottom_header_cols > 0 ) :
-        ?>
-        <div id="bottom-header" class="bottom-header">
-            <?php
-            echo \_toggle_container_open( $bottom_header_container );
+			?>
+            <div id="bottom-header" class="bottom-header">
+				<?php
+				echo \_toggle_container_open( $bottom_header_container );
 
-            for ( $i = 1; $i <= $bottom_header_cols; $i ++ ) :
-                if ( is_active_sidebar( 'bottom-header-' . $i . '-sidebar' ) ) :
-                    echo '<div class="cell cell-' . $i . '">';
-                    dynamic_sidebar( 'bottom-header-' . $i . '-sidebar' );
-                    echo '</div>';
-                endif;
-            endfor;
+				for ( $i = 1; $i <= $bottom_header_cols; $i ++ ) :
+					if ( is_active_sidebar( 'bottom-header-' . $i . '-sidebar' ) ) :
+						echo '<div class="cell cell-' . $i . '">';
+						dynamic_sidebar( 'bottom-header-' . $i . '-sidebar' );
+						echo '</div>';
+					endif;
+				endfor;
 
-            echo \_toggle_container_close( $bottom_header_container );
-            ?>
-        </div><!-- #bottom-header -->
+				echo \_toggle_container_close( $bottom_header_container );
+				?>
+            </div><!-- #bottom-header -->
 		<?php
 		endif;
 	}

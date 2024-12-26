@@ -69,8 +69,6 @@ final class Optimizer {
 	 * @return void
 	 */
 	private function _optimizer(): void {
-		add_action( 'wp_head', [ $this, 'wp_head' ], 10 );
-
 		add_filter( 'script_loader_tag', [ $this, 'script_loader_tag' ], 12, 3 );
 		add_filter( 'style_loader_tag', [ $this, 'style_loader_tag' ], 12, 2 );
 
@@ -78,7 +76,6 @@ final class Optimizer {
 		add_filter( 'widget_text', 'do_shortcode' );
 		add_filter( 'widget_text', 'shortcode_unautop' );
 
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue' ], 11 );
 		add_filter( 'posts_search', [ $this, 'post_search_by_title' ], 500, 2 );
 		//add_filter( 'posts_where', [ $this, 'posts_title_filter' ], 499, 2 );
 
@@ -89,7 +86,6 @@ final class Optimizer {
 			// only front-end
 			if ( ! Helper::isLogin() ) {
 				add_action( 'wp_print_footer_scripts', [ $this, 'print_footer_scripts' ], 999 );
-				add_action( 'wp_footer', [ $this, 'deferred_scripts' ], 1000 );
 			}
 		}
 	}
@@ -97,38 +93,7 @@ final class Optimizer {
 	// ------------------------------------------------------
 
 	/**
-	 * @return void
-	 */
-	public function wp_head(): void {
-		// manifest.json
-		//echo '<link rel="manifest" href="' . Helper::home( 'manifest.json' ) . '">';
-
-		// Theme color
-		$theme_color = Helper::getThemeMod( 'theme_color_setting' );
-		if ( $theme_color ) {
-			echo '<meta name="theme-color" content="' . $theme_color . '" />';
-		}
-
-		// Fb
-		$fb_appid = Helper::getThemeMod( 'social_fb_setting' );
-		if ( $fb_appid ) {
-			echo '<meta property="fb:app_id" content="' . $fb_appid . '" />';
-		}
-	}
-
-	// ------------------------------------------------------
-
-	/**
-	 * @return void
-	 */
-	public function enqueue(): void {
-		wp_dequeue_style( 'classic-theme-styles' );
-	}
-
-	// ------------------------------------------------------
-
-	/**
-	 * Search only in post title or excerpt
+	 * Search only in post-title or excerpt
 	 *
 	 * @param $search
 	 * @param $wp_query
@@ -304,14 +269,5 @@ final class Optimizer {
 		$styles = Helper::filterSettingOptions( 'defer_style', [] );
 
 		return Helper::lazyStyleTag( $styles, $html, $handle );
-	}
-
-	// ------------------------------------------------------
-
-	/**
-	 * @return void
-	 */
-	public function deferred_scripts(): void {
-		//...
 	}
 }

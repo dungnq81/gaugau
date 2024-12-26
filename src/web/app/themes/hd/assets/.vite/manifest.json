@@ -75,6 +75,12 @@
     "src": "web/app/themes/hd/resources/js/woocommerce2.js",
     "isEntry": true
   },
+  "web/app/themes/hd/resources/js/workbox.js": {
+    "file": "js/workbox.js",
+    "name": "workbox",
+    "src": "web/app/themes/hd/resources/js/workbox.js",
+    "isEntry": true
+  },
   "web/app/themes/hd/resources/sass/admin.scss": {
     "file": "css/admin.css",
     "src": "web/app/themes/hd/resources/sass/admin.scss",

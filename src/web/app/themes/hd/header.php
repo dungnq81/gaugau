@@ -20,7 +20,8 @@
 	 * @see __wp_head - 1
      * @see __module_preload - 10
      * @see __critical_css - 11
-     * @see __external_fonts - 12
+     * @see __external_custom - 98
+     * @see __external_fonts - 99
 	 */
     wp_head();
 

@@ -73,6 +73,8 @@ final class Editor {
 	 * @return void
 	 */
 	public function editor_enqueue_scripts(): void {
+		wp_dequeue_style( 'classic-theme-styles' );
+
 		$block_editor_options = get_option( 'editor__options' );
 		$block_style_off      = $block_editor_options['block_style_off'] ?? '';
 
