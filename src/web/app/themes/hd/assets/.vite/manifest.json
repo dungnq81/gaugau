@@ -1,0 +1,108 @@
+{
+  "__vendor.js": {
+    "file": "js/_vendor.js",
+    "name": "_vendor"
+  },
+  "web/app/themes/hd/resources/js/admin2.js": {
+    "file": "js/admin2.js",
+    "name": "admin2",
+    "src": "web/app/themes/hd/resources/js/admin2.js",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/js/app2.js": {
+    "file": "js/app2.js",
+    "name": "app2",
+    "src": "web/app/themes/hd/resources/js/app2.js",
+    "isEntry": true,
+    "imports": [
+      "__vendor.js",
+      "web/app/themes/hd/resources/js/components/back-to-top.js",
+      "web/app/themes/hd/resources/js/components/lazy-loader.js",
+      "web/app/themes/hd/resources/js/components/social-share.js"
+    ]
+  },
+  "web/app/themes/hd/resources/js/components/back-to-top.js": {
+    "file": "js/back-to-top.js",
+    "name": "back-to-top",
+    "src": "web/app/themes/hd/resources/js/components/back-to-top.js",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/js/components/lazy-loader.js": {
+    "file": "js/lazy-loader.js",
+    "name": "lazy-loader",
+    "src": "web/app/themes/hd/resources/js/components/lazy-loader.js",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/js/components/modulepreload-polyfill.js": {
+    "file": "js/modulepreload-polyfill.js",
+    "name": "modulepreload-polyfill",
+    "src": "web/app/themes/hd/resources/js/components/modulepreload-polyfill.js",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/js/components/skip-link-focus.js": {
+    "file": "js/skip-link-focus.js",
+    "name": "skip-link-focus",
+    "src": "web/app/themes/hd/resources/js/components/skip-link-focus.js",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/js/components/social-share.js": {
+    "file": "js/social-share.js",
+    "name": "social-share",
+    "src": "web/app/themes/hd/resources/js/components/social-share.js",
+    "isEntry": true,
+    "imports": [
+      "__vendor.js"
+    ]
+  },
+  "web/app/themes/hd/resources/js/login.js": {
+    "file": "js/login.js",
+    "name": "login",
+    "src": "web/app/themes/hd/resources/js/login.js",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/js/swiper2.js": {
+    "file": "js/swiper2.js",
+    "name": "swiper2",
+    "src": "web/app/themes/hd/resources/js/swiper2.js",
+    "isEntry": true,
+    "imports": [
+      "__vendor.js"
+    ]
+  },
+  "web/app/themes/hd/resources/js/woocommerce2.js": {
+    "file": "js/woocommerce2.js",
+    "name": "woocommerce2",
+    "src": "web/app/themes/hd/resources/js/woocommerce2.js",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/sass/admin.scss": {
+    "file": "css/admin.css",
+    "src": "web/app/themes/hd/resources/sass/admin.scss",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/sass/app.scss": {
+    "file": "css/app.css",
+    "src": "web/app/themes/hd/resources/sass/app.scss",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/sass/editor-style.scss": {
+    "file": "css/editor-style.css",
+    "src": "web/app/themes/hd/resources/sass/editor-style.scss",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/sass/fonts.scss": {
+    "file": "css/fonts.css",
+    "src": "web/app/themes/hd/resources/sass/fonts.scss",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/sass/swiper.scss": {
+    "file": "css/swiper.css",
+    "src": "web/app/themes/hd/resources/sass/swiper.scss",
+    "isEntry": true
+  },
+  "web/app/themes/hd/resources/sass/woocommerce.scss": {
+    "file": "css/woocommerce.css",
+    "src": "web/app/themes/hd/resources/sass/woocommerce.scss",
+    "isEntry": true
+  }
+}

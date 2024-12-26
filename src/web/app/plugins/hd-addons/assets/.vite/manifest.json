@@ -3,45 +3,45 @@
     "file": "js/_vendor.js",
     "name": "_vendor"
   },
-  "wp-content/plugins/gau-addons/resources/js/admin_addons2.js": {
+  "web/app/plugins/hd-addons/resources/js/admin_addons2.js": {
     "file": "js/admin_addons2.js",
     "name": "admin_addons2",
-    "src": "wp-content/plugins/gau-addons/resources/js/admin_addons2.js",
+    "src": "web/app/plugins/hd-addons/resources/js/admin_addons2.js",
     "isEntry": true,
     "imports": [
       "__vendor.js"
     ]
   },
-  "wp-content/plugins/gau-addons/resources/js/custom_sorting.js": {
+  "web/app/plugins/hd-addons/resources/js/custom_sorting.js": {
     "file": "js/custom_sorting.js",
     "name": "custom_sorting",
-    "src": "wp-content/plugins/gau-addons/resources/js/custom_sorting.js",
+    "src": "web/app/plugins/hd-addons/resources/js/custom_sorting.js",
     "isEntry": true
   },
-  "wp-content/plugins/gau-addons/resources/js/lazyload.js": {
+  "web/app/plugins/hd-addons/resources/js/lazyload.js": {
     "file": "js/lazyload.js",
     "name": "lazyload",
-    "src": "wp-content/plugins/gau-addons/resources/js/lazyload.js",
+    "src": "web/app/plugins/hd-addons/resources/js/lazyload.js",
     "isEntry": true,
     "imports": [
       "__vendor.js"
     ]
   },
-  "wp-content/plugins/gau-addons/resources/js/recaptcha.js": {
+  "web/app/plugins/hd-addons/resources/js/recaptcha.js": {
     "file": "js/recaptcha.js",
     "name": "recaptcha",
-    "src": "wp-content/plugins/gau-addons/resources/js/recaptcha.js",
+    "src": "web/app/plugins/hd-addons/resources/js/recaptcha.js",
     "isEntry": true
   },
-  "wp-content/plugins/gau-addons/resources/js/select2.js": {
+  "web/app/plugins/hd-addons/resources/js/select2.js": {
     "file": "js/select2.js",
     "name": "select2",
-    "src": "wp-content/plugins/gau-addons/resources/js/select2.js",
+    "src": "web/app/plugins/hd-addons/resources/js/select2.js",
     "isEntry": true
   },
-  "wp-content/plugins/gau-addons/resources/sass/admin_addons.scss": {
+  "web/app/plugins/hd-addons/resources/sass/admin_addons.scss": {
     "file": "css/admin_addons.css",
-    "src": "wp-content/plugins/gau-addons/resources/sass/admin_addons.scss",
+    "src": "web/app/plugins/hd-addons/resources/sass/admin_addons.scss",
     "isEntry": true
   }
 }

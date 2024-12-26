@@ -1,0 +1,1 @@
+import{y as e}from"./_vendor.js";const s=(s="social-share",n={})=>{const o={displays:["facebook","ex","whatsapp","messenger","telegram","linkedin","send-email","copy-link","web-share"],...n},r=document.querySelectorAll(`[${s}]`);if(0===r.length)return null;const a=[];return r.forEach((s=>{const n=new e.SocialShare(s,o);a.push(n)})),a};export{s as i};
