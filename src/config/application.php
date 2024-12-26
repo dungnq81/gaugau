@@ -116,27 +116,26 @@ Config::define( 'NONCE_SALT', env( 'NONCE_SALT' ) );
  * Custom Settings
  */
 
-// Disable the plugin and theme file editor in the admin
-Config::define( 'DISALLOW_FILE_EDIT', true );
+/** SSL */
+Config::define( 'FORCE_SSL_ADMIN', env( 'FORCE_SSL_ADMIN' ) ?? false );
 
-// Disable plugin and theme updates and installation from the admin
+// Disable the plugin and theme file editor in the admin and
+// disable plugin and theme updates and installation from the admin
+Config::define( 'DISALLOW_FILE_EDIT', true );
 Config::define( 'DISALLOW_FILE_MODS', true );
 
-Config::define( 'WP_AUTO_UPDATE_CORE', env( 'WP_AUTO_UPDATE_CORE' ) ?? false );
 Config::define( 'AUTOMATIC_UPDATER_DISABLED', env( 'AUTOMATIC_UPDATER_DISABLED' ) ?? false );
+Config::define( 'WP_AUTO_UPDATE_CORE', env( 'WP_AUTO_UPDATE_CORE' ) ?? false );
 
 Config::define( 'DISABLE_WP_CRON', env( 'DISABLE_WP_CRON' ) ?? false );
+
 Config::define( 'WP_POST_REVISIONS', env( 'WP_POST_REVISIONS' ) ?? true );
-Config::define( 'EMPTY_TRASH_DAYS', env( 'EMPTY_TRASH_DAYS' ) ?? 15 );
-Config::define( 'AUTOSAVE_INTERVAL', env( 'AUTOSAVE_INTERVAL' ) ?? 120 );
+Config::define( 'EMPTY_TRASH_DAYS', env( 'EMPTY_TRASH_DAYS' ) ?? 30 );
+Config::define( 'AUTOSAVE_INTERVAL', env( 'AUTOSAVE_INTERVAL' ) ?? 180 );
 
 /** PHP Memory */
 Config::define( 'WP_MEMORY_LIMIT', env( 'WP_MEMORY_LIMIT' ) ?? '512M' );
 Config::define( 'WP_MAX_MEMORY_LIMIT', env( 'WP_MAX_MEMORY_LIMIT' ) ?? '512M' );
-
-/** SSL */
-Config::define( 'FORCE_SSL_LOGIN', env( 'FORCE_SSL_LOGIN' ) ?? false );
-Config::define( 'FORCE_SSL_ADMIN', env( 'FORCE_SSL_ADMIN' ) ?? false );
 
 // Disable script concatenation
 Config::define( 'CONCATENATE_SCRIPTS', false );

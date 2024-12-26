@@ -45,13 +45,15 @@
         "oscarotero/env": "^v2.1.1",
         "roots/bedrock-autoloader": "^1.0.4",
         "roots/bedrock-disallow-indexing": "^2.0.0",
-        "roots/wordpress": "6.7.1",
+        "roots/wordpress": "^6.7.1",
         "roots/wp-config": "^1.0.0",
         "roots/wp-password-bcrypt": "^1.2.0",
         "wpackagist-theme/twentytwentyfive": "^1.0",
         "wpackagist-plugin/akismet": "^5.3",
         "wpackagist-plugin/fluent-smtp": "^2.2.83",
-        "lukasbesch/bedrock-plugin-disabler": "^v1.4.0"
+        "lukasbesch/bedrock-plugin-disabler": "^v1.4.0",
+
+        "ext-mysqli": "*"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b3fd72add8fd748ee9f4dab71285233b",
+    "content-hash": "98803bbbc991d5de6882646ad1c94813",
     "packages": [
         {
             "name": "box/spout",
@@ -1547,7 +1547,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "enshrined/svg-sanitize": 0,
         "roave/security-advisories": 20
     },
     "prefer-stable": false,

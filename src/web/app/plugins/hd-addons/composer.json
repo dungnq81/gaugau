@@ -1,9 +1,9 @@
 {
-	"name": "plugins/gau-addons",
-	"description": "Gau-Addons plugin",
+	"name": "plugins/hd-addons",
+	"description": "HD Addons plugin",
 	"authors": [
 		{
-			"name": "Gaudev Team"
+			"name": "Gau"
 		}
 	],
 	"autoload": {
@@ -16,7 +16,7 @@
 	"require": {
 		"php": ">=8.2",
 		"mobiledetect/mobiledetectlib": "^4.8.06",
-		"enshrined/svg-sanitize": "@stable",
+		"enshrined/svg-sanitize": "^0.20.0",
 		"matthiasmullie/minify": "^1.3.73",
 		"vectorface/whip": "^v0.5.0",
 		"box/spout": "^v3.3.0"
