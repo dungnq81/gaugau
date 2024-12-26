@@ -22,6 +22,8 @@ target/
 # Application
 web/app/plugins/*
 !web/app/plugins/.gitkeep
+!web/app/plugins/advanced-custom-fields-pro/
+!web/app/plugins/hd-addons/
 web/app/mu-plugins/*/
 web/app/themes/twentytwentyfive/
 web/app/upgrade
@@ -31,13 +33,13 @@ web/app/cache/*
 
 # WordPress
 web/wp
-web/.htaccess
+!web/.htaccess
 
 # Logs
 *.log
 
 # Dotenv
-.env
+!.env
 .env.*
 !.env.example
 

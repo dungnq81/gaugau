@@ -40,22 +40,24 @@
     ],
     "require": {
         "php": ">=8.2",
-        "composer/installers": "^2.2",
-        "vlucas/phpdotenv": "^5.5",
-        "oscarotero/env": "^2.1",
-        "roots/bedrock-autoloader": "^1.0",
-        "roots/bedrock-disallow-indexing": "^2.0",
+        "composer/installers": "^v2.3.0",
+        "vlucas/phpdotenv": "^v5.6.1",
+        "oscarotero/env": "^v2.1.1",
+        "roots/bedrock-autoloader": "^1.0.4",
+        "roots/bedrock-disallow-indexing": "^2.0.0",
         "roots/wordpress": "6.7.1",
-        "roots/wp-config": "1.0.0",
-        "roots/wp-password-bcrypt": "1.2.0",
+        "roots/wp-config": "^1.0.0",
+        "roots/wp-password-bcrypt": "^1.2.0",
         "wpackagist-theme/twentytwentyfive": "^1.0",
         "wpackagist-plugin/akismet": "^5.3",
-        "wpackagist-plugin/fluent-smtp": "^2.2"
+        "wpackagist-plugin/fluent-smtp": "^2.2.83",
+        "lukasbesch/bedrock-plugin-disabler": "^v1.4.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "laravel/pint": "^1.18",
-        "symfony/var-dumper": "^7.2"
+        "laravel/pint": "^v1.18.3",
+        "symfony/var-dumper": "^v7.2.0",
+        "php-stubs/wordpress-stubs": "^v6.7.1"
     },
     "config": {
         "optimize-autoloader": true,

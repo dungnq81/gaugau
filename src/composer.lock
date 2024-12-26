@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9a189e85a17af0d0585294bad551b5b8",
+    "content-hash": "37f76b5310e1f793590203213e02c7a5",
     "packages": [
         {
             "name": "composer/installers",
@@ -213,6 +213,50 @@
                 }
             ],
             "time": "2024-07-20T21:45:45+00:00"
+        },
+        {
+            "name": "lukasbesch/bedrock-plugin-disabler",
+            "version": "v1.4.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/lukasbesch/bedrock-plugin-disabler.git",
+                "reference": "6e1e6e9488edb6d78dbfa891df7c481fb7a4a017"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/lukasbesch/bedrock-plugin-disabler/zipball/6e1e6e9488edb6d78dbfa891df7c481fb7a4a017",
+                "reference": "6e1e6e9488edb6d78dbfa891df7c481fb7a4a017",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "^1.4|^2.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "roave/security-advisories": "dev-master",
+                "squizlabs/php_codesniffer": "^3.5"
+            },
+            "type": "wordpress-muplugin",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lukas Besch",
+                    "email": "connect@lukasbesch.com"
+                },
+                {
+                    "name": "Kamil Grzegorczyk",
+                    "email": "kamilgrzegorczyk@gmail.com"
+                }
+            ],
+            "description": "Disable certain plugins in non-production environments using PHP constants.",
+            "support": {
+                "issues": "https://github.com/lukasbesch/bedrock-plugin-disabler/issues",
+                "source": "https://github.com/lukasbesch/bedrock-plugin-disabler/tree/v1.4.0"
+            },
+            "time": "2023-02-06T12:11:13+00:00"
         },
         {
             "name": "oscarotero/env",
@@ -1227,6 +1271,54 @@
                 "source": "https://github.com/laravel/pint"
             },
             "time": "2024-11-26T15:34:00+00:00"
+        },
+        {
+            "name": "php-stubs/wordpress-stubs",
+            "version": "v6.7.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-stubs/wordpress-stubs.git",
+                "reference": "83448e918bf06d1ed3d67ceb6a985fc266a02fd1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-stubs/wordpress-stubs/zipball/83448e918bf06d1ed3d67ceb6a985fc266a02fd1",
+                "reference": "83448e918bf06d1ed3d67ceb6a985fc266a02fd1",
+                "shasum": ""
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+                "nikic/php-parser": "^4.13",
+                "php": "^7.4 || ^8.0",
+                "php-stubs/generator": "^0.8.3",
+                "phpdocumentor/reflection-docblock": "^5.4.1",
+                "phpstan/phpstan": "^1.11",
+                "phpunit/phpunit": "^9.5",
+                "szepeviktor/phpcs-psr-12-neutron-hybrid-ruleset": "^1.1.1",
+                "wp-coding-standards/wpcs": "3.1.0 as 2.3.0"
+            },
+            "suggest": {
+                "paragonie/sodium_compat": "Pure PHP implementation of libsodium",
+                "symfony/polyfill-php80": "Symfony polyfill backporting some PHP 8.0+ features to lower PHP versions",
+                "szepeviktor/phpstan-wordpress": "WordPress extensions for PHPStan"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "WordPress function and class declaration stubs for static analysis.",
+            "homepage": "https://github.com/php-stubs/wordpress-stubs",
+            "keywords": [
+                "PHPStan",
+                "static analysis",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/php-stubs/wordpress-stubs/issues",
+                "source": "https://github.com/php-stubs/wordpress-stubs/tree/v6.7.1"
+            },
+            "time": "2024-11-24T03:57:09+00:00"
         },
         {
             "name": "roave/security-advisories",

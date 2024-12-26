@@ -1,0 +1,267 @@
+@use "sass:list";
+@use "sass:math";
+@use "sass:meta";
+@use "sass:string";
+
+@use "../functions" as func;
+@use "../variables" as vars;
+
+@use "mixins" as mixin;
+
+@function calculate-flex-width( $columns: 12, $span: 1, $gap: 0 ) {
+    @if math.is-unitless($columns) and math.is-unitless($span) and $columns > 0 and $span > 0 {
+        @if $columns == $span {
+            @return math.percentage(1);
+        } @else if $columns > $span {
+            @if meta.type-of($gap) == bool or $gap < 0 {
+                $gap: 0;
+            }
+
+            $width: math.percentage(func.divide($span, $columns));
+            $gap_adjust: func.fs(( $columns - $span ) * func.divide($gap, $columns ));
+
+            @return func.subtract($width, $gap_adjust);
+        }
+    }
+
+    @warn "Invalid inputs for calculate-flex-width: columns={$columns}, span={$span}";
+    @return 0;
+}
+
+@mixin flex-self( $total: 12, $n: 1, $gap: 0 ) {
+    $width: calculate-flex-width($total, $n, $gap);
+    @if $width != 0 {
+        width: $width;
+    }
+}
+
+@mixin media-flex-self(
+    $m: 1,
+    $t: false,
+    $d: false,
+    $gap_m: false,
+    $gap: false
+) {
+    @if math.is-unitless($m) and $m > 0 {
+        @include flex-self($m, 1, $gap_m);
+    }
+    @if math.is-unitless($t) and $t > 0 {
+        @include mixin.mq-min(md) {
+            @include flex-self($t, 1, $gap);
+        }
+    }
+    @if math.is-unitless($d) and $d > 0 {
+        @include mixin.mq-min(lg) {
+            @include flex-self($d, 1, $gap);
+        }
+    }
+}
+
+@mixin flex-basis( $n: 1, $gap: false ) {
+    @include flex-self(vars.$grid-columns, $n, $gap);
+}
+
+@mixin media-flex-basis(
+    $m: 1,
+    $t: false,
+    $d: false,
+    $gap_m: false,
+    $gap: false
+) {
+    flex: 0 0 auto;
+
+    @if math.is-unitless($m) and $m > 0 {
+        @include flex-basis($m, $gap_m);
+    }
+    @if math.is-unitless($t) and $t > 0 {
+        @include mixin.mq-min(md) {
+            @include flex-basis($t, $gap);
+        }
+    }
+    @if math.is-unitless($d) and $d > 0 {
+        @include mixin.mq-min(lg) {
+            @include flex-basis($d, $gap);
+        }
+    }
+}
+
+@mixin media-flex(
+    $m: 1 1 auto,
+    $t: false,
+    $d: false,
+    $gap-m: false,
+    $gap: false
+) {
+    flex: $m;
+
+    @if $gap-m {
+        @include mixin.gap($gap-m);
+    }
+
+    @if $t {
+        @include mixin.mq-min(md) {
+            flex: $t;
+
+            @if $gap {
+                @include mixin.gap($gap);
+            }
+        }
+    }
+
+    @if $d {
+        @include mixin.mq-min(lg) {
+            flex: $d;
+        }
+    }
+}
+
+@mixin flex-layout-auto(
+    $gap_m: false,
+    $gap: false,
+    $min_width: 0,
+    $max_width: 100%,
+    $class_cell: '.cell'
+) {
+    @include flex-x(true);
+    @include mixin.media-gap($gap_m, $gap, false);
+
+    & > #{string.unquote($class_cell)} {
+        min-width: $min_width;
+        max-width: $max_width;
+        @include flex-auto;
+    }
+}
+
+@mixin flex-layout(
+    $m: 1,
+    $t: false,
+    $d: false,
+    $gap_m: false,
+    $gap: false,
+    $class_cell: '.cell'
+) {
+    @include flex-x(true);
+    @include mixin.media-gap($gap_m, $gap, false);
+
+    & > #{string.unquote($class_cell)} {
+        @if '.cell' != $class_cell {
+            @include cell(false);
+        }
+
+        @include media-flex-self($m, $t, $d, $gap_m, $gap);
+    }
+}
+
+@mixin cell( $grow: 0, $shrink: 0, $basis: auto, $w: false ) {
+    flex: $grow $shrink $basis;
+    max-width: 100%;
+    min-width: 0;
+
+    @if meta.type-of($w) != bool {
+        width: func.fs($w);
+    }
+}
+
+@mixin flex-shrink {
+    @include cell(0, 0, auto);
+}
+
+@mixin flex-auto {
+    @include cell(1, 1, 0, auto);
+}
+
+@mixin flex-stretch {
+    @include cell(0, 0, auto, 100%);
+}
+
+@mixin flex-x( $flex: true, $reverse: false ) {
+    @if true == $flex {
+        & {
+            display: flex;
+        }
+    }
+
+    @if false == $reverse {
+        & {
+            flex-flow: row wrap;
+        }
+    } @else {
+        & {
+            flex-flow: row-reverse wrap;
+        }
+    }
+}
+
+@mixin flex-y( $flex: true, $reverse: false ) {
+    @if true == $flex {
+        display: flex;
+    }
+
+    @if false == $reverse {
+        flex-flow: column nowrap;
+    } @else {
+        flex-flow: column-reverse nowrap;
+    }
+}
+
+@mixin flex-padding-x(
+    $padding_m: vars.$gutter-xs,
+    $padding: vars.$gutter,
+    $class_cell: '.cell'
+) {
+    @include mixin.mx-gutter($padding_m, $padding);
+
+    & > #{string.unquote($class_cell)} {
+        @if '.cell' != $class_cell {
+            @include cell();
+        }
+
+        @include mixin.px-gutter($padding_m, $padding);
+    }
+}
+
+@mixin flex-padding-y(
+    $padding_m: vars.$gutter-xs,
+    $padding: vars.$gutter,
+    $class_cell: '.cell'
+) {
+    @include mixin.my-gutter($padding_m, $padding);
+
+    & > #{string.unquote($class_cell)} {
+        @if '.cell' != $class_cell {
+            @include cell();
+        }
+
+        @include mixin.py-gutter($padding_m, $padding);
+    }
+}
+
+@mixin flex-align(
+    $align: flex-start,
+    $justify: false,
+    $direction_column: false,
+    $wrap: true
+) {
+    display: flex;
+    align-items: $align;
+
+    @if meta.type-of($justify) != bool {
+        justify-content: $justify;
+    }
+
+    @if $direction_column {
+        flex-direction: column;
+    }
+
+    @if $wrap == true {
+        flex-wrap: wrap;
+    }
+}
+
+@mixin flex-align-center( $direction_column: false ) {
+    @include flex-align(center, false, $direction_column);
+}
+
+@mixin flex-center() {
+    @include flex-align(center, center);
+}

@@ -1,0 +1,177 @@
+@use "../functions" as func;
+@use "colors" as *;
+
+//
+// theme color
+//
+
+$Primary-01: #005eb8;
+$Primary-02: #f4343f;
+$Primary-03: #56c271;
+$Primary-04: #00dee2;
+
+$Secondary-01: #331f00;
+$Secondary-02: #ec9a20;
+$Secondary-03: #fbead0;
+$Secondary-04: #fefbf6;
+
+$primary: $Primary-01 !default;
+$secondary: $Secondary-01 !default;
+$success: $green !default;
+$info: $cyan !default;
+$warning: $yellow !default;
+$alert: $red !default;
+$light: $gray-100 !default;
+$dark: $gray-900 !default;
+
+$theme-colors: (
+        "primary": $primary,
+        "secondary": $secondary,
+        "success": $success,
+        "info": $info,
+        "warning": $warning,
+        "alert": $alert,
+        "light": $light,
+        "dark": $dark
+) !default;
+
+// See https://www.w3.org/TR/WCAG20/#visual-audio-contrast-contrast
+
+$min-contrast-ratio: 4.5 !default;
+
+$color-contrast-dark: $black !default;
+$color-contrast-light: $white !default;
+
+// Body
+//
+// Settings for the `<body>` element.
+
+$header-color: #0a0a0a !default;
+$body-color: #0a0a0a !default;
+$body-bg: #fefefe !default;
+$body-size: 16px !default;
+
+// Links
+//
+// Style anchor elements.
+
+$link-color: #0a0a0a !default;
+$link-decoration: underline !default;
+$link-hover-color: func.shift-color($link-color, 20%) !default;
+$link-hover-decoration: null !default;
+
+// Layout breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+
+$sm: 0 !default;
+$md: 640px !default;
+$lg: 1024px !default;
+$xl: 1200px !default;
+$\2xl: 1440px !default;
+$wp: 782px !default;
+
+$mq-breakpoints: (
+        sm: 0,
+        md: func.fs($md),
+        lg: func.fs($lg),
+        xl: func.fs($xl),
+        2xl: func.fs($\2xl),
+        wp: func.fs($wp),
+) !default;
+
+// Layout containers
+//
+// Define the maximum width of `.container` for different screen sizes.
+
+$screen-sm: 100% !default;
+$screen-md: 600px !default;
+$screen-lg: 960px !default;
+$screen-xl: 1150px !default;
+$screen-2xl: 1360px !default;
+$screen-wp: 750px !default;
+
+$container-max-widths: (
+        sm: func.fs($screen-sm),
+        md: func.fs($screen-md),
+        lg: func.fs($screen-lg),
+        xl: func.fs($screen-xl),
+        2xl: func.fs($screen-2xl),
+        wp: func.fs($screen-wp),
+) !default;
+
+// Typography
+//
+// Font, line-height, gutter, and more.
+
+$font-sizes: (
+        h1: 35px,
+        h2: 29px,
+        h3: 25px,
+        h4: 21px,
+        h5: 18px,
+        h6: 16px
+) !default;
+
+$font-sizes-large: (
+        h1: 43px,
+        h2: 35px,
+        h3: 29px,
+        h4: 24px,
+        h5: 20px,
+        h6: 17px
+) !default;
+
+//
+// styles.
+
+$paragraph-margin-bottom: 15px !default;
+$header-margin-bottom: 10px !default;
+
+$global-margin: 15px !default;
+$global-padding: 15px !default;
+$global-position: 15px !default;
+
+$line-height-global: 1.5 !default;
+$line-height-header: 1.35 !default;
+$line-height-paragraph: 1.6 !default;
+
+$font-weight-lighter: lighter !default;
+$font-weight-light: 300 !default;
+$font-weight-normal: 400 !default;
+$font-weight-medium: 500 !default;
+$font-weight-semibold: 600 !default;
+$font-weight-bold: 700 !default;
+$font-weight-bolder: bolder !default;
+
+//
+// Spacers
+
+$gutter-xs: 10px !default;
+$gutter: 15px !default;
+
+$gap-xs: $gutter-xs * 2;
+$gap: $gutter * 2;
+
+$grid-columns: 12 !default;
+$grid-columns-max: 8 !default;
+
+$spacers: (
+        gutter-xs: func.fs($gutter-xs),
+        gutter: func.fs($gutter),
+        gap-xs: func.fs($gap-xs),
+        gap: func.fs($gap)
+) !default;
+
+//
+$scrollbar-w: 10px !default;
+$scrollbar-h: 5px !default;
+
+$header-font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Ubuntu", Arial, cursive, serif !default;
+$body-font: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Ubuntu", Arial, cursive, sans-serif !default;
+$awesome-font: "Font Awesome 6 Pro", "Font Awesome 6 Brands", "Font Awesome 6 Free", sans-serif;
+$monospace-font: Consolas, 'Liberation Mono', Courier, monospace;
+
+$img-path: '../img';
+$font-path: '../fonts';

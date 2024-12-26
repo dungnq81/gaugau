@@ -4,10 +4,10 @@
     "version": "0.25.01",
     "type": "module",
     "scripts": {
-        "watch:plugin": "cross-env NODE_ENV=development vite build --watch --config wp-content/plugins/gau-addons/vite.config.js",
-        "watch:theme": "cross-env NODE_ENV=development vite build --watch --config wp-content/themes/gau/vite.config.js",
-        "build:plugin": "cross-env vite build --config wp-content/plugins/gau-addons/vite.config.js",
-        "build:theme": "cross-env vite build --config wp-content/themes/gau/vite.config.js",
+        "watch:plugin": "cross-env NODE_ENV=development vite build --watch --config web/app/plugins/hd-addons/vite.config.js",
+        "watch:theme": "cross-env NODE_ENV=development vite build --watch --config web/app/themes/hd/vite.config.js",
+        "build:plugin": "cross-env vite build --config web/app/plugins/hd-addons/vite.config.js",
+        "build:theme": "cross-env vite build --config web/app/themes/hd/vite.config.js",
         "watch": "concurrently \"yarn watch:plugin\" \"yarn watch:theme\"",
         "build": "concurrently \"yarn build:plugin\" \"yarn build:theme\""
     },

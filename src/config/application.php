@@ -138,6 +138,22 @@ Config::define( 'WP_DEBUG_LOG', false );
 Config::define( 'SCRIPT_DEBUG', false );
 ini_set( 'display_errors', '0' );
 
+/** PHP Memory */
+Config::define( 'WP_MEMORY_LIMIT', env( 'WP_MEMORY_LIMIT' ) ?? '512M' );
+Config::define( 'WP_MAX_MEMORY_LIMIT', env( 'WP_MAX_MEMORY_LIMIT' ) ?? '512M' );
+
+/** SSL */
+Config::define( 'FORCE_SSL_LOGIN', env( 'FORCE_SSL_LOGIN' ) ?? false );
+Config::define( 'FORCE_SSL_ADMIN', env( 'FORCE_SSL_ADMIN' ) ?? false );
+
+/** Core update */
+Config::define( 'WP_AUTO_UPDATE_CORE', env( 'WP_AUTO_UPDATE_CORE' ) ?? false );
+
+/** DISABLED_PLUGINS */
+Config::define( 'DISABLED_PLUGINS', [
+	//'wp-rocket/wp-rocket.php'
+] );
+
 /**
  * Allow WordPress to detect HTTPS when used behind a reverse proxy or a load balancer
  * See https://codex.wordpress.org/Function_Reference/is_ssl#Notes
@@ -163,17 +179,6 @@ if ( isset( $_SERVER['HTTPS'] ) && $_SERVER['HTTPS'] === 'on' ) {
 if ( ! defined( 'FS_METHOD' ) ) {
 	define( 'FS_METHOD', 'direct' );
 }
-
-/** PHP Memory */
-Config::define( 'WP_MEMORY_LIMIT', env( 'WP_MEMORY_LIMIT' ) ?? '512M' );
-Config::define( 'WP_MAX_MEMORY_LIMIT', env( 'WP_MAX_MEMORY_LIMIT' ) ?? '512M' );
-
-/** SSL */
-Config::define( 'FORCE_SSL_LOGIN', env( 'FORCE_SSL_LOGIN' ) ?? false );
-Config::define( 'FORCE_SSL_ADMIN', env( 'FORCE_SSL_ADMIN' ) ?? false );
-
-/** Core update */
-Config::define( 'WP_AUTO_UPDATE_CORE', env( 'WP_AUTO_UPDATE_CORE' ) ?? false );
 
 /**
  * Bootstrap WordPress

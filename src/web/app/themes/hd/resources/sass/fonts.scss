@@ -1,0 +1,19 @@
+@use "sass:string";
+
+@use "variables" as vars;
+@use "mixins" as mixin;
+
+@use "components/awesome_font";
+
+/** Poppins fonts */
+//$poppins_base: string.unquote("#{vars.$font-path}/SVN-Poppins");
+
+//@include mixin.font-face(Poppins, normal, 300, SVN-Poppins-Light, $poppins_base);
+//@include mixin.font-face(Poppins, italic, 300, SVN-Poppins-LightItalic, $poppins_base);
+//
+//@include mixin.font-face(Poppins, normal, 400, SVN-Poppins-Regular, $poppins_base);
+//@include mixin.font-face(Poppins, italic, 400, SVN-Poppins-RegularItalic, $poppins_base);
+//
+//@include mixin.font-face(Poppins, normal, 500, SVN-Poppins-Medium, $poppins_base);
+//@include mixin.font-face(Poppins, normal, 600, SVN-Poppins-SemiBold, $poppins_base);
+//@include mixin.font-face(Poppins, normal, 700, SVN-Poppins-Bold, $poppins_base);
