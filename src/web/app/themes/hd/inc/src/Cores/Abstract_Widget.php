@@ -2,10 +2,10 @@
 
 namespace Cores;
 
-\defined( 'ABSPATH' ) || die;
+\defined('ABSPATH') || die;
 
-abstract class Abstract_Widget extends \WP_Widget {
-
+abstract class Abstract_Widget extends \WP_Widget
+{
 	protected string $prefix = 'w-';
 	protected string $widget_id;
 	protected string $widget_classname;
@@ -27,16 +27,17 @@ abstract class Abstract_Widget extends \WP_Widget {
 	/**
 	 * Constructor.
 	 */
-	public function __construct() {
-		$className              = ( new \ReflectionClass( $this ) )->getShortName();
-		$this->widget_classname = str_replace( [ '_widget', '-widget', ], '', Helper::dashCase( strtolower( $className ) ) );
+	public function __construct()
+	{
+		$className              = (new \ReflectionClass($this))->getShortName();
+		$this->widget_classname = str_replace(['_widget', '-widget',], '', Helper::dashCase(strtolower($className)));
 		$this->widget_id        = $this->prefix . $this->widget_classname;
 
-		parent::__construct( $this->widget_id, $this->widget_name, $this->widget_options(), $this->control_options() );
+		parent::__construct($this->widget_id, $this->widget_name, $this->widget_options(), $this->control_options());
 
-		add_action( 'save_post', [ $this, 'flush_widget_cache' ] );
-		add_action( 'deleted_post', [ $this, 'flush_widget_cache' ] );
-		add_action( 'switch_theme', [ $this, 'flush_widget_cache' ] );
+		add_action('save_post', [$this, 'flush_widget_cache']);
+		add_action('deleted_post', [$this, 'flush_widget_cache']);
+		add_action('switch_theme', [$this, 'flush_widget_cache']);
 	}
 
 	// --------------------------------------------------
@@ -44,7 +45,8 @@ abstract class Abstract_Widget extends \WP_Widget {
 	/**
 	 * @return array
 	 */
-	protected function widget_options(): array {
+	protected function widget_options(): array
+	{
 		return [
 			'classname'                   => $this->widget_classname,
 			'description'                 => $this->widget_description,
@@ -59,7 +61,8 @@ abstract class Abstract_Widget extends \WP_Widget {
 	/**
 	 * @return array
 	 */
-	protected function control_options(): array {
+	protected function control_options(): array
+	{
 		return [];
 	}
 
@@ -70,9 +73,10 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 *
 	 * @return void
 	 */
-	public function flush_widget_cache(): void {
-		foreach ( [ 'https', 'http' ] as $scheme ) {
-			wp_cache_delete( $this->get_widget_id_for_cache( $this->widget_id, $scheme ), 'widget' );
+	public function flush_widget_cache(): void
+	{
+		foreach (['https', 'http'] as $scheme) {
+			wp_cache_delete($this->get_widget_id_for_cache($this->widget_id, $scheme), 'widget');
 		}
 	}
 
@@ -84,14 +88,15 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 *
 	 * @return mixed|void
 	 */
-	protected function get_widget_id_for_cache( $widget_id, string $scheme = '' ) {
-		if ( $scheme ) {
+	protected function get_widget_id_for_cache($widget_id, string $scheme = '')
+	{
+		if ($scheme) {
 			$widget_id_for_cache = $widget_id . '-' . $scheme;
 		} else {
-			$widget_id_for_cache = $widget_id . '-' . ( is_ssl() ? 'https' : 'http' );
+			$widget_id_for_cache = $widget_id . '-' . (is_ssl() ? 'https' : 'http');
 		}
 
-		return apply_filters( 'cached_widget_id_filter', $widget_id_for_cache );
+		return apply_filters('cached_widget_id_filter', $widget_id_for_cache);
 	}
 
 	// --------------------------------------------------
@@ -103,21 +108,21 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 *
 	 * @return string
 	 */
-	public function cache_widget( array $args, string $content, int $expiration = 3600 ): string {
-
+	public function cache_widget(array $args, string $content, int $expiration = 3600): string
+	{
 		// Don't set any cache if widget_id doesn't exist
-		if ( empty( $args['widget_id'] ) ) {
+		if (empty($args['widget_id'])) {
 			return $content;
 		}
 
-		$cache_key = $this->get_widget_id_for_cache( $this->widget_id );
-		$cache     = wp_cache_get( $cache_key, 'widget' );
-		if ( ! is_array( $cache ) ) {
+		$cache_key = $this->get_widget_id_for_cache($this->widget_id);
+		$cache     = wp_cache_get($cache_key, 'widget');
+		if (! is_array($cache)) {
 			$cache = [];
 		}
 
-		$cache[ $this->get_widget_id_for_cache( $args['widget_id'] ) ] = $content;
-		wp_cache_set( $cache_key, $cache, 'widget', $expiration );
+		$cache[$this->get_widget_id_for_cache($args['widget_id'])] = $content;
+		wp_cache_set($cache_key, $cache, 'widget', $expiration);
 
 		return $content;
 	}
@@ -131,19 +136,20 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 *
 	 * @return bool true if the widget is cached otherwise false
 	 */
-	public function get_cached_widget( array $args ): bool {
+	public function get_cached_widget(array $args): bool
+	{
 		// Don't get cache if widget_id doesn't exists
-		if ( empty( $args['widget_id'] ) ) {
+		if (empty($args['widget_id'])) {
 			return false;
 		}
 
-		$cache = wp_cache_get( $this->get_widget_id_for_cache( $this->widget_id ), 'widget' );
-		if ( ! is_array( $cache ) ) {
+		$cache = wp_cache_get($this->get_widget_id_for_cache($this->widget_id), 'widget');
+		if (! is_array($cache)) {
 			$cache = [];
 		}
 
-		if ( isset( $cache[ $this->get_widget_id_for_cache( $args['widget_id'] ) ] ) ) {
-			echo $cache[ $this->get_widget_id_for_cache( $args['widget_id'] ) ];
+		if (isset($cache[$this->get_widget_id_for_cache($args['widget_id'])])) {
+			echo $cache[$this->get_widget_id_for_cache($args['widget_id'])];
 
 			return true;
 		}
@@ -158,7 +164,8 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 *
 	 * @return string
 	 */
-	protected function get_instance_title( array $instance ): string {
+	protected function get_instance_title(array $instance): string
+	{
 		return $instance['title'] ?? $this->settings['title']['std'] ?? '';
 	}
 
@@ -167,17 +174,18 @@ abstract class Abstract_Widget extends \WP_Widget {
 	/**
 	 * @param int $number
 	 */
-	public function _register_one( $number = - 1 ): void {
-		parent::_register_one( $number );
+	public function _register_one($number = -1): void
+	{
+		parent::_register_one($number);
 
-		if ( $this->registered ) {
+		if ($this->registered) {
 			return;
 		}
 
 		$this->registered = true;
 
-		if ( is_active_widget( false, false, $this->id_base, true ) ) {
-			add_action( 'wp_enqueue_scripts', [ $this, 'styles_and_scripts' ], 99 );
+		if (is_active_widget(false, false, $this->id_base, true)) {
+			add_action('wp_enqueue_scripts', [$this, 'styles_and_scripts'], 99);
 		}
 	}
 
@@ -196,8 +204,9 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 * @return object|bool
 	 * @throws \JsonException
 	 */
-	protected function acfFields( $id ): object|bool {
-		return Helper::getFields( $id, true );
+	protected function acfFields($id): object|bool
+	{
+		return Helper::getFields($id, true);
 	}
 
 	// --------------------------------------------------
@@ -208,48 +217,49 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 *
 	 * @return array
 	 */
-	public function update( $new_instance, $old_instance ): array {
+	public function update($new_instance, $old_instance): array
+	{
 		$instance = $old_instance;
 
-		if ( empty( $this->settings ) ) {
+		if (empty($this->settings)) {
 			return $instance;
 		}
 
 		// Loop settings and get values to save
-		foreach ( $this->settings as $key => $setting ) {
+		foreach ($this->settings as $key => $setting) {
 			$setting_type = $setting['type'] ?? '';
 
-			if ( ! $setting_type ) {
+			if (! $setting_type) {
 				continue;
 			}
 
 			// Format the value based on a settings type.
-			switch ( $setting_type ) {
+			switch ($setting_type) {
 				case 'number':
-					$instance[ $key ] = absint( $new_instance[ $key ] );
-					if ( isset( $setting['min'] ) && '' !== $setting['min'] ) {
-						$instance[ $key ] = max( $instance[ $key ], $setting['min'] );
+					$instance[$key] = absint($new_instance[$key]);
+					if (isset($setting['min']) && '' !== $setting['min']) {
+						$instance[$key] = max($instance[$key], $setting['min']);
 					}
-					if ( isset( $setting['max'] ) && '' !== $setting['max'] ) {
-						$instance[ $key ] = min( $instance[ $key ], $setting['max'] );
+					if (isset($setting['max']) && '' !== $setting['max']) {
+						$instance[$key] = min($instance[$key], $setting['max']);
 					}
 					break;
 
 				case 'textarea':
-					$instance[ $key ] = wp_kses( trim( wp_unslash( $new_instance[ $key ] ) ), wp_kses_allowed_html( 'post' ) );
+					$instance[$key] = wp_kses(trim(wp_unslash($new_instance[$key])), wp_kses_allowed_html('post'));
 					break;
 
 				case 'checkbox':
-					$instance[ $key ] = empty( $new_instance[ $key ] ) ? 0 : 1;
+					$instance[$key] = empty($new_instance[$key]) ? 0 : 1;
 					break;
 
 				default:
-					$instance[ $key ] = isset( $new_instance[ $key ] ) ? sanitize_text_field( $new_instance[ $key ] ) : $setting['std'];
+					$instance[$key] = isset($new_instance[$key]) ? sanitize_text_field($new_instance[$key]) : $setting['std'];
 					break;
 			}
 
 			// Sanitize the value of a setting.
-			$instance[ $key ] = apply_filters( 'widget_settings_sanitize_option_filter', $instance[ $key ], $new_instance, $key, $setting );
+			$instance[$key] = apply_filters('widget_settings_sanitize_option_filter', $instance[$key], $new_instance, $key, $setting);
 		}
 
 		$this->flush_widget_cache();
@@ -264,44 +274,45 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 *
 	 * @return void
 	 */
-	public function form( $instance ): void {
-		if ( empty( $this->settings ) ) {
+	public function form($instance): void
+	{
+		if (empty($this->settings)) {
 			return;
 		}
 
-		foreach ( $this->settings as $key => $setting ) {
+		foreach ($this->settings as $key => $setting) {
 
 			$class = $setting['class'] ?? '';
-			$value = $instance[ $key ] ?? $setting['std'];
+			$value = $instance[$key] ?? $setting['std'];
 
-			switch ( $setting['type'] ) {
+			switch ($setting['type']) {
 				case 'number':
-					$this->render_number_input( $key, $setting, $value, $class );
+					$this->render_number_input($key, $setting, $value, $class);
 					break;
 
 				case 'textarea':
-					$this->render_textarea( $key, $setting, $value, $class );
+					$this->render_textarea($key, $setting, $value, $class);
 					break;
 
 				case 'checkbox':
-					$this->render_checkbox( $key, $setting, $value, $class );
+					$this->render_checkbox($key, $setting, $value, $class);
 					break;
 
 				case 'text':
-					$this->render_text_input( $key, $setting, $value, $class );
+					$this->render_text_input($key, $setting, $value, $class);
 					break;
 
 				case 'select':
-					$this->render_select( $key, $setting, $value, $class );
+					$this->render_select($key, $setting, $value, $class);
 					break;
 
 				case 'select_multi':
-					$this->render_select( $key, $setting, $value, $class, true );
+					$this->render_select($key, $setting, $value, $class, true);
 					break;
 
-				// Default: run an action.
+					// Default: run an action.
 				default:
-					do_action( 'widget_field_' . $setting['type'], $key, $value, $setting, $instance );
+					do_action('widget_field_' . $setting['type'], $key, $value, $setting, $instance);
 					break;
 			}
 		}
@@ -317,14 +328,15 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 * @param mixed $value
 	 * @param string $class
 	 */
-	protected function render_text_input( string $key, array $setting, mixed $value, string $class ): void {
+	protected function render_text_input(string $key, array $setting, mixed $value, string $class): void
+	{
 		echo '<p>';
-		echo '<label for="' . Helper::escAttr( $this->get_field_id( $key ) ) . '">' . wp_kses_post( $setting['label'] ) . '</label>';
-		echo '<input class="widefat ' . Helper::escAttr( $class ) . '"';
-		echo ' id="' . Helper::escAttr( $this->get_field_id( $key ) ) . '"';
-		echo ' name="' . Helper::escAttr( $this->get_field_name( $key ) ) . '" type="text"';
-		echo ' value="' . Helper::escAttr( $value ) . '">';
-		if ( isset( $setting['desc'] ) ) {
+		echo '<label for="' . Helper::escAttr($this->get_field_id($key)) . '">' . wp_kses_post($setting['label']) . '</label>';
+		echo '<input class="widefat ' . Helper::escAttr($class) . '"';
+		echo ' id="' . Helper::escAttr($this->get_field_id($key)) . '"';
+		echo ' name="' . Helper::escAttr($this->get_field_name($key)) . '" type="text"';
+		echo ' value="' . Helper::escAttr($value) . '">';
+		if (isset($setting['desc'])) {
 			echo '<small class="help-text">' . $setting['desc'] . '</small>';
 		}
 		echo '</p>';
@@ -340,16 +352,17 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 * @param mixed $value
 	 * @param string $class
 	 */
-	protected function render_number_input( string $key, array $setting, mixed $value, string $class ): void {
-		echo '<p class="' . Helper::escAttr( $class ) . '">';
-		echo '<label for="' . Helper::escAttr( $this->get_field_id( $key ) ) . '">' . wp_kses_post( $setting['label'] ) . '</label>';
+	protected function render_number_input(string $key, array $setting, mixed $value, string $class): void
+	{
+		echo '<p class="' . Helper::escAttr($class) . '">';
+		echo '<label for="' . Helper::escAttr($this->get_field_id($key)) . '">' . wp_kses_post($setting['label']) . '</label>';
 		echo '<input class="widefat"';
-		echo ' id="' . Helper::escAttr( $this->get_field_id( $key ) ) . '"';
-		echo ' name="' . Helper::escAttr( $this->get_field_name( $key ) ) . '" type="number"';
-		echo ' min="' . Helper::escAttr( $setting['min'] ) . '"';
-		echo ' max="' . Helper::escAttr( $setting['max'] ) . '"';
-		echo ' value="' . Helper::escAttr( $value ) . '"/>';
-		if ( isset( $setting['desc'] ) ) {
+		echo ' id="' . Helper::escAttr($this->get_field_id($key)) . '"';
+		echo ' name="' . Helper::escAttr($this->get_field_name($key)) . '" type="number"';
+		echo ' min="' . Helper::escAttr($setting['min']) . '"';
+		echo ' max="' . Helper::escAttr($setting['max']) . '"';
+		echo ' value="' . Helper::escAttr($value) . '"/>';
+		if (isset($setting['desc'])) {
 			echo '<small class="help-text">' . $setting['desc'] . '</small>';
 		}
 		echo '</p>';
@@ -366,29 +379,30 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 * @param string $class
 	 * @param bool $multi
 	 */
-	protected function render_select( string $key, array $setting, mixed $value, string $class, bool $multi = false ): void {
-		if ( $multi ) {
+	protected function render_select(string $key, array $setting, mixed $value, string $class, bool $multi = false): void
+	{
+		if ($multi) {
 			$class .= ' select2 select2-multi';
 		}
 
 		echo '<p>';
-		echo '<label for="' . Helper::escAttr( $this->get_field_id( $key ) ) . '">' . wp_kses_post( $setting['label'] ) . '</label>';
-		echo '<select class="widefat ' . Helper::escAttr( $class ) . '"';
+		echo '<label for="' . Helper::escAttr($this->get_field_id($key)) . '">' . wp_kses_post($setting['label']) . '</label>';
+		echo '<select class="widefat ' . Helper::escAttr($class) . '"';
 
-		if ( $multi ) {
+		if ($multi) {
 			echo ' multiple';
 		}
 
-		echo ' id="' . Helper::escAttr( $this->get_field_id( $key ) ) . '"';
-		echo ' name="' . Helper::escAttr( $this->get_field_name( $key ) ) . '">';
+		echo ' id="' . Helper::escAttr($this->get_field_id($key)) . '"';
+		echo ' name="' . Helper::escAttr($this->get_field_name($key)) . '">';
 
-		foreach ( $setting['options'] as $option_key => $option_value ) {
-			echo '<option value="' . Helper::escAttr( $option_key ) . '" ' . selected( $option_key, $value ) . '>';
-			echo esc_html( $option_value );
+		foreach ($setting['options'] as $option_key => $option_value) {
+			echo '<option value="' . Helper::escAttr($option_key) . '" ' . selected($option_key, $value) . '>';
+			echo esc_html($option_value);
 			echo '</option>';
 		}
 		echo '</select>';
-		if ( isset( $setting['desc'] ) ) {
+		if (isset($setting['desc'])) {
 			echo '<small class="help-text">' . $setting['desc'] . '</small>';
 		}
 		echo '</p>';
@@ -404,15 +418,16 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 * @param mixed $value
 	 * @param string $class
 	 */
-	protected function render_textarea( string $key, array $setting, mixed $value, string $class ): void {
-		$rows = ! empty( $setting['rows'] ) ? (int) $setting['rows'] : 3;
+	protected function render_textarea(string $key, array $setting, mixed $value, string $class): void
+	{
+		$rows = ! empty($setting['rows']) ? (int) $setting['rows'] : 3;
 		echo '<p>';
-		echo '<label for="' . Helper::escAttr( $this->get_field_id( $key ) ) . '">' . wp_kses_post( $setting['label'] ) . '</label>';
-		echo '<textarea class="widefat ' . Helper::escAttr( $class ) . '"';
-		echo ' id="' . Helper::escAttr( $this->get_field_id( $key ) ) . '"';
-		echo ' name="' . Helper::escAttr( $this->get_field_name( $key ) ) . '" cols="20"';
-		echo ' rows="' . esc_attr( $rows ) . '">' . esc_textarea( $value ) . '</textarea>';
-		if ( isset( $setting['desc'] ) ) {
+		echo '<label for="' . Helper::escAttr($this->get_field_id($key)) . '">' . wp_kses_post($setting['label']) . '</label>';
+		echo '<textarea class="widefat ' . Helper::escAttr($class) . '"';
+		echo ' id="' . Helper::escAttr($this->get_field_id($key)) . '"';
+		echo ' name="' . Helper::escAttr($this->get_field_name($key)) . '" cols="20"';
+		echo ' rows="' . esc_attr($rows) . '">' . esc_textarea($value) . '</textarea>';
+		if (isset($setting['desc'])) {
 			echo '<small class="help-text">' . $setting['desc'] . '</small>';
 		}
 		echo '</p>';
@@ -428,15 +443,16 @@ abstract class Abstract_Widget extends \WP_Widget {
 	 * @param mixed $value
 	 * @param string $class
 	 */
-	protected function render_checkbox( string $key, array $setting, mixed $value, string $class ): void {
+	protected function render_checkbox(string $key, array $setting, mixed $value, string $class): void
+	{
 		echo '<p>';
 		echo '<label>';
-		echo '<input class="checkbox ' . Helper::escAttr( $class ) . '"';
-		echo ' id="' . Helper::escAttr( $this->get_field_id( $key ) ) . '"';
-		echo ' name="' . Helper::escAttr( $this->get_field_name( $key ) ) . '"';
+		echo '<input class="checkbox ' . Helper::escAttr($class) . '"';
+		echo ' id="' . Helper::escAttr($this->get_field_id($key)) . '"';
+		echo ' name="' . Helper::escAttr($this->get_field_name($key)) . '"';
 		echo ' type="checkbox"';
-		echo ' value="1" ' . checked( $value, 1 ) . '>';
-		echo '<span class="message">' . wp_kses_post( $setting['label'] ) . '</span>';
+		echo ' value="1" ' . checked($value, 1) . '>';
+		echo '<span class="message">' . wp_kses_post($setting['label']) . '</span>';
 		echo '</label>';
 		echo '</p>';
 	}

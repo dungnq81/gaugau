@@ -50,7 +50,7 @@ if ( ! function_exists( '__module_preload' ) ) {
 // -----------------------------------------------
 
 if ( ! function_exists( '__critical_css' ) ) {
-	add_action( 'wp_head', '__critical_css', 11 );
+	add_action( 'wp_head', '__critical_css', 12 );
 
 	function __critical_css(): void {
 		if ( is_front_page() || is_home() ) {
@@ -75,13 +75,12 @@ if ( ! function_exists( '__critical_css' ) ) {
 // -----------------------------------------------
 
 if ( ! function_exists( '__external_custom' ) ) {
-	add_action( 'wp_head', '__external_custom', 98 );
+	add_action( 'wp_head', '__external_custom', 11 );
 
 	function __external_custom(): void {
         // Manifest
-		$manifest_url = Helper::home( 'manifest.json' );
-		if ( file_exists( $manifest_url ) ) {
-			echo '<link rel="manifest" href="' . esc_url( $manifest_url ) . '">';
+		if ( file_exists( WEBROOT_DIR . '/manifest.json' ) ) {
+			echo '<link rel="manifest" href="' . esc_url( Helper::home( 'manifest.json' ) ) . '">';
 		}
 
 		// Theme color

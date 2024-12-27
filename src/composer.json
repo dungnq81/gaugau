@@ -52,7 +52,6 @@
         "wpackagist-plugin/akismet": "^5.3",
         "wpackagist-plugin/fluent-smtp": "^2.2.83",
         "lukasbesch/bedrock-plugin-disabler": "^v1.4.0",
-
         "ext-mysqli": "*"
     },
     "require-dev": {

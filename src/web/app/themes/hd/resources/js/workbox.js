@@ -9,26 +9,38 @@ let maxEntries = 60;
 
 let cacheName = 'GAUDEV-workbox-cache';
 
+/**
+ * Matches against local static files in assets/css, assets/js, and assets/img
+ * folders.
+ *
+ * @param {Object} _ref
+ * @param {Request} _ref.request
+ * @returns {boolean}
+ */
 let matchCallback = function matchCallback(_ref) {
-    let request = _ref.request;
-    return (
-        request.destination === '/app/themes/hd/assets/css/.*' ||
-        request.destination === '/app/themes/hd/assets/js/.*' ||
-        request.destination === '/app/themes/hd/assets/img/.*'
-    );
+	let request = _ref.request;
+	return (
+		request.destination === '/app/themes/hd/assets/css/.*' ||
+		request.destination === '/app/themes/hd/assets/js/.*' ||
+		request.destination === '/app/themes/hd/assets/img/.*'
+	);
 };
 
-registerRoute(matchCallback, new CacheFirst({
-    cacheName: cacheName,
-    plugins: [
-        new CacheableResponsePlugin({
-            statuses: [0, 200]
-        }),
-        new ExpirationPlugin({
-            maxEntries: maxEntries,
-            maxAgeSeconds: maxAgeSeconds
-        })]
-}));
+registerRoute(
+	matchCallback,
+	new CacheFirst({
+		cacheName: cacheName,
+		plugins: [
+			new CacheableResponsePlugin({
+				statuses: [0, 200],
+			}),
+			new ExpirationPlugin({
+				maxEntries: maxEntries,
+				maxAgeSeconds: maxAgeSeconds,
+			}),
+		],
+	})
+);
 
 // console.log(matchCallback);
 // console.log(ExpirationPlugin);
@@ -40,26 +52,37 @@ registerRoute(matchCallback, new CacheFirst({
 let expectedCaches = ['GAUDEV'];
 
 self.addEventListener('install', function (e) {
-    e.waitUntil(caches.open('GAUDEV').then(function (cache) {
-        return cache.addAll(['/']);
-    }));
+	e.waitUntil(
+		caches.open('GAUDEV').then(function (cache) {
+			return cache.addAll(['/']);
+		})
+	);
 });
 
 self.addEventListener('activate', function (event) {
-    event.waitUntil(caches.keys().then(function (keys) {
-        return Promise.all(keys.map(function (key) {
-            if (expectedCaches.includes(key)) {
-                return caches.delete(key);
-            }
-        }));
-    }).then(function () {
-        console.log('GAUDEV now ready to handle fetches.');
-    }));
+	event.waitUntil(
+		caches
+			.keys()
+			.then(function (keys) {
+				return Promise.all(
+					keys.map(function (key) {
+						if (expectedCaches.includes(key)) {
+							return caches.delete(key);
+						}
+					})
+				);
+			})
+			.then(function () {
+				console.log('GAUDEV now ready to handle fetches.');
+			})
+	);
 });
 
 self.addEventListener('fetch', function (e) {
-    // console.log(e.request.url);
-    e.respondWith(caches.match(e.request).then(function (response) {
-        return response || fetch(e.request);
-    }));
+	// console.log(e.request.url);
+	e.respondWith(
+		caches.match(e.request).then(function (response) {
+			return response || fetch(e.request);
+		})
+	);
 });

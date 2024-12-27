@@ -12,7 +12,8 @@ use Cores\Traits\Singleton;
  * Modified by Tom Usborne for GeneratePress
  * Modified by Gau
  */
-final class CSS {
+final class CSS
+{
 	use Singleton;
 
 	/**
@@ -72,9 +73,10 @@ final class CSS {
 	 * @return $this
 	 * @since  1.0
 	 */
-	public function set_selector( $selector = '' ) {
+	public function set_selector($selector = '')
+	{
 		// Render the css in the output string everytime the selector changes.
-		if ( '' !== $this->_selector ) {
+		if ('' !== $this->_selector) {
 			$this->add_selector_rules_to_output();
 		}
 
@@ -96,22 +98,23 @@ final class CSS {
 	 * @return $this
 	 * @since  1.0
 	 */
-	public function add_property( $property, $value, $og_default = false, $unit = false ) {
+	public function add_property($property, $value, $og_default = false, $unit = false)
+	{
 		// Setting font-size to 0 is rarely ever a good thing.
-		if ( 'font-size' === $property && 0 === $value ) {
+		if ('font-size' === $property && 0 === $value) {
 			return false;
 		}
 
 		// Add our unit to our value if it exists.
-		if ( $unit && '' !== $unit && is_numeric( $value ) ) {
+		if ($unit && '' !== $unit && is_numeric($value)) {
 			$value = $value . $unit;
-			if ( '' !== $og_default ) {
+			if ('' !== $og_default) {
 				$og_default = $og_default . $unit;
 			}
 		}
 
 		// If we don't have a value or our value is the same as our og default, bail.
-		if ( ( empty( $value ) && ! is_numeric( $value ) ) || $og_default === $value ) {
+		if ((empty($value) && ! is_numeric($value)) || $og_default === $value) {
 			return false;
 		}
 
@@ -128,12 +131,13 @@ final class CSS {
 	 * @return $this
 	 * @since  1.1
 	 */
-	public function start_media_query( $value ) {
+	public function start_media_query($value)
+	{
 		// Add the current rules to the output.
 		$this->add_selector_rules_to_output();
 
 		// Add any previous media queries to the output.
-		if ( ! empty( $this->_media_query ) ) {
+		if (! empty($this->_media_query)) {
 			$this->add_media_query_rules_to_output();
 		}
 
@@ -150,8 +154,9 @@ final class CSS {
 	 * @since  1.1
 	 * @see    start_media_query()
 	 */
-	public function stop_media_query() {
-		return $this->start_media_query( null );
+	public function stop_media_query()
+	{
+		return $this->start_media_query(null);
 	}
 
 	/**
@@ -160,9 +165,10 @@ final class CSS {
 	 * @return $this
 	 * @since  1.1
 	 */
-	private function add_media_query_rules_to_output() {
-		if ( ! empty( $this->_media_query_output ) ) {
-			$this->_output .= sprintf( '@media %1$s{%2$s}', $this->_media_query, $this->_media_query_output );
+	private function add_media_query_rules_to_output()
+	{
+		if (! empty($this->_media_query_output)) {
+			$this->_output .= sprintf('@media %1$s{%2$s}', $this->_media_query, $this->_media_query_output);
 
 			// Reset the media query output string.
 			$this->_media_query_output = '';
@@ -178,13 +184,14 @@ final class CSS {
 	 * @return $this
 	 * @since  1.0
 	 */
-	private function add_selector_rules_to_output() {
-		if ( ! empty( $this->_css ) ) {
+	private function add_selector_rules_to_output()
+	{
+		if (! empty($this->_css)) {
 			$this->_selector_output = $this->_selector;
-			$selector_output        = sprintf( '%1$s{%2$s}', $this->_selector_output, $this->_css );
+			$selector_output        = sprintf('%1$s{%2$s}', $this->_selector_output, $this->_css);
 
 			// Add our CSS to the output.
-			if ( ! empty( $this->_media_query ) ) {
+			if (! empty($this->_media_query)) {
 				$this->_media_query_output .= $selector_output;
 				$this->_css                = '';
 			} else {
@@ -205,7 +212,8 @@ final class CSS {
 	 * @return string
 	 * @since  1.0
 	 */
-	public function css_output() {
+	public function css_output()
+	{
 		// Add current selector's rules to output.
 		$this->add_selector_rules_to_output();
 
