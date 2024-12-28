@@ -3,30 +3,30 @@ import { isEmpty, toString } from 'ramda';
 import Swiper from 'swiper/bundle';
 
 // Initialize Swiper instances
-const initializeSwiper = (el, swiper_class, options) => {
-    if (!(el instanceof Element)) {
-        console.error('Error: The provided element is not a DOM element.');
+const initializeSwiper = ( el, swiper_class, options ) => {
+    if ( !( el instanceof Element ) ) {
+        console.error( 'Error: The provided element is not a DOM element.' );
         return;
     }
 
-    const swiper = new Swiper(swiper_class, options);
+    const swiper = new Swiper( swiper_class, options );
 
-    el.addEventListener('mouseover', () => {
+    el.addEventListener( 'mouseover', () => {
         swiper.autoplay.stop();
-    });
+    } );
 
-    el.addEventListener('mouseout', () => {
-        if (options.autoplay) {
+    el.addEventListener( 'mouseout', () => {
+        if ( options.autoplay ) {
             swiper.autoplay.start();
         }
-    });
+    } );
 
     return swiper;
 };
 
 // Generate unique class names
 const generateClasses = () => {
-    const rand = nanoid(9);
+    const rand = nanoid( 9 );
     return {
         rand: rand,
         swiperClass: 'swiper-' + rand,
@@ -38,7 +38,7 @@ const generateClasses = () => {
 };
 
 // Default Swiper options
-const getDefaultOptions = () => ({
+const getDefaultOptions = () => ( {
     grabCursor: !0,
     allowTouchMove: !0,
     threshold: 5,
@@ -47,32 +47,32 @@ const getDefaultOptions = () => ({
     wrapperClass: 'swiper-wrapper',
     slideClass: 'swiper-slide',
     slideActiveClass: 'swiper-slide-active',
-});
+} );
 
 // Utility to generate random integers
-const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+const random = ( min, max ) => Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 
 //
 // swipers single
 //
 const initializeSwipers = () => {
-    const swiperElements = [...document?.querySelectorAll('.w-swiper')];
+    const swiperElements = [...document.querySelectorAll( '.w-swiper' )];
 
-    swiperElements.forEach((el, index) => {
+    swiperElements.forEach( ( el, index ) => {
         const classes = generateClasses();
-        el.classList.add(classes.swiperClass);
+        el.classList.add( classes.swiperClass );
 
-        let controls = el.closest('.swiper-section')?.querySelector('.swiper-controls');
-        if (!controls) {
-            controls = document.createElement('div');
-            controls.classList.add('swiper-controls');
-            el.after(controls);
+        let controls = el.closest( '.swiper-section' )?.querySelector( '.swiper-controls' );
+        if ( !controls ) {
+            controls = document.createElement( 'div' );
+            controls.classList.add( 'swiper-controls' );
+            el.after( controls );
         }
 
-        const swiperWrapper = el?.querySelector('.swiper-wrapper');
-        let options = JSON.parse(swiperWrapper.dataset.options) || {};
+        const swiperWrapper = el?.querySelector( '.swiper-wrapper' );
+        let options = JSON.parse( swiperWrapper.dataset.options ) || {};
 
-        if (isEmpty(options)) {
+        if ( isEmpty( options ) ) {
             options = {
                 autoview: !0,
                 autoplay: !0,
@@ -82,9 +82,9 @@ const initializeSwipers = () => {
 
         let swiperOptions = { ...getDefaultOptions() };
 
-        if (options.autoview) {
+        if ( options.autoview ) {
             swiperOptions.slidesPerView = 'auto';
-            if (options.gap) {
+            if ( options.gap ) {
                 swiperOptions.spaceBetween = 20;
                 swiperOptions.breakpoints = {
                     768: { spaceBetween: 30 },
@@ -98,54 +98,54 @@ const initializeSwipers = () => {
             };
         }
 
-        if (options.observer) {
+        if ( options.observer ) {
             swiperOptions.observer = !0;
             swiperOptions.observeParents = !0;
         }
 
-        if (options.effect) {
-            swiperOptions.effect = toString(options.effect);
-            if (swiperOptions.effect === 'fade') {
+        if ( options.effect ) {
+            swiperOptions.effect = toString( options.effect );
+            if ( swiperOptions.effect === 'fade' ) {
                 swiperOptions.fadeEffect = { crossFade: !0 };
             }
         }
 
-        if (options.autoheight) swiperOptions.autoHeight = !0;
-        if (options.loop) swiperOptions.loop = !0;
-        if (options.parallax) swiperOptions.parallax = !0;
-        if (options.direction) swiperOptions.direction = toString(options.direction);
-        if (options.centered) swiperOptions.centeredSlides = !0;
-        if (options.freemode) swiperOptions.freeMode = !0;
-        if (options.cssmode) swiperOptions.cssMode = !0;
+        if ( options.autoheight ) swiperOptions.autoHeight = !0;
+        if ( options.loop ) swiperOptions.loop = !0;
+        if ( options.parallax ) swiperOptions.parallax = !0;
+        if ( options.direction ) swiperOptions.direction = toString( options.direction );
+        if ( options.centered ) swiperOptions.centeredSlides = !0;
+        if ( options.freemode ) swiperOptions.freeMode = !0;
+        if ( options.cssmode ) swiperOptions.cssMode = !0;
 
-        swiperOptions.speed = options.speed ? parseInt(options.speed) : random(300, 900);
+        swiperOptions.speed = options.speed ? parseInt( options.speed ) : random( 300, 900 );
 
-        if (options.autoplay) {
+        if ( options.autoplay ) {
             swiperOptions.autoplay = {
                 disableOnInteraction: !1,
-                delay: options.delay ? parseInt(options.delay) : random(3000, 6000),
+                delay: options.delay ? parseInt( options.delay ) : random( 3000, 6000 ),
             };
-            if (options.reverse) swiperOptions.reverseDirection = !0;
+            if ( options.reverse ) swiperOptions.reverseDirection = !0;
         }
 
         // Navigation
-        if (options.navigation) {
-            const section = el.closest('.swiper-section');
-            let btnPrev = section?.querySelector('.swiper-button-prev');
-            let btnNext = section?.querySelector('.swiper-button-next');
+        if ( options.navigation ) {
+            const section = el.closest( '.swiper-section' );
+            let btnPrev = section?.querySelector( '.swiper-button-prev' );
+            let btnNext = section?.querySelector( '.swiper-button-next' );
 
-            if (btnPrev && btnNext) {
-                btnPrev.classList.add(classes.prevClass);
-                btnNext.classList.add(classes.nextClass);
+            if ( btnPrev && btnNext ) {
+                btnPrev.classList.add( classes.prevClass );
+                btnNext.classList.add( classes.nextClass );
             } else {
-                btnPrev = document.createElement('div');
-                btnNext = document.createElement('div');
-                btnPrev.classList.add('swiper-button', 'swiper-button-prev', classes.prevClass);
-                btnNext.classList.add('swiper-button', 'swiper-button-next', classes.nextClass);
-                controls.append(btnPrev, btnNext);
+                btnPrev = document.createElement( 'div' );
+                btnNext = document.createElement( 'div' );
+                btnPrev.classList.add( 'swiper-button', 'swiper-button-prev', classes.prevClass );
+                btnNext.classList.add( 'swiper-button', 'swiper-button-next', classes.nextClass );
+                controls.append( btnPrev, btnNext );
 
-                btnPrev.setAttribute('data-fa', '');
-                btnNext.setAttribute('data-fa', '');
+                btnPrev.setAttribute( 'data-fa', '' );
+                btnNext.setAttribute( 'data-fa', '' );
             }
 
             swiperOptions.navigation = {
@@ -155,40 +155,40 @@ const initializeSwipers = () => {
         }
 
         // Pagination
-        if (options.pagination) {
-            const section = el.closest('.swiper-section');
-            let pagination = section?.querySelector('.swiper-pagination');
-            if (pagination) {
-                pagination.classList.add(classes.paginationClass);
+        if ( options.pagination ) {
+            const section = el.closest( '.swiper-section' );
+            let pagination = section?.querySelector( '.swiper-pagination' );
+            if ( pagination ) {
+                pagination.classList.add( classes.paginationClass );
             } else {
-                pagination = document.createElement('div');
-                pagination.classList.add('swiper-pagination', classes.paginationClass);
-                controls.appendChild(pagination);
+                pagination = document.createElement( 'div' );
+                pagination.classList.add( 'swiper-pagination', classes.paginationClass );
+                controls.appendChild( pagination );
             }
 
             const paginationType = options.pagination;
             swiperOptions.pagination = {
                 el: '.' + classes.paginationClass,
                 clickable: !0,
-                ...(paginationType === 'bullets' && { dynamicBullets: !1, type: 'bullets' }),
-                ...(paginationType === 'fraction' && { type: 'fraction' }),
-                ...(paginationType === 'progressbar' && { type: 'progressbar' }),
-                ...(paginationType === 'custom' && {
-                    renderBullet: (index, className) => `<span class="${className}">${index + 1}</span>`,
-                }),
+                ...( paginationType === 'bullets' && { dynamicBullets: !1, type: 'bullets' } ),
+                ...( paginationType === 'fraction' && { type: 'fraction' } ),
+                ...( paginationType === 'progressbar' && { type: 'progressbar' } ),
+                ...( paginationType === 'custom' && {
+                    renderBullet: ( index, className ) => `<span class="${className}">${index + 1}</span>`,
+                } ),
             };
         }
 
         // Scrollbar
-        if (options.scrollbar) {
-            const section = el.closest('.swiper-section');
-            let scrollbar = section?.querySelector('.swiper-scrollbar');
-            if (scrollbar) {
-                scrollbar.classList.add(classes.scrollbarClass);
+        if ( options.scrollbar ) {
+            const section = el.closest( '.swiper-section' );
+            let scrollbar = section?.querySelector( '.swiper-scrollbar' );
+            if ( scrollbar ) {
+                scrollbar.classList.add( classes.scrollbarClass );
             } else {
-                scrollbar = document.createElement('div');
-                scrollbar.classList.add('swiper-scrollbar', classes.scrollbarClass);
-                controls.appendChild(scrollbar);
+                scrollbar = document.createElement( 'div' );
+                scrollbar.classList.add( 'swiper-scrollbar', classes.scrollbarClass );
+                controls.appendChild( scrollbar );
             }
 
             swiperOptions.scrollbar = {
@@ -199,7 +199,7 @@ const initializeSwipers = () => {
         }
 
         // Marquee
-        if (options.marquee) {
+        if ( options.marquee ) {
             swiperOptions.centeredSlides = !1;
             swiperOptions.autoplay = {
                 delay: 1,
@@ -211,40 +211,40 @@ const initializeSwipers = () => {
         }
 
         // rows
-        if (options.rows) {
+        if ( options.rows ) {
             swiperOptions.direction = 'horizontal';
             swiperOptions.loop = !1;
             swiperOptions.grid = {
-                rows: parseInt(options.rows),
+                rows: parseInt( options.rows ),
                 fill: 'row',
             };
         }
 
-        initializeSwiper(el, '.' + classes.swiperClass, swiperOptions);
-    });
+        initializeSwiper( el, '.' + classes.swiperClass, swiperOptions );
+    } );
 };
 
 //
 // Products slides
 //
 const spgSwipers = () => {
-    const swiperElements = [...document?.querySelectorAll('.swiper-product-gallery')];
+    const swiperElements = [...document.querySelectorAll( '.swiper-product-gallery' )];
 
-    swiperElements.forEach((el, index) => {
+    swiperElements.forEach( ( el, index ) => {
         const classes = generateClasses();
-        el.classList.add(classes.swiperClass);
+        el.classList.add( classes.swiperClass );
 
-        const w_images = el?.querySelector('.swiper-images');
-        const w_thumbs = el?.querySelector('.swiper-thumbs');
+        const w_images = el?.querySelector( '.swiper-images' );
+        const w_thumbs = el?.querySelector( '.swiper-thumbs' );
 
         let swiper_images = false;
         let swiper_thumbs = false;
 
         /** wpg thumbs */
-        if (w_thumbs) {
-            w_thumbs?.querySelector('.swiper-button-prev').classList.add('prev-thumbs-' + classes.rand);
-            w_thumbs?.querySelector('.swiper-button-next').classList.add('next-thumbs-' + classes.rand);
-            w_thumbs.classList.add('thumbs-' + classes.rand);
+        if ( w_thumbs ) {
+            w_thumbs?.querySelector( '.swiper-button-prev' ).classList.add( 'prev-thumbs-' + classes.rand );
+            w_thumbs?.querySelector( '.swiper-button-next' ).classList.add( 'next-thumbs-' + classes.rand );
+            w_thumbs.classList.add( 'thumbs-' + classes.rand );
 
             let thumbs_options = { ...getDefaultOptions() };
             thumbs_options.breakpoints = {
@@ -267,14 +267,14 @@ const spgSwipers = () => {
                 nextEl: '.next-thumbs-' + classes.rand,
             };
 
-            swiper_thumbs = initializeSwiper(w_thumbs, '.thumbs-' + classes.rand, thumbs_options);
+            swiper_thumbs = initializeSwiper( w_thumbs, '.thumbs-' + classes.rand, thumbs_options );
         }
 
         /** wpg images */
-        if (w_images) {
-            w_images?.querySelector('.swiper-button-prev').classList.add('prev-images-' + classes.rand);
-            w_images?.querySelector('.swiper-button-next').classList.add('next-images-' + classes.rand);
-            w_images.classList.add('images-' + classes.rand);
+        if ( w_images ) {
+            w_images?.querySelector( '.swiper-button-prev' ).classList.add( 'prev-images-' + classes.rand );
+            w_images?.querySelector( '.swiper-button-next' ).classList.add( 'next-images-' + classes.rand );
+            w_images.classList.add( 'images-' + classes.rand );
 
             let images_options = { ...getDefaultOptions() };
             images_options.slidesPerView = 'auto';
@@ -286,62 +286,62 @@ const spgSwipers = () => {
                 nextEl: '.next-images-' + classes.rand,
             };
 
-            if (swiper_thumbs) {
+            if ( swiper_thumbs ) {
                 images_options.thumbs = {
                     swiper: swiper_thumbs,
                 };
             }
 
-            swiper_images = initializeSwiper(w_images, '.images-' + classes.rand, images_options);
+            swiper_images = initializeSwiper( w_images, '.images-' + classes.rand, images_options );
         }
 
         /** Variation image */
-        let firstImage = w_images?.querySelector('.swiper-images-first img');
-        firstImage.removeAttribute('srcset');
+        let firstImage = w_images?.querySelector( '.swiper-images-first img' );
+        firstImage.removeAttribute( 'srcset' );
 
-        let firstImageSrc = firstImage.getAttribute('src');
-        let imagePopupSrc = w_images?.querySelector('.swiper-images-first .image-popup');
+        let firstImageSrc = firstImage.getAttribute( 'src' );
+        let imagePopupSrc = w_images?.querySelector( '.swiper-images-first .image-popup' );
 
         /** */
         let firstThumb = false;
         let firstThumbSrc = false;
         let dataLargeImage = false;
 
-        if (swiper_thumbs) {
-            firstThumb = w_thumbs?.querySelector('.swiper-thumbs-first img');
-            firstThumb.removeAttribute('srcset');
+        if ( swiper_thumbs ) {
+            firstThumb = w_thumbs?.querySelector( '.swiper-thumbs-first img' );
+            firstThumb.removeAttribute( 'srcset' );
 
-            firstThumbSrc = firstThumb.getAttribute('src');
-            dataLargeImage = firstThumb.getAttribute('data-large_image');
+            firstThumbSrc = firstThumb.getAttribute( 'src' );
+            dataLargeImage = firstThumb.getAttribute( 'data-large_image' );
         }
 
         /** WC event */
-        const variations_form = jQuery('form.variations_form');
-        if (variations_form) {
-            variations_form.on('found_variation', function (event, variation) {
-                if (variation.image.src) {
-                    firstImage.setAttribute('src', variation.image.src);
-                    imagePopupSrc.setAttribute('data-src', variation.image.full_src);
-                    if (swiper_thumbs) {
-                        firstThumb.setAttribute('src', variation.image.gallery_thumbnail_src);
+        const variations_form = jQuery( 'form.variations_form' );
+        if ( variations_form ) {
+            variations_form.on( 'found_variation', function ( event, variation ) {
+                if ( variation.image.src ) {
+                    firstImage.setAttribute( 'src', variation.image.src );
+                    imagePopupSrc.setAttribute( 'data-src', variation.image.full_src );
+                    if ( swiper_thumbs ) {
+                        firstThumb.setAttribute( 'src', variation.image.gallery_thumbnail_src );
                     }
 
-                    swiper_images.slideTo(0);
+                    swiper_images.slideTo( 0 );
                 }
-            });
+            } );
 
-            variations_form.on('reset_image', function () {
-                firstImage.setAttribute('src', firstImageSrc);
-                imagePopupSrc.setAttribute('data-src', dataLargeImage);
-                if (swiper_thumbs) {
-                    firstThumb.setAttribute('src', firstThumbSrc);
+            variations_form.on( 'reset_image', function () {
+                firstImage.setAttribute( 'src', firstImageSrc );
+                imagePopupSrc.setAttribute( 'data-src', dataLargeImage );
+                if ( swiper_thumbs ) {
+                    firstThumb.setAttribute( 'src', firstThumbSrc );
                 }
 
-                swiper_images.slideTo(0);
-            });
+                swiper_images.slideTo( 0 );
+            } );
         }
-    });
+    } );
 };
 
-document.addEventListener('DOMContentLoaded', initializeSwipers);
-document.addEventListener('DOMContentLoaded', spgSwipers);
+document.addEventListener( 'DOMContentLoaded', initializeSwipers );
+document.addEventListener( 'DOMContentLoaded', spgSwipers );

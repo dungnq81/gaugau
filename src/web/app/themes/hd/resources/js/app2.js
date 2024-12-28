@@ -4,7 +4,7 @@ import Foundation from './3rd/_zf';
 import { nanoid } from 'nanoid';
 import Cookies from 'js-cookie';
 
-Object.assign(window, { Cookies });
+Object.assign( window, { Cookies } );
 
 import BackToTop from './components/back-to-top';
 import lazyLoader from './components/lazy-loader';
@@ -19,25 +19,25 @@ const baseUrl = typeof hd !== 'undefined' && typeof hd.baseUrl !== 'undefined' ?
 const themeUrl = typeof hd !== 'undefined' && typeof hd.themeUrl !== 'undefined' ? hd.themeUrl : 'http://localhost:8080/app/themes/hd/';
 
 'serviceWorker' in navigator &&
-	window.addEventListener('load', function () {
-		navigator.serviceWorker.register(themeUrl + 'assets/js/workbox.js').then(
-			function (e) {
-				console.log('ServiceWorker registration successful with scope: ', e.scope);
+	window.addEventListener( 'load', function () {
+		navigator.serviceWorker.register( themeUrl + 'assets/js/workbox.js' ).then(
+			function ( e ) {
+				console.log( 'ServiceWorker registration successful with scope: ', e.scope );
 			},
-			function (e) {
-				console.log('ServiceWorker registration failed: ', e);
+			function ( e ) {
+				console.log( 'ServiceWorker registration failed: ', e );
 			}
 		);
-	});
+	} );
 
 // Initialize
-function init() {
+function init () {
 	new BackToTop();
-	lazyLoader(4000, "script[data-type='lazy']");
-	initializeSocialShare('social-share', customOptions);
+	lazyLoader( 4000, "script[data-type='lazy']" );
+	initializeSocialShare( 'social-share', customOptions );
 }
 
 // Document ready
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener( 'DOMContentLoaded', function () {
 	init();
-});
+} );

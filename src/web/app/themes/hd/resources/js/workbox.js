@@ -1,4 +1,4 @@
-importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.3.0/workbox-sw.js');
+importScripts( 'https://storage.googleapis.com/workbox-cdn/releases/7.3.0/workbox-sw.js' );
 
 let registerRoute = workbox.routing.registerRoute;
 let CacheFirst = workbox.strategies.CacheFirst;
@@ -17,7 +17,7 @@ let cacheName = 'GAUDEV-workbox-cache';
  * @param {Request} _ref.request
  * @returns {boolean}
  */
-let matchCallback = function matchCallback(_ref) {
+let matchCallback = function matchCallback ( _ref ) {
 	let request = _ref.request;
 	return (
 		request.destination === '/app/themes/hd/assets/css/.*' ||
@@ -28,18 +28,18 @@ let matchCallback = function matchCallback(_ref) {
 
 registerRoute(
 	matchCallback,
-	new CacheFirst({
+	new CacheFirst( {
 		cacheName: cacheName,
 		plugins: [
-			new CacheableResponsePlugin({
+			new CacheableResponsePlugin( {
 				statuses: [0, 200],
-			}),
-			new ExpirationPlugin({
+			} ),
+			new ExpirationPlugin( {
 				maxEntries: maxEntries,
 				maxAgeSeconds: maxAgeSeconds,
-			}),
+			} ),
 		],
-	})
+	} )
 );
 
 // console.log(matchCallback);
@@ -51,38 +51,38 @@ registerRoute(
 // SELF INSTALL
 let expectedCaches = ['GAUDEV'];
 
-self.addEventListener('install', function (e) {
+self.addEventListener( 'install', function ( e ) {
 	e.waitUntil(
-		caches.open('GAUDEV').then(function (cache) {
-			return cache.addAll(['/']);
-		})
+		caches.open( 'GAUDEV' ).then( function ( cache ) {
+			return cache.addAll( ['/'] );
+		} )
 	);
-});
+} );
 
-self.addEventListener('activate', function (event) {
+self.addEventListener( 'activate', function ( event ) {
 	event.waitUntil(
 		caches
 			.keys()
-			.then(function (keys) {
+			.then( function ( keys ) {
 				return Promise.all(
-					keys.map(function (key) {
-						if (expectedCaches.includes(key)) {
-							return caches.delete(key);
+					keys.map( function ( key ) {
+						if ( expectedCaches.includes( key ) ) {
+							return caches.delete( key );
 						}
-					})
+					} )
 				);
-			})
-			.then(function () {
-				console.log('GAUDEV now ready to handle fetches.');
-			})
+			} )
+			.then( function () {
+				console.log( 'GAUDEV now ready to handle fetches.' );
+			} )
 	);
-});
+} );
 
-self.addEventListener('fetch', function (e) {
+self.addEventListener( 'fetch', function ( e ) {
 	// console.log(e.request.url);
 	e.respondWith(
-		caches.match(e.request).then(function (response) {
-			return response || fetch(e.request);
-		})
+		caches.match( e.request ).then( function ( response ) {
+			return response || fetch( e.request );
+		} )
 	);
-});
+} );

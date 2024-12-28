@@ -1,5 +1,5 @@
 // Import jQuery and assign to window
-Object.assign(window, { $: jQuery, jQuery });
+Object.assign( window, { $: jQuery, jQuery } );
 
 // Import Foundation core and utilities
 import { Foundation } from 'foundation-sites/js/foundation.core';
@@ -17,7 +17,7 @@ import { onImagesLoaded } from 'foundation-sites/js/foundation.util.imageLoader'
 import { Timer } from 'foundation-sites/js/foundation.util.timer';
 
 // Assign Foundation utilities
-Object.assign(Foundation, {
+Object.assign( Foundation, {
     rtl: CoreUtils.rtl,
     GetYoDigits: CoreUtils.GetYoDigits,
     RegExpEscape: CoreUtils.RegExpEscape,
@@ -34,11 +34,11 @@ Object.assign(Foundation, {
     Touch,
     Triggers,
     Timer,
-});
+} );
 
 // Initialize utilities
-Touch.init($);
-Triggers.init($, Foundation);
+Touch.init( $ );
+Triggers.init( $, Foundation );
 MediaQuery._init();
 
 // Import and initialize Foundation plugins
@@ -78,11 +78,11 @@ const plugins = [
     { plugin: Abide, name: 'Abide' },
 ];
 
-plugins.forEach(({ plugin, name }) => {
-    Foundation.plugin(plugin, name);
-});
+plugins.forEach( ( { plugin, name } ) => {
+    Foundation.plugin( plugin, name );
+} );
 
-Foundation.addToJquery($);
+Foundation.addToJquery( $ );
 
 //
 // pattern, validator
@@ -94,10 +94,10 @@ Foundation.addToJquery($);
  * @param parent
  * @returns {boolean}
  */
-function notEqualToValidator($el, required, parent) {
-    if (!required) return true;
+function notEqualToValidator ( $el, required, parent ) {
+    if ( !required ) return true;
 
-    let input1Value = $('#' + $el.attr('data-notEqualTo')).val(),
+    let input1Value = $( '#' + $el.attr( 'data-notEqualTo' ) ).val(),
         input2Value = $el.val();
 
     // Return true if they are different, false if they are the same
@@ -106,6 +106,6 @@ function notEqualToValidator($el, required, parent) {
 
 Foundation.Abide.defaults.validators['notEqualTo'] = notEqualToValidator;
 
-$(() => $(document).foundation());
+$( () => $( document ).foundation() );
 
 export default Foundation;

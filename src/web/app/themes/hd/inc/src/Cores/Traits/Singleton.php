@@ -2,7 +2,7 @@
 
 namespace Cores\Traits;
 
-\defined( 'ABSPATH' ) || die;
+\defined('ABSPATH') || die;
 
 /**
  * Singleton base class for having singleton implementation
@@ -11,8 +11,8 @@ namespace Cores\Traits;
  *
  * /!\ The get_instance method has to be implemented in the child class!
  */
-trait Singleton {
-
+trait Singleton
+{
 	/**
 	 * @var self
 	 */
@@ -23,8 +23,9 @@ trait Singleton {
 	 *
 	 * @return self
 	 */
-	final public static function get_instance(): static {
-		if ( null === static::$instance ) {
+	final public static function get_instance(): static
+	{
+		if (null === static::$instance) {
 			self::$instance = new static;
 		}
 
@@ -34,7 +35,8 @@ trait Singleton {
 	/**
 	 * Constructor is protected to prevent instantiation from outside
 	 */
-	private function __construct() {
+	private function __construct()
+	{
 		$this->init();
 	}
 
@@ -42,7 +44,8 @@ trait Singleton {
 	 * Optional init function for additional setup
 	 * Child classes may override this function to perform custom actions
 	 */
-	protected function init(): void {
+	protected function init(): void
+	{
 		// Custom initialization logic (can be overridden by child classes)
 	}
 

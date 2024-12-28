@@ -2,10 +2,10 @@
 
 namespace Cores\Traits;
 
-\defined( 'ABSPATH' ) || die;
+\defined('ABSPATH') || die;
 
-trait DateTime {
-
+trait DateTime
+{
 	// -------------------------------------------------------------
 
 	/**
@@ -13,13 +13,14 @@ trait DateTime {
 	 *
 	 * @return bool
 	 */
-	public function isFutureTime( $time_string ): bool {
-		$time_converted = self::convertDatetimeFormat( $time_string, 'U' );
-		if ( false === $time_converted ) {
+	public function isFutureTime($time_string): bool
+	{
+		$time_converted = self::convertDatetimeFormat($time_string, 'U');
+		if (false === $time_converted) {
 			return false;
 		}
 
-		$current = current_time( 'U', 0 );
+		$current = current_time('U', 0);
 
 		return $time_converted >= $current;
 	}
@@ -41,25 +42,25 @@ trait DateTime {
 		false|int|string $to = false
 	): string {
 
-		$_ago = __( 'ago', TEXT_DOMAIN );
+		$_ago = __('ago', TEXT_DOMAIN);
 
-		if ( empty( $to ) ) {
-			$to = current_time( 'U', 0 );
+		if (empty($to)) {
+			$to = current_time('U', 0);
 		}
-		if ( empty( $from ) && $post ) {
-			$from = get_the_time( 'U', $post );
+		if (empty($from) && $post) {
+			$from = get_the_time('U', $post);
 		}
 
 		// If $from is still empty, return an empty string or handle accordingly
-		if ( empty( $from ) ) {
+		if (empty($from)) {
 			return '';
 		}
 
-		$diff  = (int) abs( $to - $from );
-		$since = human_time_diff( $from, $to );
+		$diff  = (int) abs($to - $from);
+		$since = human_time_diff($from, $to);
 		$since .= ' ' . $_ago;
 
-		return apply_filters( 'humanize_time_filter', $since, $diff, $from, $to );
+		return apply_filters('humanize_time_filter', $since, $diff, $from, $to);
 	}
 
 	// --------------------------------------------------
@@ -73,29 +74,30 @@ trait DateTime {
 	 * @return string ISO 8601 duration string.
 	 * @throws \Exception If the date-time strings are invalid.
 	 */
-	public static function isoDuration( string $date_time_1, string $date_time_2 ): string {
+	public static function isoDuration(string $date_time_1, string $date_time_2): string
+	{
 
 		// Create DateTime objects
-		$_date_time_1 = new \DateTime( $date_time_1 );
-		$_date_time_2 = new \DateTime( $date_time_2 );
+		$_date_time_1 = new \DateTime($date_time_1);
+		$_date_time_2 = new \DateTime($date_time_2);
 
 		// Calculate the interval
-		$interval = $_date_time_1->diff( $_date_time_2 );
+		$interval = $_date_time_1->diff($_date_time_2);
 
 		// Start building the ISO duration string
 		$isoDuration = 'P';
-		$isoDuration .= ( $interval->y > 0 ) ? $interval->y . 'Y' : '';
-		$isoDuration .= ( $interval->m > 0 ) ? $interval->m . 'M' : '';
-		$isoDuration .= ( $interval->d > 0 ) ? $interval->d . 'D' : '';
+		$isoDuration .= ($interval->y > 0) ? $interval->y . 'Y' : '';
+		$isoDuration .= ($interval->m > 0) ? $interval->m . 'M' : '';
+		$isoDuration .= ($interval->d > 0) ? $interval->d . 'D' : '';
 
 		// Check if there are any time components to add
 		$timePart = 'T';
-		$timePart .= ( $interval->h > 0 ) ? $interval->h . 'H' : '';
-		$timePart .= ( $interval->i > 0 ) ? $interval->i . 'M' : '';
-		$timePart .= ( $interval->s > 0 ) ? $interval->s . 'S' : '';
+		$timePart .= ($interval->h > 0) ? $interval->h . 'H' : '';
+		$timePart .= ($interval->i > 0) ? $interval->i . 'M' : '';
+		$timePart .= ($interval->s > 0) ? $interval->s . 'S' : '';
 
 		// If there are no time components, reset the time part
-		if ( $timePart === 'T' ) {
+		if ($timePart === 'T') {
 			$timePart = 'T0S'; // Indicates zero duration in time
 		}
 
@@ -112,32 +114,33 @@ trait DateTime {
 	 *
 	 * @return false|int|string Formatted date string in UTC, timestamp, or false on failure.
 	 */
-	public static function convertToUTC( int|string $date_string, string $format = 'Y-m-d H:i:s' ): false|int|string {
+	public static function convertToUTC(int|string $date_string, string $format = 'Y-m-d H:i:s'): false|int|string
+	{
 
 		// Handle timestamp input
-		if ( self::isInteger( $date_string ) ) {
+		if (self::isInteger($date_string)) {
 			$date_string = '@' . $date_string;
 		}
 
 		// Create `DateTime object` in the site's timezone
-		$datetime = date_create( $date_string, wp_timezone() );
+		$datetime = date_create($date_string, wp_timezone());
 
-		if ( false === $datetime ) {
+		if (false === $datetime) {
 			return false;
 		}
 
 		// Return `timestamp` if a format is `timestamp` or `U`
-		if ( 'timestamp' === $format || 'U' === $format ) {
+		if ('timestamp' === $format || 'U' === $format) {
 			return $datetime->getTimestamp();
 		}
 
 		// Standardize `mysql` format option
-		if ( 'mysql' === $format ) {
+		if ('mysql' === $format) {
 			$format = 'Y-m-d H:i:s';
 		}
 
 		// Convert to UTC and return in `specified format`
-		return $datetime->setTimezone( new \DateTimeZone( 'UTC' ) )->format( $format );
+		return $datetime->setTimezone(new \DateTimeZone('UTC'))->format($format);
 	}
 
 	// -------------------------------------------------------------
@@ -150,35 +153,36 @@ trait DateTime {
 	 *
 	 * @return false|int|string Formatted date string in the site's timezone, timestamp, or false on failure.
 	 */
-	public static function convertFromUTC( int|string $date_string, string $format = 'Y-m-d H:i:s' ): false|int|string {
+	public static function convertFromUTC(int|string $date_string, string $format = 'Y-m-d H:i:s'): false|int|string
+	{
 
 		// Handle timestamp input
-		if ( self::isInteger( $date_string ) ) {
+		if (self::isInteger($date_string)) {
 			$date_string = '@' . $date_string;
 		}
 
 		// Create DateTime object in UTC timezone
-		$datetime = date_create( $date_string, new \DateTimeZone( 'UTC' ) );
+		$datetime = date_create($date_string, new \DateTimeZone('UTC'));
 
-		if ( false === $datetime ) {
+		if (false === $datetime) {
 			return false;
 		}
 
 		// Convert to site's timezone
-		$datetime->setTimezone( wp_timezone() );
+		$datetime->setTimezone(wp_timezone());
 
 		// If a format is 'timestamp' or 'U', adjust for the site's timezone offset
-		if ( 'timestamp' === $format || 'U' === $format ) {
+		if ('timestamp' === $format || 'U' === $format) {
 			return $datetime->getTimestamp() + $datetime->getOffset();
 		}
 
 		// Standardize 'mysql' format option
-		if ( 'mysql' === $format ) {
+		if ('mysql' === $format) {
 			$format = 'Y-m-d H:i:s';
 		}
 
 		// Return formatted date string in the site's timezone
-		return $datetime->format( $format );
+		return $datetime->format($format);
 	}
 
 	// -------------------------------------------------------------
@@ -191,32 +195,33 @@ trait DateTime {
 	 *
 	 * @return false|int|string Formatted date string, timestamp, or false on failure.
 	 */
-	public static function convertDatetimeFormat( int|string $date_string, string $format = 'Y-m-d H:i:s' ): false|int|string {
+	public static function convertDatetimeFormat(int|string $date_string, string $format = 'Y-m-d H:i:s'): false|int|string
+	{
 
 		// Convert timestamp to DateTime-friendly format
-		if ( self::isInteger( $date_string ) ) {
+		if (self::isInteger($date_string)) {
 			$date_string = "@" . $date_string;
 		}
 
 		// Create a DateTime object in the site's timezone
-		$datetime = date_create( $date_string, wp_timezone() );
+		$datetime = date_create($date_string, wp_timezone());
 
-		if ( false === $datetime ) {
+		if (false === $datetime) {
 			return false;
 		}
 
 		// For 'timestamp' or 'U', adjust the timestamp for the site's timezone offset
-		if ( 'timestamp' === $format || 'U' === $format ) {
+		if ('timestamp' === $format || 'U' === $format) {
 			return $datetime->getTimestamp() + $datetime->getOffset();
 		}
 
 		// Map 'mysql' to standard SQL datetime format
-		if ( 'mysql' === $format ) {
+		if ('mysql' === $format) {
 			$format = 'Y-m-d H:i:s';
 		}
 
 		// Return the formatted date string
-		return $datetime->format( $format );
+		return $datetime->format($format);
 	}
 
 	// -------------------------------------------------------------
@@ -229,13 +234,14 @@ trait DateTime {
 	 * @return array Array with time difference in days, hours, minutes, and seconds.
 	 * @throws \Exception
 	 */
-	public static function timeDifference( string $date_string ): array {
+	public static function timeDifference(string $date_string): array
+	{
 
 		// Parse target time in the site's timezone
-		$targetTime = \DateTime::createFromFormat( 'Y-m-d\TH:i:s', $date_string, wp_timezone() );
+		$targetTime = \DateTime::createFromFormat('Y-m-d\TH:i:s', $date_string, wp_timezone());
 
 		// Return default zeroed values if the date format is invalid
-		if ( $targetTime === false ) {
+		if ($targetTime === false) {
 			return [
 				'days'    => '00',
 				'hours'   => '00',
@@ -244,14 +250,14 @@ trait DateTime {
 			];
 		}
 
-		$interval = ( new \DateTime( 'now', wp_timezone() ) )->diff( $targetTime );
+		$interval = (new \DateTime('now', wp_timezone()))->diff($targetTime);
 
 		// Format and return each time unit as a two-digit string
 		return [
-			'days'    => str_pad( $interval->format( '%a' ), 2, '0', STR_PAD_LEFT ),
-			'hours'   => str_pad( $interval->format( '%h' ), 2, '0', STR_PAD_LEFT ),
-			'minutes' => str_pad( $interval->format( '%i' ), 2, '0', STR_PAD_LEFT ),
-			'seconds' => str_pad( $interval->format( '%s' ), 2, '0', STR_PAD_LEFT ),
+			'days'    => str_pad($interval->format('%a'), 2, '0', STR_PAD_LEFT),
+			'hours'   => str_pad($interval->format('%h'), 2, '0', STR_PAD_LEFT),
+			'minutes' => str_pad($interval->format('%i'), 2, '0', STR_PAD_LEFT),
+			'seconds' => str_pad($interval->format('%s'), 2, '0', STR_PAD_LEFT),
 		];
 	}
 

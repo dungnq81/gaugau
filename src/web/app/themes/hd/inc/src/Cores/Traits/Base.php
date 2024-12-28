@@ -5,10 +5,10 @@ namespace Cores\Traits;
 use Detection\Exception\MobileDetectException;
 use Detection\MobileDetect;
 
-\defined( 'ABSPATH' ) || die;
+\defined('ABSPATH') || die;
 
-trait Base {
-
+trait Base
+{
 	// -------------------------------------------------------------
 
 	/**
@@ -17,16 +17,17 @@ trait Base {
 	 *
 	 * @return void
 	 */
-	public static function messageSuccess( $message, bool $auto_hide = false ): void {
+	public static function messageSuccess($message, bool $auto_hide = false): void
+	{
 		$message = $message ?: 'Values saved';
-		$message = __( $message, TEXT_DOMAIN );
+		$message = __($message, TEXT_DOMAIN);
 
 		$class = 'notice notice-success is-dismissible';
-		if ( $auto_hide ) {
+		if ($auto_hide) {
 			$class .= ' dismissible-auto';
 		}
 
-		printf( '<div class="%1$s"><p><strong>%2$s</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>', self::escAttr( $class ), $message );
+		printf('<div class="%1$s"><p><strong>%2$s</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>', self::escAttr($class), $message);
 	}
 
 	// -------------------------------------------------------------
@@ -37,16 +38,17 @@ trait Base {
 	 *
 	 * @return void
 	 */
-	public static function messageError( $message, bool $auto_hide = false ): void {
+	public static function messageError($message, bool $auto_hide = false): void
+	{
 		$message = $message ?: 'Values error';
-		$message = __( $message, TEXT_DOMAIN );
+		$message = __($message, TEXT_DOMAIN);
 
 		$class = 'notice notice-error is-dismissible';
-		if ( $auto_hide ) {
+		if ($auto_hide) {
 			$class .= ' dismissible-auto';
 		}
 
-		printf( '<div class="%1$s"><p><strong>%2$s</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>', self::escAttr( $class ), $message );
+		printf('<div class="%1$s"><p><strong>%2$s</strong></p><button type="button" class="notice-dismiss"><span class="screen-reader-text">Dismiss this notice.</span></button></div>', self::escAttr($class), $message);
 	}
 
 	// -------------------------------------------------------------
@@ -58,8 +60,9 @@ trait Base {
 	 *
 	 * @return void
 	 */
-	public static function wpDie( string|\WP_Error $message = '', string|int $title = '', string|array|int $args = [] ): void {
-		wp_die( $message, $title, $args );
+	public static function wpDie(string|\WP_Error $message = '', string|int $title = '', string|array|int $args = []): void
+	{
+		wp_die($message, $title, $args);
 	}
 
 	// -------------------------------------------------------------
@@ -72,9 +75,10 @@ trait Base {
 	 *
 	 * @return void
 	 */
-	public static function errorLog( string $message, int $message_type = 0, ?string $destination = null, ?string $additional_headers = null ): void {
-		if ( WP_DEBUG ) {
-			error_log( $message, $message_type, $destination, $additional_headers );
+	public static function errorLog(string $message, int $message_type = 0, ?string $destination = null, ?string $additional_headers = null): void
+	{
+		if (WP_DEBUG) {
+			error_log($message, $message_type, $destination, $additional_headers);
 		}
 	}
 
@@ -87,17 +91,18 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function isPageTemplate( ?string $template = null ): bool {
-		if ( $template === null || ! is_page() ) {
+	public static function isPageTemplate(?string $template = null): bool
+	{
+		if ($template === null || ! is_page()) {
 			return false;
 		}
 
-		$current_template_slug = get_page_template_slug( get_the_ID() );
-		if ( ! $current_template_slug ) {
+		$current_template_slug = get_page_template_slug(get_the_ID());
+		if (! $current_template_slug) {
 			return false;
 		}
 
-		return $current_template_slug === trim( $template );
+		return $current_template_slug === trim($template);
 	}
 
 	// -------------------------------------------------------------
@@ -109,15 +114,16 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function isTaxonomy( ?string $taxonomy = null ): bool {
+	public static function isTaxonomy(?string $taxonomy = null): bool
+	{
 		$queried_object = get_queried_object();
 
-		if ( $taxonomy === null ) {
-			return $queried_object && ! empty( $queried_object?->taxonomy );
+		if ($taxonomy === null) {
+			return $queried_object && ! empty($queried_object?->taxonomy);
 		}
 
 		// Validate queried object and its taxonomy.
-		return $queried_object && isset( $queried_object->taxonomy ) && $queried_object->taxonomy === $taxonomy;
+		return $queried_object && isset($queried_object->taxonomy) && $queried_object->taxonomy === $taxonomy;
 	}
 
 	// --------------------------------------------------
@@ -129,23 +135,24 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function isXml( string $content ): bool {
+	public static function isXml(string $content): bool
+	{
 		// Check for empty content
-		if ( trim( $content ) === '' ) {
+		if (trim($content) === '') {
 			return false;
 		}
 
 		// Get the first 50 chars of the content to check for XML declaration
-		$xml_part = mb_substr( $content, 0, 50 );
+		$xml_part = mb_substr($content, 0, 50);
 
 		// Check if the content starts with an XML declaration
-		if ( preg_match( '/<\?xml version="/', $xml_part ) ) {
+		if (preg_match('/<\?xml version="/', $xml_part)) {
 			return true;
 		}
 
 		// Attempt to load the content as XML to ensure it is well-formed
-		libxml_use_internal_errors( true );
-		$xml = simplexml_load_string( $content );
+		libxml_use_internal_errors(true);
+		$xml = simplexml_load_string($content);
 		libxml_clear_errors();
 
 		return $xml !== false;
@@ -158,29 +165,30 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function isUrl( ?string $url ): bool {
+	public static function isUrl(?string $url): bool
+	{
 		// Basic URL validation using filter_var
-		if ( ! filter_var( $url, FILTER_VALIDATE_URL ) ) {
+		if (! filter_var($url, FILTER_VALIDATE_URL)) {
 			return false;
 		}
 
-		$parsed_url = parse_url( $url );
+		$parsed_url = parse_url($url);
 
 		// Validate scheme
-		$valid_schemes = [ 'http', 'https' ];
-		if ( ! isset( $parsed_url['scheme'] ) || ! in_array( $parsed_url['scheme'], $valid_schemes, true ) ) {
+		$valid_schemes = ['http', 'https'];
+		if (! isset($parsed_url['scheme']) || ! in_array($parsed_url['scheme'], $valid_schemes, true)) {
 			return false;
 		}
 
 		// Validate host
-		if ( ! isset( $parsed_url['host'] ) || ! filter_var( $parsed_url['host'], FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME ) ) {
+		if (! isset($parsed_url['host']) || ! filter_var($parsed_url['host'], FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
 			return false;
 		}
 
 		// Optional: Validate DNS resolution for the host
-//		if ( ! checkdnsrr( $parsed_url['host'], 'A' ) && ! checkdnsrr( $parsed_url['host'], 'AAAA' ) ) {
-//			return false;
-//		}
+		//		if ( ! checkdnsrr( $parsed_url['host'], 'A' ) && ! checkdnsrr( $parsed_url['host'], 'AAAA' ) ) {
+		//			return false;
+		//		}
 
 		return true;
 	}
@@ -193,12 +201,13 @@ trait Base {
 	 * @return boolean
 	 * @throws MobileDetectException
 	 */
-	public static function isMobile(): bool {
-		if ( class_exists( MobileDetect::class ) ) {
+	public static function isMobile(): bool
+	{
+		if (class_exists(MobileDetect::class)) {
 			try {
-				return ( new MobileDetect() )->isMobile();
-			} catch ( \Exception $e ) {
-				throw new MobileDetectException( 'Error detecting mobile device', 0, $e );
+				return (new MobileDetect())->isMobile();
+			} catch (\Exception $e) {
+				throw new MobileDetectException('Error detecting mobile device', 0, $e);
 			}
 		}
 
@@ -213,14 +222,15 @@ trait Base {
 	 *
 	 * @return  bool
 	 */
-	public static function isPhp( string $version = '7.4' ): bool {
+	public static function isPhp(string $version = '7.4'): bool
+	{
 		static $phpVer = [];
 
-		if ( ! isset( $phpVer[ $version ] ) ) {
-			$phpVer[ $version ] = version_compare( PHP_VERSION, $version, '>=' );
+		if (! isset($phpVer[$version])) {
+			$phpVer[$version] = version_compare(PHP_VERSION, $version, '>=');
 		}
 
-		return $phpVer[ $version ];
+		return $phpVer[$version];
 	}
 
 	// --------------------------------------------------
@@ -230,8 +240,9 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function isInteger( mixed $input ): bool {
-		return filter_var( $input, FILTER_VALIDATE_INT ) !== false;
+	public static function isInteger(mixed $input): bool
+	{
+		return filter_var($input, FILTER_VALIDATE_INT) !== false;
 	}
 
 	// --------------------------------------------------
@@ -241,13 +252,14 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function isEmpty( mixed $value ): bool {
-		if ( is_string( $value ) ) {
-			return trim( $value ) === '';
+	public static function isEmpty(mixed $value): bool
+	{
+		if (is_string($value)) {
+			return trim($value) === '';
 		}
 
 		// Check for numeric and boolean values, and use empty() for others
-		return ! is_numeric( $value ) && ! is_bool( $value ) && empty( $value );
+		return ! is_numeric($value) && ! is_bool($value) && empty($value);
 	}
 
 	// -------------------------------------------------------------
@@ -261,8 +273,9 @@ trait Base {
 	 *
 	 * @return bool True if the current request is a WP_CLI request, false otherwise.
 	 */
-	public static function isWpCli(): bool {
-		return defined( 'WP_CLI' ) && \WP_CLI;
+	public static function isWpCli(): bool
+	{
+		return defined('WP_CLI') && \WP_CLI;
 	}
 
 	// -------------------------------------------------------------
@@ -270,7 +283,8 @@ trait Base {
 	/**
 	 * @return bool
 	 */
-	public static function isAdmin(): bool {
+	public static function isAdmin(): bool
+	{
 		return is_admin();
 	}
 
@@ -279,8 +293,9 @@ trait Base {
 	/**
 	 * @return bool
 	 */
-	public static function isLogin(): bool {
-		return in_array( $GLOBALS['pagenow'], [ 'wp-login.php', 'wp-register.php' ] );
+	public static function isLogin(): bool
+	{
+		return in_array($GLOBALS['pagenow'], ['wp-login.php', 'wp-register.php']);
 	}
 
 	// -------------------------------------------------------------
@@ -292,10 +307,11 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function checkPluginInstalled( string $plugin_slug ): bool {
+	public static function checkPluginInstalled(string $plugin_slug): bool
+	{
 
 		// Ensure required functions are available
-		if ( ! function_exists( 'get_plugins' ) || ! function_exists( 'is_plugin_active' ) ) {
+		if (! function_exists('get_plugins') || ! function_exists('is_plugin_active')) {
 			require_once ABSPATH . 'wp-admin/includes/plugin.php';
 		}
 
@@ -303,7 +319,7 @@ trait Base {
 		$installed_plugins = get_plugins();
 
 		// Check if the plugin slug exists in the installed plugins array
-		return array_key_exists( $plugin_slug, $installed_plugins );
+		return array_key_exists($plugin_slug, $installed_plugins);
 	}
 
 	// -------------------------------------------------------------
@@ -315,8 +331,9 @@ trait Base {
 	 *
 	 * @return bool
 	 */
-	public static function checkPluginActive( string $plugin_slug ): bool {
-		return self::checkPluginInstalled( $plugin_slug ) && is_plugin_active( $plugin_slug );
+	public static function checkPluginActive(string $plugin_slug): bool
+	{
+		return self::checkPluginInstalled($plugin_slug) && is_plugin_active($plugin_slug);
 	}
 
 	// -------------------------------------------------------------
@@ -328,9 +345,10 @@ trait Base {
 	 *
 	 * @return bool True if either the free or Pro version of ACF is active, false otherwise.
 	 */
-	public static function isAcfActive(): bool {
-		return self::checkPluginActive( 'advanced-custom-fields/acf.php' ) ||
-		       self::checkPluginActive( 'advanced-custom-fields-pro/acf.php' );
+	public static function isAcfActive(): bool
+	{
+		return self::checkPluginActive('advanced-custom-fields/acf.php') ||
+			self::checkPluginActive('advanced-custom-fields-pro/acf.php');
 	}
 
 	// -------------------------------------------------------------
@@ -338,9 +356,10 @@ trait Base {
 	/**
 	 * @return bool
 	 */
-	public static function isPolylangActive(): bool {
-		return self::checkPluginActive( 'polylang/polylang.php' ) ||
-		       self::checkPluginActive( 'polylang-pro/polylang.php' );
+	public static function isPolylangActive(): bool
+	{
+		return self::checkPluginActive('polylang/polylang.php') ||
+			self::checkPluginActive('polylang-pro/polylang.php');
 	}
 
 	// -------------------------------------------------------------
@@ -348,8 +367,9 @@ trait Base {
 	/**
 	 * @return bool
 	 */
-	public static function isCf7Active(): bool {
-		return self::checkPluginActive( 'contact-form-7/wp-contact-form-7.php' );
+	public static function isCf7Active(): bool
+	{
+		return self::checkPluginActive('contact-form-7/wp-contact-form-7.php');
 	}
 
 	// -------------------------------------------------------------
@@ -357,7 +377,8 @@ trait Base {
 	/**
 	 * @return bool
 	 */
-	public static function isWoocommerceActive(): bool {
-		return self::checkPluginActive( 'woocommerce/woocommerce.php' );
+	public static function isWoocommerceActive(): bool
+	{
+		return self::checkPluginActive('woocommerce/woocommerce.php');
 	}
 }

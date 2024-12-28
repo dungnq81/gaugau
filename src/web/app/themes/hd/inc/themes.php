@@ -35,7 +35,6 @@ add_action('widgets_init', '__register_sidebars_action', 11);
 
 function __register_sidebars_action(): void
 {
-
 	//----------------------------------------------------------
 	// Homepage
 	//----------------------------------------------------------
@@ -205,7 +204,6 @@ add_filter('body_class', '__body_classes_filter', 11, 1);
 
 function __body_classes_filter(array $classes): array
 {
-
 	// Check whether we're in the customizer preview.
 	if (is_customize_preview()) {
 		$classes[] = 'customizer-preview';
@@ -241,7 +239,6 @@ add_filter('post_class', '__post_classes_filter', 11, 1);
 
 function __post_classes_filter(array $classes): array
 {
-
 	// remove_sticky_class
 	if (in_array('sticky', $classes, false)) {
 		$classes   = array_diff($classes, ["sticky"]);
@@ -427,7 +424,6 @@ add_filter('addon_theme_setting_options_filter', '__theme_setting_options', 99);
 function __theme_setting_options(array $arr): array
 {
 	$arr_new = [
-
 		// hide admin menu
 		'admin_hide_menu'                     => [
 			//'edit.php',
@@ -446,7 +442,6 @@ function __theme_setting_options(array $arr): array
 
 		// defer, delay script - default 5s.
 		'defer_script'                        => [
-
 			// defer.
 			'contact-form-7' => 'defer',
 
