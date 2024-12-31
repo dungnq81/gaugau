@@ -1,4 +1,16 @@
 {
-	"preset": "per",
-	"exclude": ["web/wp", "web/app/mu-plugins/bedrock-disallow-indexing", "web/app/plugins", "web/app/themes/twentytwentyfive"]
+	"preset": "psr12",
+	"rules": {
+		"array_syntax": {"syntax": "short"},
+		"ordered_imports": {"sort_algorithm": "alpha"},
+		"no_unused_imports": true,
+		"single_quote": true
+	},
+	"exclude": [
+		"web/wp",
+		"web/app/mu-plugins",
+		"web/app/plugins",
+		"web/app/themes/twentytwentyfive",
+		"vendor"
+	]
 }

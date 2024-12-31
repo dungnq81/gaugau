@@ -1,18 +1,21 @@
 <?php
+
 /**
  * Functions for ACF post type objects.
  *
- * @package ACF
+ * @param mixed $id
  */
 
 /**
  * Get an ACF CPT as an array
  *
  * @param integer|string $id The post ID being queried.
+ *
  * @return array|false The post type object.
  */
-function acf_get_post_type( $id ) {
-	return acf_get_internal_post_type( $id, 'acf-post-type' );
+function acf_get_post_type($id)
+{
+    return acf_get_internal_post_type($id, 'acf-post-type');
 }
 
 /**
@@ -20,11 +23,13 @@ function acf_get_post_type( $id ) {
  *
  * @since   6.1
  *
- * @param   integer|string $id The post ID.
- * @return  array|false The internal post type array.
+ * @param integer|string $id The post ID.
+ *
+ * @return array|false The internal post type array.
  */
-function acf_get_raw_post_type( $id ) {
-	return acf_get_raw_internal_post_type( $id, 'acf-post-type' );
+function acf_get_raw_post_type($id)
+{
+    return acf_get_raw_internal_post_type($id, 'acf-post-type');
 }
 
 /**
@@ -33,10 +38,12 @@ function acf_get_raw_post_type( $id ) {
  * @since 6.1
  *
  * @param integer|string $id The post ID, key, or name.
+ *
  * @return object|boolean The post object, or false on failure.
  */
-function acf_get_post_type_post( $id ) {
-	return acf_get_internal_post_type_post( $id, 'acf-post-type' );
+function acf_get_post_type_post($id)
+{
+    return acf_get_internal_post_type_post($id, 'acf-post-type');
 }
 
 /**
@@ -45,10 +52,12 @@ function acf_get_post_type_post( $id ) {
  * @since 6.1
  *
  * @param string $id The identifier.
+ *
  * @return boolean
  */
-function acf_is_post_type_key( $id ) {
-	return acf_is_internal_post_type_key( $id, 'acf-post-type' );
+function acf_is_post_type_key($id)
+{
+    return acf_is_internal_post_type_key($id, 'acf-post-type');
 }
 
 /**
@@ -57,10 +66,12 @@ function acf_is_post_type_key( $id ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return array|boolean
  */
-function acf_validate_post_type( array $post_type = array() ) {
-	return acf_validate_internal_post_type( $post_type, 'acf-post-type' );
+function acf_validate_post_type(array $post_type = [])
+{
+    return acf_validate_internal_post_type($post_type, 'acf-post-type');
 }
 
 /**
@@ -69,10 +80,12 @@ function acf_validate_post_type( array $post_type = array() ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return array
  */
-function acf_translate_post_type( array $post_type ) {
-	return acf_translate_internal_post_type( $post_type, 'acf-post-type' );
+function acf_translate_post_type(array $post_type)
+{
+    return acf_translate_internal_post_type($post_type, 'acf-post-type');
 }
 
 /**
@@ -81,10 +94,12 @@ function acf_translate_post_type( array $post_type ) {
  * @since 6.1
  *
  * @param array $filter An array of args to filter results by.
+ *
  * @return array
  */
-function acf_get_acf_post_types( array $filter = array() ) {
-	return acf_get_internal_post_type_posts( 'acf-post-type', $filter );
+function acf_get_acf_post_types(array $filter = [])
+{
+    return acf_get_internal_post_type_posts('acf-post-type', $filter);
 }
 
 /**
@@ -94,8 +109,9 @@ function acf_get_acf_post_types( array $filter = array() ) {
  *
  * @return array
  */
-function acf_get_raw_post_types() {
-	return acf_get_raw_internal_post_type_posts( 'acf-post-type' );
+function acf_get_raw_post_types()
+{
+    return acf_get_raw_internal_post_type_posts('acf-post-type');
 }
 
 /**
@@ -104,11 +120,13 @@ function acf_get_raw_post_types() {
  * @since 6.1
  *
  * @param array $post_types An array of ACF posts.
- * @param array $args       An array of args to filter by.
+ * @param array $args An array of args to filter by.
+ *
  * @return array
  */
-function acf_filter_post_types( array $post_types, array $args = array() ) {
-	return acf_filter_internal_post_type_posts( $post_types, $args, 'acf-post-type' );
+function acf_filter_post_types(array $post_types, array $args = [])
+{
+    return acf_filter_internal_post_type_posts($post_types, $args, 'acf-post-type');
 }
 
 /**
@@ -117,10 +135,12 @@ function acf_filter_post_types( array $post_types, array $args = array() ) {
  * @since   6.1
  *
  * @param array $post_type The main ACF post type array.
+ *
  * @return array
  */
-function acf_update_post_type( array $post_type ) {
-	return acf_update_internal_post_type( $post_type, 'acf-post-type' );
+function acf_update_post_type(array $post_type)
+{
+    return acf_update_internal_post_type($post_type, 'acf-post-type');
 }
 
 /**
@@ -129,10 +149,12 @@ function acf_update_post_type( array $post_type ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return void
  */
-function acf_flush_post_type_cache( array $post_type ) {
-	acf_flush_internal_post_type_cache( $post_type, 'acf-post-type' );
+function acf_flush_post_type_cache(array $post_type)
+{
+    acf_flush_internal_post_type_cache($post_type, 'acf-post-type');
 }
 
 /**
@@ -141,10 +163,12 @@ function acf_flush_post_type_cache( array $post_type ) {
  * @since 6.1
  *
  * @param integer|string $id The ACF post type ID, key or name.
+ *
  * @return boolean True if post type was deleted.
  */
-function acf_delete_post_type( $id = 0 ) {
-	return acf_delete_internal_post_type( $id, 'acf-post-type' );
+function acf_delete_post_type($id = 0)
+{
+    return acf_delete_internal_post_type($id, 'acf-post-type');
 }
 
 /**
@@ -153,10 +177,12 @@ function acf_delete_post_type( $id = 0 ) {
  * @since 6.1
  *
  * @param integer|string $id The post type ID, key, or name.
+ *
  * @return boolean True if post was trashed.
  */
-function acf_trash_post_type( $id = 0 ) {
-	return acf_trash_internal_post_type( $id, 'acf-post-type' );
+function acf_trash_post_type($id = 0)
+{
+    return acf_trash_internal_post_type($id, 'acf-post-type');
 }
 
 /**
@@ -165,10 +191,12 @@ function acf_trash_post_type( $id = 0 ) {
  * @since 6.1
  *
  * @param integer|string $id The post type ID, key, or name.
+ *
  * @return boolean True if post was untrashed.
  */
-function acf_untrash_post_type( $id = 0 ) {
-	return acf_untrash_internal_post_type( $id, 'acf-post-type' );
+function acf_untrash_post_type($id = 0)
+{
+    return acf_untrash_internal_post_type($id, 'acf-post-type');
 }
 
 /**
@@ -177,10 +205,12 @@ function acf_untrash_post_type( $id = 0 ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return boolean
  */
-function acf_is_post_type( $post_type ) {
-	return acf_is_internal_post_type( $post_type, 'acf-post-type' );
+function acf_is_post_type($post_type)
+{
+    return acf_is_internal_post_type($post_type, 'acf-post-type');
 }
 
 /**
@@ -188,23 +218,27 @@ function acf_is_post_type( $post_type ) {
  *
  * @since 6.1
  *
- * @param integer|string $id          The ACF post type ID, key or name.
- * @param integer        $new_post_id Optional ID to override.
+ * @param integer|string $id The ACF post type ID, key or name.
+ * @param integer $new_post_id Optional ID to override.
+ *
  * @return array|boolean The new ACF post type, or false on failure.
  */
-function acf_duplicate_post_type( $id = 0, $new_post_id = 0 ) {
-	return acf_duplicate_internal_post_type( $id, $new_post_id, 'acf-post-type' );
+function acf_duplicate_post_type($id = 0, $new_post_id = 0)
+{
+    return acf_duplicate_internal_post_type($id, $new_post_id, 'acf-post-type');
 }
 
 /**
  * Activates or deactivates an ACF post type.
  *
- * @param integer|string $id       The ACF post type ID, key or name.
- * @param boolean        $activate True if the post type should be activated.
+ * @param integer|string $id The ACF post type ID, key or name.
+ * @param boolean $activate True if the post type should be activated.
+ *
  * @return boolean
  */
-function acf_update_post_type_active_status( $id, $activate = true ) {
-	return acf_update_internal_post_type_active_status( $id, $activate, 'acf-post-type' );
+function acf_update_post_type_active_status($id, $activate = true)
+{
+    return acf_update_internal_post_type_active_status($id, $activate, 'acf-post-type');
 }
 
 /**
@@ -213,10 +247,12 @@ function acf_update_post_type_active_status( $id, $activate = true ) {
  * @since 6.1
  *
  * @param integer $post_id The ACF post type ID.
+ *
  * @return string
  */
-function acf_get_post_type_edit_link( $post_id ) {
-	return acf_get_internal_post_type_edit_link( $post_id, 'acf-post-type' );
+function acf_get_post_type_edit_link($post_id)
+{
+    return acf_get_internal_post_type_edit_link($post_id, 'acf-post-type');
 }
 
 /**
@@ -225,10 +261,12 @@ function acf_get_post_type_edit_link( $post_id ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return array
  */
-function acf_prepare_post_type_for_export( array $post_type = array() ) {
-	return acf_prepare_internal_post_type_for_export( $post_type, 'acf-post-type' );
+function acf_prepare_post_type_for_export(array $post_type = [])
+{
+    return acf_prepare_internal_post_type_for_export($post_type, 'acf-post-type');
 }
 
 /**
@@ -237,10 +275,12 @@ function acf_prepare_post_type_for_export( array $post_type = array() ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return string|boolean
  */
-function acf_export_post_type_as_php( array $post_type ) {
-	return acf_export_internal_post_type_as_php( $post_type, 'acf-post-type' );
+function acf_export_post_type_as_php(array $post_type)
+{
+    return acf_export_internal_post_type_as_php($post_type, 'acf-post-type');
 }
 
 /**
@@ -249,10 +289,12 @@ function acf_export_post_type_as_php( array $post_type ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return array
  */
-function acf_prepare_post_type_for_import( array $post_type = array() ) {
-	return acf_prepare_internal_post_type_for_import( $post_type, 'acf-post-type' );
+function acf_prepare_post_type_for_import(array $post_type = [])
+{
+    return acf_prepare_internal_post_type_for_import($post_type, 'acf-post-type');
 }
 
 /**
@@ -261,10 +303,12 @@ function acf_prepare_post_type_for_import( array $post_type = array() ) {
  * @since 6.1
  *
  * @param array $post_type The ACF post type array.
+ *
  * @return array The imported post type.
  */
-function acf_import_post_type( array $post_type ) {
-	return acf_import_internal_post_type( $post_type, 'acf-post-type' );
+function acf_import_post_type(array $post_type)
+{
+    return acf_import_internal_post_type($post_type, 'acf-post-type');
 }
 
 /**
@@ -273,28 +317,30 @@ function acf_import_post_type( array $post_type ) {
  * @since 6.2.1
  *
  * @param array $post_types The post types being exported.
+ *
  * @return string
  */
-function acf_export_enter_title_here( array $post_types ) {
-	$to_export = array();
-	$export    = '';
+function acf_export_enter_title_here(array $post_types)
+{
+    $to_export = [];
+    $export    = '';
 
-	foreach ( $post_types as $post_type ) {
-		if ( ! empty( $post_type['enter_title_here'] ) ) {
-			$to_export[ $post_type['post_type'] ] = $post_type['enter_title_here'];
-		}
-	}
+    foreach ($post_types as $post_type) {
+        if (! empty($post_type['enter_title_here'])) {
+            $to_export[ $post_type['post_type'] ] = $post_type['enter_title_here'];
+        }
+    }
 
-	if ( ! empty( $to_export ) ) {
-		$export .= "\r\nadd_filter( 'enter_title_here', function( \$default, \$post ) {\r\n";
-		$export .= "\tswitch ( \$post->post_type ) {\r\n";
+    if (! empty($to_export)) {
+        $export .= "\r\nadd_filter( 'enter_title_here', function( \$default, \$post ) {\r\n";
+        $export .= "\tswitch ( \$post->post_type ) {\r\n";
 
-		foreach ( $to_export as $post_type => $enter_title_here ) {
-			$export .= "\t\tcase '$post_type':\r\n\t\t\treturn '$enter_title_here';\r\n";
-		}
+        foreach ($to_export as $post_type => $enter_title_here) {
+            $export .= "\t\tcase '$post_type':\r\n\t\t\treturn '$enter_title_here';\r\n";
+        }
 
-		$export .= "\t}\r\n\r\n\treturn \$default;\r\n}, 10, 2 );\r\n\r\n";
-	}
+        $export .= "\t}\r\n\r\n\treturn \$default;\r\n}, 10, 2 );\r\n\r\n";
+    }
 
-	return esc_textarea( $export );
+    return esc_textarea($export);
 }

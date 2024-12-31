@@ -1,24 +1,15 @@
 <?php return array(
     'root' => array(
-        'name' => 'plugins/gau-addons',
+        'name' => 'plugins/hd-addons',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '7a44cd7fc7ebe83368ccd3dfd1d6f2895bb8d686',
+        'reference' => '15f6b9c20de0d265c6b34e84f3fd71efc0699509',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'box/spout' => array(
-            'pretty_version' => 'v3.3.0',
-            'version' => '3.3.0.0',
-            'reference' => '9bdb027d312b732515b884a341c0ad70372c6295',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../box/spout',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
         'enshrined/svg-sanitize' => array(
             'pretty_version' => '0.20.0',
             'version' => '0.20.0.0',
@@ -55,10 +46,19 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
-        'plugins/gau-addons' => array(
+        'openspout/openspout' => array(
+            'pretty_version' => 'v4.28.3',
+            'version' => '4.28.3.0',
+            'reference' => '12b5eddcc230a97a9a67a722ad75c247e1a16750',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../openspout/openspout',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'plugins/hd-addons' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => '7a44cd7fc7ebe83368ccd3dfd1d6f2895bb8d686',
+            'reference' => '15f6b9c20de0d265c6b34e84f3fd71efc0699509',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -94,7 +94,7 @@
         'roave/security-advisories' => array(
             'pretty_version' => 'dev-latest',
             'version' => 'dev-latest',
-            'reference' => '5a88337185d08d54ac102bc6eb137fc432ea70fb',
+            'reference' => '9dd07280fc4c5f6c3d2a3da5e4058fc7288c2a1d',
             'type' => 'metapackage',
             'install_path' => null,
             'aliases' => array(

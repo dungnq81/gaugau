@@ -4,83 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98803bbbc991d5de6882646ad1c94813",
+    "content-hash": "443912f71c68e3e7a99e73bbedabd341",
     "packages": [
-        {
-            "name": "box/spout",
-            "version": "v3.3.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/box/spout.git",
-                "reference": "9bdb027d312b732515b884a341c0ad70372c6295"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/box/spout/zipball/9bdb027d312b732515b884a341c0ad70372c6295",
-                "reference": "9bdb027d312b732515b884a341c0ad70372c6295",
-                "shasum": ""
-            },
-            "require": {
-                "ext-dom": "*",
-                "ext-xmlreader": "*",
-                "ext-zip": "*",
-                "php": ">=7.2.0"
-            },
-            "require-dev": {
-                "friendsofphp/php-cs-fixer": "^2",
-                "phpunit/phpunit": "^8"
-            },
-            "suggest": {
-                "ext-iconv": "To handle non UTF-8 CSV files (if \"php-intl\" is not already installed or is too limited)",
-                "ext-intl": "To handle non UTF-8 CSV files (if \"iconv\" is not already installed)"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.1.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Box\\Spout\\": "src/Spout"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "Apache-2.0"
-            ],
-            "authors": [
-                {
-                    "name": "Adrien Loison",
-                    "email": "adrien@box.com"
-                }
-            ],
-            "description": "PHP Library to read and write spreadsheet files (CSV, XLSX and ODS), in a fast and scalable way",
-            "homepage": "https://www.github.com/box/spout",
-            "keywords": [
-                "OOXML",
-                "csv",
-                "excel",
-                "memory",
-                "odf",
-                "ods",
-                "office",
-                "open",
-                "php",
-                "read",
-                "scale",
-                "spreadsheet",
-                "stream",
-                "write",
-                "xlsx"
-            ],
-            "support": {
-                "issues": "https://github.com/box/spout/issues",
-                "source": "https://github.com/box/spout/tree/v3.3.0"
-            },
-            "abandoned": true,
-            "time": "2021-05-14T21:18:09+00:00"
-        },
         {
             "name": "enshrined/svg-sanitize",
             "version": "0.20.0",
@@ -316,6 +241,99 @@
             "time": "2024-12-10T15:32:06+00:00"
         },
         {
+            "name": "openspout/openspout",
+            "version": "v4.28.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/openspout/openspout.git",
+                "reference": "12b5eddcc230a97a9a67a722ad75c247e1a16750"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/openspout/openspout/zipball/12b5eddcc230a97a9a67a722ad75c247e1a16750",
+                "reference": "12b5eddcc230a97a9a67a722ad75c247e1a16750",
+                "shasum": ""
+            },
+            "require": {
+                "ext-dom": "*",
+                "ext-fileinfo": "*",
+                "ext-filter": "*",
+                "ext-libxml": "*",
+                "ext-xmlreader": "*",
+                "ext-zip": "*",
+                "php": "~8.2.0 || ~8.3.0 || ~8.4.0"
+            },
+            "require-dev": {
+                "ext-zlib": "*",
+                "friendsofphp/php-cs-fixer": "^3.65.0",
+                "infection/infection": "^0.29.8",
+                "phpbench/phpbench": "^1.3.1",
+                "phpstan/phpstan": "^2.0.3",
+                "phpstan/phpstan-phpunit": "^2.0.1",
+                "phpstan/phpstan-strict-rules": "^2",
+                "phpunit/phpunit": "^11.5.0"
+            },
+            "suggest": {
+                "ext-iconv": "To handle non UTF-8 CSV files (if \"php-mbstring\" is not already installed or is too limited)",
+                "ext-mbstring": "To handle non UTF-8 CSV files (if \"iconv\" is not already installed)"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "OpenSpout\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Adrien Loison",
+                    "email": "adrien@box.com"
+                }
+            ],
+            "description": "PHP Library to read and write spreadsheet files (CSV, XLSX and ODS), in a fast and scalable way",
+            "homepage": "https://github.com/openspout/openspout",
+            "keywords": [
+                "OOXML",
+                "csv",
+                "excel",
+                "memory",
+                "odf",
+                "ods",
+                "office",
+                "open",
+                "php",
+                "read",
+                "scale",
+                "spreadsheet",
+                "stream",
+                "write",
+                "xlsx"
+            ],
+            "support": {
+                "issues": "https://github.com/openspout/openspout/issues",
+                "source": "https://github.com/openspout/openspout/tree/v4.28.3"
+            },
+            "funding": [
+                {
+                    "url": "https://paypal.me/filippotessarotto",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/Slamdunk",
+                    "type": "github"
+                }
+            ],
+            "time": "2024-12-17T11:28:11+00:00"
+        },
+        {
             "name": "psr/cache",
             "version": "3.0.0",
             "source": {
@@ -533,12 +551,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "5a88337185d08d54ac102bc6eb137fc432ea70fb"
+                "reference": "9dd07280fc4c5f6c3d2a3da5e4058fc7288c2a1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/5a88337185d08d54ac102bc6eb137fc432ea70fb",
-                "reference": "5a88337185d08d54ac102bc6eb137fc432ea70fb",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/9dd07280fc4c5f6c3d2a3da5e4058fc7288c2a1d",
+                "reference": "9dd07280fc4c5f6c3d2a3da5e4058fc7288c2a1d",
                 "shasum": ""
             },
             "conflict": {
@@ -827,7 +845,7 @@
                 "james-heinrich/phpthumb": "<1.7.12",
                 "jasig/phpcas": "<1.3.3",
                 "jcbrand/converse.js": "<3.3.3",
-                "joelbutcher/socialstream": "<6.2",
+                "joelbutcher/socialstream": "<5.6|>=6,<6.2",
                 "johnbillion/wp-crontrol": "<1.16.2",
                 "joomla/application": "<1.0.13",
                 "joomla/archive": "<1.1.12|>=2,<2.0.1",
@@ -1199,7 +1217,8 @@
                 "t3s/content-consent": "<1.0.3|>=2,<2.0.2",
                 "tastyigniter/tastyigniter": "<3.3",
                 "tcg/voyager": "<=1.4",
-                "tecnickcom/tcpdf": "<=6.7.5",
+                "tecnickcom/tc-lib-pdf-font": "<2.6.4",
+                "tecnickcom/tcpdf": "<6.8",
                 "terminal42/contao-tablelookupwizard": "<3.3.5",
                 "thelia/backoffice-default-template": ">=2.1,<2.1.2",
                 "thelia/thelia": ">=2.1,<2.1.3",
@@ -1211,6 +1230,7 @@
                 "tinymce/tinymce": "<7.2",
                 "tinymighty/wiki-seo": "<1.2.2",
                 "titon/framework": "<9.9.99",
+                "tltneon/lgsl": "<7",
                 "tobiasbg/tablepress": "<=2.0.0.0-RC1",
                 "topthink/framework": "<6.0.17|>=6.1,<=8.0.4",
                 "topthink/think": "<=6.1.1",
@@ -1378,7 +1398,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-12-23T19:04:22+00:00"
+            "time": "2024-12-27T20:05:23+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
@@ -1554,6 +1574,6 @@
     "platform": {
         "php": ">=8.2"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }

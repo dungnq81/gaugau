@@ -6,217 +6,228 @@
  * All the logic for adding fields to taxonomy terms
  *
  * @class       acf_form_taxonomy
- * @package     ACF
- * @subpackage  Forms
  */
-if ( ! class_exists( 'acf_form_taxonomy' ) ) :
+if (! class_exists('acf_form_taxonomy')) :
 
-	class acf_form_taxonomy {
+    class acf_form_taxonomy
+    {
+        public $view = 'add';
 
-		var $view = 'add';
+        /**
+         * This function will setup the class functionality
+         *
+         * @type function
+         *
+         * @date    5/03/2014
+         *
+         * @since   5.0.0
+         *
+         * @param   n/a
+         *
+         * @return n/a
+         */
+        public function __construct()
+        {
+            // actions
+            add_action('admin_enqueue_scripts', [$this, 'admin_enqueue_scripts']);
 
+            // save
+            add_action('create_term', [$this, 'save_term'], 10, 3);
+            add_action('edit_term', [$this, 'save_term'], 10, 3);
 
-		/**
-		 * This function will setup the class functionality
-		 *
-		 * @type    function
-		 * @date    5/03/2014
-		 * @since   5.0.0
-		 *
-		 * @param   n/a
-		 * @return  n/a
-		 */
-		function __construct() {
+            // delete
+            add_action('delete_term', [$this, 'delete_term'], 10, 4);
+        }
 
-			// actions
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+        /**
+         * This function will check if the current page is for a post/page edit form
+         *
+         * @type function
+         *
+         * @date    23/06/12
+         *
+         * @since   3.1.8
+         *
+         * @param   n/a
+         *
+         * @return (boolean)
+         */
+        public function validate_page()
+        {
+            // global
+            global $pagenow;
 
-			// save
-			add_action( 'create_term', array( $this, 'save_term' ), 10, 3 );
-			add_action( 'edit_term', array( $this, 'save_term' ), 10, 3 );
+            // validate page
+            if ($pagenow === 'edit-tags.php' || $pagenow === 'term.php') {
+                return true;
+            }
 
-			// delete
-			add_action( 'delete_term', array( $this, 'delete_term' ), 10, 4 );
-		}
+            // return
+            return false;
+        }
 
+        /**
+         * This action is run after post query but before any admin script / head actions.
+         * It is a good place to register all actions.
+         *
+         * @type action (admin_enqueue_scripts)
+         *
+         * @date    26/01/13
+         *
+         * @since   3.6.0
+         *
+         * @param   N/A
+         *
+         * @return N/A
+         */
+        public function admin_enqueue_scripts()
+        {
+            // validate page
+            if (! $this->validate_page()) {
+                return;
+            }
 
-		/**
-		 * This function will check if the current page is for a post/page edit form
-		 *
-		 * @type    function
-		 * @date    23/06/12
-		 * @since   3.1.8
-		 *
-		 * @param   n/a
-		 * @return  (boolean)
-		 */
-		function validate_page() {
+            // vars
+            $screen   = get_current_screen();
+            $taxonomy = $screen->taxonomy;
 
-			// global
-			global $pagenow;
+            // load acf scripts
+            acf_enqueue_scripts();
 
-			// validate page
-			if ( $pagenow === 'edit-tags.php' || $pagenow === 'term.php' ) {
-				return true;
-			}
+            // actions
+            add_action('admin_footer', [$this, 'admin_footer'], 10, 1);
+            add_action("{$taxonomy}_add_form_fields", [$this, 'add_term'], 10, 1);
+            add_action("{$taxonomy}_edit_form", [$this, 'edit_term'], 10, 2);
+        }
 
-			// return
-			return false;
-		}
+        /**
+         * description
+         *
+         * @type function
+         *
+         * @date    8/10/13
+         *
+         * @since   5.0.0
+         *
+         * @param $post_id (int)
+         * @param mixed $taxonomy
+         *
+         * @return $post_id (int)
+         */
+        public function add_term($taxonomy)
+        {
+            // vars
+            $post_id = 'term_0';
 
+            // update vars
+            $this->view = 'add';
 
-		/**
-		 * This action is run after post query but before any admin script / head actions.
-		 * It is a good place to register all actions.
-		 *
-		 * @type    action (admin_enqueue_scripts)
-		 * @date    26/01/13
-		 * @since   3.6.0
-		 *
-		 * @param   N/A
-		 * @return  N/A
-		 */
-		function admin_enqueue_scripts() {
+            // get field groups
+            $field_groups = acf_get_field_groups(
+                [
+                    'taxonomy' => $taxonomy,
+                ]
+            );
 
-			// validate page
-			if ( ! $this->validate_page() ) {
-				return;
-			}
+            // render
+            if (! empty($field_groups)) {
+                // data
+                acf_form_data(
+                    [
+                        'screen'  => 'taxonomy',
+                        'post_id' => $post_id,
+                    ]
+                );
 
-			// vars
-			$screen   = get_current_screen();
-			$taxonomy = $screen->taxonomy;
+                // wrap
+                echo '<div id="acf-term-fields" class="acf-fields -clear">';
 
-			// load acf scripts
-			acf_enqueue_scripts();
+                // loop
+                foreach ($field_groups as $field_group) {
+                    $fields = acf_get_fields($field_group);
+                    acf_render_fields($fields, $post_id, 'div', 'field');
+                }
 
-			// actions
-			add_action( 'admin_footer', array( $this, 'admin_footer' ), 10, 1 );
-			add_action( "{$taxonomy}_add_form_fields", array( $this, 'add_term' ), 10, 1 );
-			add_action( "{$taxonomy}_edit_form", array( $this, 'edit_term' ), 10, 2 );
-		}
+                // wrap
+                echo '</div>';
+            }
+        }
 
+        /**
+         * description
+         *
+         * @type function
+         *
+         * @date    8/10/13
+         *
+         * @since   5.0.0
+         *
+         * @param $post_id (int)
+         * @param mixed $term
+         * @param mixed $taxonomy
+         *
+         * @return $post_id (int)
+         */
+        public function edit_term($term, $taxonomy)
+        {
+            // vars
+            $post_id = 'term_' . $term->term_id;
 
-		/**
-		 * description
-		 *
-		 * @type    function
-		 * @date    8/10/13
-		 * @since   5.0.0
-		 *
-		 * @param   $post_id (int)
-		 * @return  $post_id (int)
-		 */
-		function add_term( $taxonomy ) {
+            // update vars
+            $this->view = 'edit';
 
-			// vars
-			$post_id = 'term_0';
+            // get field groups
+            $field_groups = acf_get_field_groups(
+                [
+                    'taxonomy' => $taxonomy,
+                ]
+            );
 
-			// update vars
-			$this->view = 'add';
+            // render
+            if (! empty($field_groups)) {
+                acf_form_data(
+                    [
+                        'screen'  => 'taxonomy',
+                        'post_id' => $post_id,
+                    ]
+                );
 
-			// get field groups
-			$field_groups = acf_get_field_groups(
-				array(
-					'taxonomy' => $taxonomy,
-				)
-			);
+                foreach ($field_groups as $field_group) {
+                    // title
+                    if ($field_group['style'] == 'default') {
+                        echo '<h2>' . esc_html($field_group['title']) . '</h2>';
+                    }
 
-			// render
-			if ( ! empty( $field_groups ) ) {
+                    // fields
+                    echo '<table class="form-table">';
+                    $fields = acf_get_fields($field_group);
+                    acf_render_fields($fields, $post_id, 'tr', 'field');
+                    echo '</table>';
+                }
+            }
+        }
 
-				// data
-				acf_form_data(
-					array(
-						'screen'  => 'taxonomy',
-						'post_id' => $post_id,
-					)
-				);
-
-				// wrap
-				echo '<div id="acf-term-fields" class="acf-fields -clear">';
-
-				// loop
-				foreach ( $field_groups as $field_group ) {
-						$fields = acf_get_fields( $field_group );
-						acf_render_fields( $fields, $post_id, 'div', 'field' );
-				}
-
-				// wrap
-				echo '</div>';
-			}
-		}
-
-
-		/**
-		 * description
-		 *
-		 * @type    function
-		 * @date    8/10/13
-		 * @since   5.0.0
-		 *
-		 * @param   $post_id (int)
-		 * @return  $post_id (int)
-		 */
-		function edit_term( $term, $taxonomy ) {
-
-			// vars
-			$post_id = 'term_' . $term->term_id;
-
-			// update vars
-			$this->view = 'edit';
-
-			// get field groups
-			$field_groups = acf_get_field_groups(
-				array(
-					'taxonomy' => $taxonomy,
-				)
-			);
-
-			// render
-			if ( ! empty( $field_groups ) ) {
-				acf_form_data(
-					array(
-						'screen'  => 'taxonomy',
-						'post_id' => $post_id,
-					)
-				);
-
-				foreach ( $field_groups as $field_group ) {
-
-						// title
-					if ( $field_group['style'] == 'default' ) {
-						echo '<h2>' . esc_html( $field_group['title'] ) . '</h2>';
-					}
-
-						// fields
-						echo '<table class="form-table">';
-					$fields = acf_get_fields( $field_group );
-					acf_render_fields( $fields, $post_id, 'tr', 'field' );
-						echo '</table>';
-				}
-			}
-		}
-
-
-		/**
-		 * description
-		 *
-		 * @type    function
-		 * @date    27/03/2015
-		 * @since   5.1.5
-		 *
-		 * @param   $post_id (int)
-		 * @return  $post_id (int)
-		 */
-		function admin_footer() {
-
-			?>
+        /**
+         * description
+         *
+         * @type function
+         *
+         * @date    27/03/2015
+         *
+         * @since   5.1.5
+         *
+         * @param $post_id (int)
+         *
+         * @return $post_id (int)
+         */
+        public function admin_footer()
+        {
+            ?>
 <script type="text/javascript">
 (function($) {
 	
 	// Define vars.
-	var view = '<?php echo esc_attr( $this->view ); ?>';
+	var view = '<?php echo esc_attr($this->view); ?>';
 	var $form = $('#' + view + 'tag');
 	var $submit = $('#' + view + 'tag input[type="submit"]:last');
 	
@@ -227,9 +238,9 @@ if ( ! class_exists( 'acf_form_taxonomy' ) ) :
 	
 			<?php
 
-			// View: Add.
-			if ( $this->view == 'add' ) :
-				?>
+            // View: Add.
+            if ($this->view == 'add') :
+                ?>
 	
 	// vars
 	var $fields = $('#acf-term-fields');
@@ -290,78 +301,89 @@ if ( ! class_exists( 'acf_form_taxonomy' ) ) :
 })(jQuery);	
 </script>
 			<?php
-		}
+        }
 
+        /**
+         * description
+         *
+         * @type function
+         *
+         * @date    8/10/13
+         *
+         * @since   5.0.0
+         *
+         * @param $post_id (int)
+         * @param mixed $term_id
+         * @param mixed $tt_id
+         * @param mixed $taxonomy
+         *
+         * @return $post_id (int)
+         */
+        public function save_term($term_id, $tt_id, $taxonomy)
+        {
+            // vars
+            $post_id = 'term_' . $term_id;
 
-		/**
-		 * description
-		 *
-		 * @type    function
-		 * @date    8/10/13
-		 * @since   5.0.0
-		 *
-		 * @param   $post_id (int)
-		 * @return  $post_id (int)
-		 */
-		function save_term( $term_id, $tt_id, $taxonomy ) {
+            // verify and remove nonce
+            if (! acf_verify_nonce('taxonomy')) {
+                return $term_id;
+            }
 
-			// vars
-			$post_id = 'term_' . $term_id;
+            // valied and show errors
+            acf_validate_save_post(true);
 
-			// verify and remove nonce
-			if ( ! acf_verify_nonce( 'taxonomy' ) ) {
-				return $term_id;
-			}
+            // save
+            acf_save_post($post_id);
+        }
 
-			// valied and show errors
-			acf_validate_save_post( true );
+        /**
+         * description
+         *
+         * @type function
+         *
+         * @date    15/10/13
+         *
+         * @since   5.0.0
+         *
+         * @param $post_id (int)
+         * @param mixed $term
+         * @param mixed $tt_id
+         * @param mixed $taxonomy
+         * @param mixed $deleted_term
+         *
+         * @return $post_id (int)
+         */
+        public function delete_term($term, $tt_id, $taxonomy, $deleted_term)
+        {
+            // bail early if termmeta table exists
+            if (acf_isset_termmeta()) {
+                return $term;
+            }
 
-			// save
-			acf_save_post( $post_id );
-		}
+            // globals
+            global $wpdb;
 
+            // vars
+            $search  = $taxonomy . '_' . $term . '_%';
+            $_search = '_' . $search;
 
-		/**
-		 * description
-		 *
-		 * @type    function
-		 * @date    15/10/13
-		 * @since   5.0.0
-		 *
-		 * @param   $post_id (int)
-		 * @return  $post_id (int)
-		 */
-		function delete_term( $term, $tt_id, $taxonomy, $deleted_term ) {
+            // escape '_'
+            // http://stackoverflow.com/questions/2300285/how-do-i-escape-in-sql-server
+            $search  = str_replace('_', '\_', $search);
+            $_search = str_replace('_', '\_', $_search);
 
-			// bail early if termmeta table exists
-			if ( acf_isset_termmeta() ) {
-				return $term;
-			}
+            // delete
+            $result = $wpdb->query(
+                $wpdb->prepare(
+                    "DELETE FROM $wpdb->options WHERE option_name LIKE %s OR option_name LIKE %s",
+                    $search,
+                    $_search
+                )
+            );
+        }
+    }
 
-			// globals
-			global $wpdb;
-
-			// vars
-			$search  = $taxonomy . '_' . $term . '_%';
-			$_search = '_' . $search;
-
-			// escape '_'
-			// http://stackoverflow.com/questions/2300285/how-do-i-escape-in-sql-server
-			$search  = str_replace( '_', '\_', $search );
-			$_search = str_replace( '_', '\_', $_search );
-
-			// delete
-			$result = $wpdb->query(
-				$wpdb->prepare(
-					"DELETE FROM $wpdb->options WHERE option_name LIKE %s OR option_name LIKE %s",
-					$search,
-					$_search
-				)
-			);
-		}
-	}
-
-	new acf_form_taxonomy();
+    new acf_form_taxonomy();
 endif;
 
 

@@ -1,105 +1,105 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly
 }
 
-if ( ! class_exists( 'ACF_Ajax_Check_Screen' ) ) :
+if (! class_exists('ACF_Ajax_Check_Screen')) :
 
-	class ACF_Ajax_Check_Screen extends ACF_Ajax {
+    class ACF_Ajax_Check_Screen extends ACF_Ajax
+    {
+        /** @var string The AJAX action name. */
+        public $action = 'acf/ajax/check_screen';
 
-		/** @var string The AJAX action name. */
-		var $action = 'acf/ajax/check_screen';
+        /** @var boolean Prevents access for non-logged in users. */
+        public $public = false;
 
-		/** @var boolean Prevents access for non-logged in users. */
-		var $public = false;
+        /**
+         * Returns the response data to sent back.
+         *
+         * @since 5.7.2
+         *
+         * @param array $request The request args.
+         *
+         * @return array|WP_Error The response data or WP_Error.
+         */
+        public function get_response($request)
+        {
+            $args = wp_parse_args(
+                $this->request,
+                [
+                    'screen'  => '',
+                    'post_id' => 0,
+                    'ajax'    => true,
+                    'exists'  => [],
+                ]
+            );
 
-		/**
-		 * Returns the response data to sent back.
-		 *
-		 * @since 5.7.2
-		 *
-		 * @param array $request The request args.
-		 * @return array|WP_Error The response data or WP_Error.
-		 */
-		public function get_response( $request ) {
-			$args = wp_parse_args(
-				$this->request,
-				array(
-					'screen'  => '',
-					'post_id' => 0,
-					'ajax'    => true,
-					'exists'  => array(),
-				)
-			);
+            if (! acf_current_user_can_edit_post((int) $args['post_id'])) {
+                return new WP_Error('acf_invalid_permissions', __('Sorry, you do not have permission to do that.', 'acf'));
+            }
 
-			if ( ! acf_current_user_can_edit_post( (int) $args['post_id'] ) ) {
-				return new WP_Error( 'acf_invalid_permissions', __( 'Sorry, you do not have permission to do that.', 'acf' ) );
-			}
+            $response = [
+                'results' => [],
+                'style'   => '',
+            ];
 
-			$response = array(
-				'results' => array(),
-				'style'   => '',
-			);
+            // get field groups
+            $field_groups = acf_get_field_groups($args);
 
-			// get field groups
-			$field_groups = acf_get_field_groups( $args );
+            // loop through field groups
+            if ($field_groups) {
+                foreach ($field_groups as $i => $field_group) {
+                    // vars
+                    $item = [
+                        'id'       => 'acf-' . $field_group['key'],
+                        'key'      => $field_group['key'],
+                        'title'    => $field_group['title'],
+                        'position' => $field_group['position'],
+                        'classes'  => postbox_classes('acf-' . $field_group['key'], $args['screen']),
+                        'style'    => $field_group['style'],
+                        'label'    => $field_group['label_placement'],
+                        'edit'     => acf_get_field_group_edit_link($field_group['ID']),
+                        'html'     => '',
+                    ];
 
-			// loop through field groups
-			if ( $field_groups ) {
-				foreach ( $field_groups as $i => $field_group ) {
+                    $hidden_metaboxes = get_hidden_meta_boxes($args['screen']);
 
-					// vars
-					$item = array(
-						'id'       => 'acf-' . $field_group['key'],
-						'key'      => $field_group['key'],
-						'title'    => $field_group['title'],
-						'position' => $field_group['position'],
-						'classes'  => postbox_classes( 'acf-' . $field_group['key'], $args['screen'] ),
-						'style'    => $field_group['style'],
-						'label'    => $field_group['label_placement'],
-						'edit'     => acf_get_field_group_edit_link( $field_group['ID'] ),
-						'html'     => '',
-					);
+                    if (is_array($hidden_metaboxes) && in_array($item['id'], $hidden_metaboxes)) {
+                        $item['classes'] = trim($item['classes'] . ' hide-if-js');
+                    }
 
-					$hidden_metaboxes = get_hidden_meta_boxes( $args['screen'] );
+                    // append html if doesnt already exist on page
+                    if (! in_array($field_group['key'], $args['exists'])) {
+                        // load fields
+                        $fields = acf_get_fields($field_group);
 
-					if ( is_array( $hidden_metaboxes ) && in_array( $item['id'], $hidden_metaboxes ) ) {
-						$item['classes'] = trim( $item['classes'] . ' hide-if-js' );
-					}
+                        // get field HTML
+                        ob_start();
 
-					// append html if doesnt already exist on page
-					if ( ! in_array( $field_group['key'], $args['exists'] ) ) {
+                        // render
+                        acf_render_fields($fields, $args['post_id'], 'div', $field_group['instruction_placement']);
 
-						// load fields
-						$fields = acf_get_fields( $field_group );
+                        $item['html'] = ob_get_clean();
+                    }
 
-						// get field HTML
-						ob_start();
+                    // append
+                    $response['results'][] = $item;
+                }
 
-						// render
-						acf_render_fields( $fields, $args['post_id'], 'div', $field_group['instruction_placement'] );
+                // Get style from first field group.
+                $response['style'] = acf_get_field_group_style($field_groups[0]);
+            }
 
-						$item['html'] = ob_get_clean();
-					}
+            // Custom metabox order.
+            if ($this->get('screen') == 'post') {
+                $response['sorted'] = get_user_option('meta-box-order_' . $this->get('post_type'));
+            }
 
-					// append
-					$response['results'][] = $item;
-				}
+            // return
+            return $response;
+        }
+    }
 
-				// Get style from first field group.
-				$response['style'] = acf_get_field_group_style( $field_groups[0] );
-			}
-
-			// Custom metabox order.
-			if ( $this->get( 'screen' ) == 'post' ) {
-				$response['sorted'] = get_user_option( 'meta-box-order_' . $this->get( 'post_type' ) );
-			}
-
-			// return
-			return $response;
-		}
-	}
-
-	acf_new_instance( 'ACF_Ajax_Check_Screen' );
+    acf_new_instance('ACF_Ajax_Check_Screen');
 endif; // class_exists check

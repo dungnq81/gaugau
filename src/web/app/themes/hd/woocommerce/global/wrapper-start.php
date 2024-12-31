@@ -12,7 +12,6 @@
  * the readme will list any important changes.
  *
  * @see         https://woocommerce.com/document/template-structure/
- * @package     WooCommerce\Templates
  */
 
 \defined('ABSPATH') || die;

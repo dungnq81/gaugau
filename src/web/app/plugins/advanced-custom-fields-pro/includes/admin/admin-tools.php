@@ -1,318 +1,340 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+if (! defined('ABSPATH')) {
+    exit; // Exit if accessed directly
 }
 
-if ( ! class_exists( 'acf_admin_tools' ) ) :
-	#[AllowDynamicProperties]
-	class acf_admin_tools {
+if (! class_exists('acf_admin_tools')) :
+    #[AllowDynamicProperties]
+    class acf_admin_tools
+    {
+        /** @var array Contains an array of admin tool instances */
+        public $tools = [];
 
+        /** @var string The active tool */
+        public $active = '';
 
-		/** @var array Contains an array of admin tool instances */
-		var $tools = array();
+        /**
+         * __construct
+         *
+         * This function will setup the class functionality
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param   n/a
+         *
+         * @return n/a
+         */
+        public function __construct()
+        {
+            // actions
+            add_action('admin_menu', [$this, 'admin_menu'], 15);
+        }
 
+        /**
+         * register_tool
+         *
+         * This function will store a tool tool class
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param string $class
+         *
+         * @return n/a
+         */
+        public function register_tool($class)
+        {
+            $instance                       = new $class();
+            $this->tools[ $instance->name ] = $instance;
+        }
 
-		/** @var string The active tool */
-		var $active = '';
+        /**
+         * get_tool
+         *
+         * This function will return a tool tool class
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param string $name
+         *
+         * @return n/a
+         */
+        public function get_tool($name)
+        {
+            return isset($this->tools[ $name ]) ? $this->tools[ $name ] : null;
+        }
 
+        /**
+         * get_tools
+         *
+         * This function will return an array of all tools
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param   n/a
+         *
+         * @return array
+         */
+        public function get_tools()
+        {
+            return $this->tools;
+        }
 
-		/**
-		 * __construct
-		 *
-		 * This function will setup the class functionality
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   n/a
-		 * @return  n/a
-		 */
-		function __construct() {
+        /**
+         * This function will add the ACF menu item to the WP admin
+         *
+         * @type action (admin_menu)
+         *
+         * @date    28/09/13
+         *
+         * @since   5.0.0
+         *
+         * @param   n/a
+         *
+         * @return n/a
+         */
+        public function admin_menu()
+        {
+            // bail early if no show_admin
+            if (! acf_get_setting('show_admin')) {
+                return;
+            }
 
-			// actions
-			add_action( 'admin_menu', array( $this, 'admin_menu' ), 15 );
-		}
+            // add page
+            $page = add_submenu_page('edit.php?post_type=acf-field-group', __('Tools', 'acf'), __('Tools', 'acf'), acf_get_setting('capability'), 'acf-tools', [$this, 'html']);
 
-		/**
-		 * register_tool
-		 *
-		 * This function will store a tool tool class
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   string $class
-		 * @return  n/a
-		 */
-		function register_tool( $class ) {
+            // actions
+            add_action('load-' . $page, [$this, 'load']);
+        }
 
-			$instance                       = new $class();
-			$this->tools[ $instance->name ] = $instance;
-		}
+        /**
+         * load
+         *
+         * description
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param   n/a
+         *
+         * @return n/a
+         */
+        public function load()
+        {
+            add_action('admin_body_class', [$this, 'admin_body_class']);
 
+            // disable filters (default to raw data)
+            acf_disable_filters();
 
-		/**
-		 * get_tool
-		 *
-		 * This function will return a tool tool class
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   string $name
-		 * @return  n/a
-		 */
-		function get_tool( $name ) {
+            // include tools
+            $this->include_tools();
 
-			return isset( $this->tools[ $name ] ) ? $this->tools[ $name ] : null;
-		}
+            // check submit
+            $this->check_submit();
 
+            // load acf scripts
+            acf_enqueue_scripts();
+        }
 
-		/**
-		 * get_tools
-		 *
-		 * This function will return an array of all tools
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   n/a
-		 * @return  array
-		 */
-		function get_tools() {
+        /**
+         * Modifies the admin body class.
+         *
+         * @since 6.0.0
+         *
+         * @param string $classes Space-separated list of CSS classes.
+         *
+         * @return string
+         */
+        public function admin_body_class($classes)
+        {
+            $classes .= ' acf-admin-page';
 
-			return $this->tools;
-		}
+            return $classes;
+        }
 
+        /**
+         * include_tools
+         *
+         * description
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param   n/a
+         *
+         * @return n/a
+         */
+        public function include_tools()
+        {
+            // include
+            acf_include('includes/admin/tools/class-acf-admin-tool.php');
+            acf_include('includes/admin/tools/class-acf-admin-tool-export.php');
+            acf_include('includes/admin/tools/class-acf-admin-tool-import.php');
 
-		/**
-		 * This function will add the ACF menu item to the WP admin
-		 *
-		 * @type    action (admin_menu)
-		 * @date    28/09/13
-		 * @since   5.0.0
-		 *
-		 * @param   n/a
-		 * @return  n/a
-		 */
-		function admin_menu() {
+            // action
+            do_action('acf/include_admin_tools');
+        }
 
-			// bail early if no show_admin
-			if ( ! acf_get_setting( 'show_admin' ) ) {
-				return;
-			}
+        /**
+         * check_submit
+         *
+         * description
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param   n/a
+         *
+         * @return n/a
+         */
+        public function check_submit()
+        {
+            // loop
+            foreach ($this->get_tools() as $tool) {
+                // load
+                $tool->load();
 
-			// add page
-			$page = add_submenu_page( 'edit.php?post_type=acf-field-group', __( 'Tools', 'acf' ), __( 'Tools', 'acf' ), acf_get_setting( 'capability' ), 'acf-tools', array( $this, 'html' ) );
+                // submit
+                if (acf_verify_nonce($tool->name)) {
+                    $tool->submit();
+                }
+            }
+        }
 
-			// actions
-			add_action( 'load-' . $page, array( $this, 'load' ) );
-		}
+        /**
+         * html
+         *
+         * description
+         *
+         * @date    10/10/17
+         *
+         * @since   5.6.3
+         *
+         * @param   n/a
+         *
+         * @return n/a
+         */
+        public function html()
+        {
+            // vars
+            $screen = get_current_screen();
+            $active = acf_maybe_get_GET('tool');
 
+            // view
+            $view = [
+                'screen_id' => $screen->id,
+                'active'    => $active,
+            ];
 
-		/**
-		 * load
-		 *
-		 * description
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   n/a
-		 * @return  n/a
-		 */
-		function load() {
+            // register metaboxes
+            foreach ($this->get_tools() as $tool) {
+                // check active
+                if ($active && $active !== $tool->name) {
+                    continue;
+                }
 
-			add_action( 'admin_body_class', array( $this, 'admin_body_class' ) );
+                // add metabox
+                add_meta_box('acf-admin-tool-' . $tool->name, acf_esc_html($tool->title), [$this, 'metabox_html'], $screen->id, 'normal', 'default', ['tool' => $tool->name]);
+            }
 
-			// disable filters (default to raw data)
-			acf_disable_filters();
+            // view
+            acf_get_view('tools/tools', $view);
+        }
 
-			// include tools
-			$this->include_tools();
+        /**
+         * Output the metabox HTML for specific tools
+         *
+         * @since 5.6.3
+         *
+         * @param mixed $post The post this metabox is being displayed on, should be an empty string always for us on a tools page.
+         * @param array $metabox An array of the metabox attributes.
+         */
+        public function metabox_html($post, $metabox)
+        {
+            $tool       = $this->get_tool($metabox['args']['tool']);
+            $form_attrs = ['method' => 'post'];
 
-			// check submit
-			$this->check_submit();
+            if ($metabox['args']['tool'] === 'import') {
+                $form_attrs['onsubmit'] = 'acf.disableForm(event)';
+            }
 
-			// load acf scripts
-			acf_enqueue_scripts();
-		}
+            printf('<form %s>', acf_esc_attrs($form_attrs));
+            $tool->html();
+            acf_nonce_input($tool->name);
+            echo '</form>';
+        }
+    }
 
-		/**
-		 * Modifies the admin body class.
-		 *
-		 * @since 6.0.0
-		 *
-		 * @param string $classes Space-separated list of CSS classes.
-		 * @return string
-		 */
-		public function admin_body_class( $classes ) {
-			$classes .= ' acf-admin-page';
-			return $classes;
-		}
-
-		/**
-		 * include_tools
-		 *
-		 * description
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   n/a
-		 * @return  n/a
-		 */
-		function include_tools() {
-
-			// include
-			acf_include( 'includes/admin/tools/class-acf-admin-tool.php' );
-			acf_include( 'includes/admin/tools/class-acf-admin-tool-export.php' );
-			acf_include( 'includes/admin/tools/class-acf-admin-tool-import.php' );
-
-			// action
-			do_action( 'acf/include_admin_tools' );
-		}
-
-
-		/**
-		 * check_submit
-		 *
-		 * description
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   n/a
-		 * @return  n/a
-		 */
-		function check_submit() {
-
-			// loop
-			foreach ( $this->get_tools() as $tool ) {
-
-				// load
-				$tool->load();
-
-				// submit
-				if ( acf_verify_nonce( $tool->name ) ) {
-					$tool->submit();
-				}
-			}
-		}
-
-
-		/**
-		 * html
-		 *
-		 * description
-		 *
-		 * @date    10/10/17
-		 * @since   5.6.3
-		 *
-		 * @param   n/a
-		 * @return  n/a
-		 */
-		function html() {
-
-			// vars
-			$screen = get_current_screen();
-			$active = acf_maybe_get_GET( 'tool' );
-
-			// view
-			$view = array(
-				'screen_id' => $screen->id,
-				'active'    => $active,
-			);
-
-			// register metaboxes
-			foreach ( $this->get_tools() as $tool ) {
-
-				// check active
-				if ( $active && $active !== $tool->name ) {
-					continue;
-				}
-
-				// add metabox
-				add_meta_box( 'acf-admin-tool-' . $tool->name, acf_esc_html( $tool->title ), array( $this, 'metabox_html' ), $screen->id, 'normal', 'default', array( 'tool' => $tool->name ) );
-			}
-
-			// view
-			acf_get_view( 'tools/tools', $view );
-		}
-
-
-		/**
-		 * Output the metabox HTML for specific tools
-		 *
-		 * @since 5.6.3
-		 *
-		 * @param mixed $post    The post this metabox is being displayed on, should be an empty string always for us on a tools page.
-		 * @param array $metabox An array of the metabox attributes.
-		 */
-		public function metabox_html( $post, $metabox ) {
-			$tool       = $this->get_tool( $metabox['args']['tool'] );
-			$form_attrs = array( 'method' => 'post' );
-
-			if ( $metabox['args']['tool'] === 'import' ) {
-				$form_attrs['onsubmit'] = 'acf.disableForm(event)';
-			}
-
-			printf( '<form %s>', acf_esc_attrs( $form_attrs ) );
-			$tool->html();
-			acf_nonce_input( $tool->name );
-			echo '</form>';
-		}
-	}
-
-	// initialize
-	acf()->admin_tools = new acf_admin_tools();
+    // initialize
+    acf()->admin_tools = new acf_admin_tools();
 endif; // class_exists check
 
 
 /**
  * alias of acf()->admin_tools->register_tool()
  *
- * @type    function
+ * @type function
+ *
  * @date    31/5/17
+ *
  * @since   5.6.0
  *
  * @param   n/a
- * @return  n/a
+ * @param mixed $class
+ *
+ * @return n/a
  */
-function acf_register_admin_tool( $class ) {
-
-	return acf()->admin_tools->register_tool( $class );
+function acf_register_admin_tool($class)
+{
+    return acf()->admin_tools->register_tool($class);
 }
 
 
 /**
  * This function will return the admin URL to the tools page
  *
- * @type    function
+ * @type function
+ *
  * @date    31/5/17
+ *
  * @since   5.6.0
  *
  * @param   n/a
- * @return  n/a
+ *
+ * @return n/a
  */
-function acf_get_admin_tools_url() {
-
-	return admin_url( 'edit.php?post_type=acf-field-group&page=acf-tools' );
+function acf_get_admin_tools_url()
+{
+    return admin_url('edit.php?post_type=acf-field-group&page=acf-tools');
 }
 
 
 /**
  * This function will return the admin URL to the tools page
  *
- * @type    function
+ * @type function
+ *
  * @date    31/5/17
+ *
  * @since   5.6.0
  *
  * @param   n/a
- * @return  n/a
+ * @param mixed $tool
+ *
+ * @return n/a
  */
-function acf_get_admin_tool_url( $tool = '' ) {
-
-	return acf_get_admin_tools_url() . '&tool=' . $tool;
+function acf_get_admin_tool_url($tool = '')
+{
+    return acf_get_admin_tools_url() . '&tool=' . $tool;
 }

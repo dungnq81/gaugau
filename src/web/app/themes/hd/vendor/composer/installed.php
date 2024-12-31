@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
-        'name' => 'wordpress/hd',
+        'name' => 'themes/hd',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => '7a44cd7fc7ebe83368ccd3dfd1d6f2895bb8d686',
+        'reference' => '15f6b9c20de0d265c6b34e84f3fd71efc0699509',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -67,7 +67,7 @@
         'roave/security-advisories' => array(
             'pretty_version' => 'dev-latest',
             'version' => 'dev-latest',
-            'reference' => '5a88337185d08d54ac102bc6eb137fc432ea70fb',
+            'reference' => '9dd07280fc4c5f6c3d2a3da5e4058fc7288c2a1d',
             'type' => 'metapackage',
             'install_path' => null,
             'aliases' => array(
@@ -75,21 +75,21 @@
             ),
             'dev_requirement' => true,
         ),
+        'themes/hd' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'reference' => '15f6b9c20de0d265c6b34e84f3fd71efc0699509',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'vectorface/whip' => array(
             'pretty_version' => 'v0.5.0',
             'version' => '0.5.0.0',
             'reference' => '0d0f4648cfb29777f0ae9f2dc6a3853e16674f78',
             'type' => 'library',
             'install_path' => __DIR__ . '/../vectorface/whip',
-            'aliases' => array(),
-            'dev_requirement' => false,
-        ),
-        'wordpress/hd' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '7a44cd7fc7ebe83368ccd3dfd1d6f2895bb8d686',
-            'type' => 'library',
-            'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
             'dev_requirement' => false,
         ),

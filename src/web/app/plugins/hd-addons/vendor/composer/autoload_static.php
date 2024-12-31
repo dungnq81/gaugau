@@ -31,6 +31,10 @@ class ComposerStaticInitb1d011e3e021839ea87b839dd827e727
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Cache\\' => 10,
         ),
+        'O' => 
+        array (
+            'OpenSpout\\' => 10,
+        ),
         'M' => 
         array (
             'MatthiasMullie\\PathConverter\\' => 29,
@@ -39,10 +43,6 @@ class ComposerStaticInitb1d011e3e021839ea87b839dd827e727
         'D' => 
         array (
             'Detection\\' => 10,
-        ),
-        'B' => 
-        array (
-            'Box\\Spout\\' => 10,
         ),
         'A' => 
         array (
@@ -79,6 +79,10 @@ class ComposerStaticInitb1d011e3e021839ea87b839dd827e727
         array (
             0 => __DIR__ . '/..' . '/psr/cache/src',
         ),
+        'OpenSpout\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/openspout/openspout/src',
+        ),
         'MatthiasMullie\\PathConverter\\' => 
         array (
             0 => __DIR__ . '/..' . '/matthiasmullie/path-converter/src',
@@ -90,10 +94,6 @@ class ComposerStaticInitb1d011e3e021839ea87b839dd827e727
         'Detection\\' => 
         array (
             0 => __DIR__ . '/..' . '/mobiledetect/mobiledetectlib/src',
-        ),
-        'Box\\Spout\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/box/spout/src/Spout',
         ),
         'Addons\\' => 
         array (

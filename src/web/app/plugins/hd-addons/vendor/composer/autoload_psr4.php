@@ -13,9 +13,9 @@ return array(
     'Psr\\SimpleCache\\' => array($vendorDir . '/psr/simple-cache/src'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-message/src'),
     'Psr\\Cache\\' => array($vendorDir . '/psr/cache/src'),
+    'OpenSpout\\' => array($vendorDir . '/openspout/openspout/src'),
     'MatthiasMullie\\PathConverter\\' => array($vendorDir . '/matthiasmullie/path-converter/src'),
     'MatthiasMullie\\Minify\\' => array($vendorDir . '/matthiasmullie/minify/src'),
     'Detection\\' => array($vendorDir . '/mobiledetect/mobiledetectlib/src'),
-    'Box\\Spout\\' => array($vendorDir . '/box/spout/src/Spout'),
     'Addons\\' => array($baseDir . '/src'),
 );

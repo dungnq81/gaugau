@@ -1,14 +1,14 @@
 <?php
 
-\defined( 'ABSPATH' ) || die;
+\defined('ABSPATH') || die;
 
-$html_header      = get_custom_post_option_content( 'html_header', true );
-$html_footer      = get_custom_post_option_content( 'html_footer', true );
-$html_body_top    = get_custom_post_option_content( 'html_body_top', true );
-$html_body_bottom = get_custom_post_option_content( 'html_body_bottom', true );
+$html_header      = get_custom_post_option_content('html_header', true);
+$html_footer      = get_custom_post_option_content('html_footer', true);
+$html_body_top    = get_custom_post_option_content('html_body_top', true);
+$html_body_bottom = get_custom_post_option_content('html_body_bottom', true);
 
 ?>
-<h2><?php _e( 'Custom Scripts Settings', ADDONS_TEXT_DOMAIN ); ?></h2>
+<h2><?php _e('Custom Scripts Settings', ADDONS_TEXT_DOMAIN); ?></h2>
 <div class="section section-textarea" id="section_html_header">
     <label class="heading" for="html_header"><?php _e('Header scripts', ADDONS_TEXT_DOMAIN) ?></label>
     <div class="desc">Add custom scripts inside HEAD tag. You need to have a SCRIPT tag around scripts.</div>

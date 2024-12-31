@@ -2,8 +2,6 @@
 
 /**
  * The template for displaying sidebar.
- *
- * @package Gau
  */
 
 \defined('ABSPATH') || die;

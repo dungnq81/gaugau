@@ -6,72 +6,77 @@
  * Returns true if this site has an upgrade avaialble.
  *
  * @date    24/8/18
+ *
  * @since   5.7.4
  *
  * @param   void
- * @return  boolean
+ *
+ * @return boolean
  */
-function acf_has_upgrade() {
-	$db_version = acf_get_db_version();
+function acf_has_upgrade()
+{
+    $db_version = acf_get_db_version();
 
-	if ( $db_version && acf_version_compare( $db_version, '<', ACF_UPGRADE_VERSION ) ) {
-		return true;
-	}
+    if ($db_version && acf_version_compare($db_version, '<', ACF_UPGRADE_VERSION)) {
+        return true;
+    }
 
-	if ( $db_version !== ACF_VERSION ) {
-		acf_update_db_version( ACF_VERSION );
-	}
+    if ($db_version !== ACF_VERSION) {
+        acf_update_db_version(ACF_VERSION);
+    }
 
-	return false;
+    return false;
 }
 
 /**
  * Runs upgrade routines if this site has an upgrade available.
  *
  * @date  24/8/18
+ *
  * @since 5.7.4
  */
-function acf_upgrade_all() {
-	// Increase time limit if possible.
-	if ( function_exists( 'set_time_limit' ) ) {
-		set_time_limit( 600 );
-	}
+function acf_upgrade_all()
+{
+    // Increase time limit if possible.
+    if (function_exists('set_time_limit')) {
+        set_time_limit(600);
+    }
 
-	// start timer
-	timer_start();
+    // start timer
+    timer_start();
 
-	// log
-	acf_dev_log( 'ACF Upgrade Begin.' );
+    // log
+    acf_dev_log('ACF Upgrade Begin.');
 
-	// vars
-	$db_version = acf_get_db_version();
+    // vars
+    $db_version = acf_get_db_version();
 
-	// 5.0.0
-	if ( acf_version_compare( $db_version, '<', '5.0.0' ) ) {
-		acf_upgrade_500();
-	}
+    // 5.0.0
+    if (acf_version_compare($db_version, '<', '5.0.0')) {
+        acf_upgrade_500();
+    }
 
-	// 5.5.0
-	if ( acf_version_compare( $db_version, '<', '5.5.0' ) ) {
-		acf_upgrade_550();
-	}
+    // 5.5.0
+    if (acf_version_compare($db_version, '<', '5.5.0')) {
+        acf_upgrade_550();
+    }
 
-	/**
-	 * When adding new upgrade routines here, increment the ACF_UPGRADE_VERSION
-	 * constant in `acf.php` to the new highest upgrade version.
-	 */
+    /**
+     * When adding new upgrade routines here, increment the ACF_UPGRADE_VERSION
+     * constant in `acf.php` to the new highest upgrade version.
+     */
 
-	// upgrade DB version once all updates are complete
-	acf_update_db_version( ACF_VERSION );
+    // upgrade DB version once all updates are complete
+    acf_update_db_version(ACF_VERSION);
 
-	if ( is_multisite() ) {
-		// Clears the network upgrade notification banner after site upgrades.
-		delete_site_transient( 'acf_network_upgrade_needed_' . ACF_UPGRADE_VERSION );
-	}
+    if (is_multisite()) {
+        // Clears the network upgrade notification banner after site upgrades.
+        delete_site_transient('acf_network_upgrade_needed_' . ACF_UPGRADE_VERSION);
+    }
 
-	// log
-	global $wpdb;
-	acf_dev_log( 'ACF Upgrade Complete.', $wpdb->num_queries, timer_stop( 0 ) );
+    // log
+    global $wpdb;
+    acf_dev_log('ACF Upgrade Complete.', $wpdb->num_queries, timer_stop(0));
 }
 
 /**
@@ -80,26 +85,32 @@ function acf_upgrade_all() {
  * Returns the ACF DB version.
  *
  * @date    10/09/2016
+ *
  * @since   5.4.0
  *
  * @param   void
- * @return  string
+ *
+ * @return string
  */
-function acf_get_db_version() {
-	return get_option( 'acf_version' );
+function acf_get_db_version()
+{
+    return get_option('acf_version');
 }
 
 /**
  * Updates the ACF DB version.
  *
  * @date    10/09/2016
+ *
  * @since   5.4.0
  *
- * @param   string $version The new version.
- * @return  void
+ * @param string $version The new version.
+ *
+ * @return void
  */
-function acf_update_db_version( $version = '' ) {
-	update_option( 'acf_version', $version );
+function acf_update_db_version($version = '')
+{
+    update_option('acf_version', $version);
 }
 
 /**
@@ -108,24 +119,26 @@ function acf_update_db_version( $version = '' ) {
  * Version 5 introduces new post types for field groups and fields.
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
  * @param   void
- * @return  void
+ *
+ * @return void
  */
-function acf_upgrade_500() {
+function acf_upgrade_500()
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.0.0.');
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.0.0.' );
+    // action
+    do_action('acf/upgrade_500');
 
-	// action
-	do_action( 'acf/upgrade_500' );
+    // do tasks
+    acf_upgrade_500_field_groups();
 
-	// do tasks
-	acf_upgrade_500_field_groups();
-
-	// update version
-	acf_update_db_version( '5.0.0' );
+    // update version
+    acf_update_db_version('5.0.0');
 }
 
 /**
@@ -134,33 +147,35 @@ function acf_upgrade_500() {
  * Upgrades all ACF4 field groups to ACF5
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
  * @param   void
- * @return  void
+ *
+ * @return void
  */
-function acf_upgrade_500_field_groups() {
+function acf_upgrade_500_field_groups()
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.0.0 Field Groups.');
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.0.0 Field Groups.' );
+    // get old field groups
+    $ofgs = get_posts(
+        [
+            'numberposts'      => -1,
+            'post_type'        => 'acf',
+            'orderby'          => 'menu_order title',
+            'order'            => 'asc',
+            'suppress_filters' => true,
+        ]
+    );
 
-	// get old field groups
-	$ofgs = get_posts(
-		array(
-			'numberposts'      => -1,
-			'post_type'        => 'acf',
-			'orderby'          => 'menu_order title',
-			'order'            => 'asc',
-			'suppress_filters' => true,
-		)
-	);
-
-	// loop
-	if ( $ofgs ) {
-		foreach ( $ofgs as $ofg ) {
-			acf_upgrade_500_field_group( $ofg );
-		}
-	}
+    // loop
+    if ($ofgs) {
+        foreach ($ofgs as $ofg) {
+            acf_upgrade_500_field_group($ofg);
+        }
+    }
 }
 
 /**
@@ -169,68 +184,69 @@ function acf_upgrade_500_field_groups() {
  * Upgrades a ACF4 field group to ACF5
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
- * @param   object $ofg The old field group post object.
- * @return  array $nfg  The new field group array.
+ * @param object $ofg The old field group post object.
+ *
+ * @return array $nfg  The new field group array.
  */
-function acf_upgrade_500_field_group( $ofg ) {
+function acf_upgrade_500_field_group($ofg)
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.0.0 Field Group.', $ofg);
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.0.0 Field Group.', $ofg );
+    // vars
+    $nfg = [
+        'ID'         => 0,
+        'title'      => $ofg->post_title,
+        'menu_order' => $ofg->menu_order,
+    ];
 
-	// vars
-	$nfg = array(
-		'ID'         => 0,
-		'title'      => $ofg->post_title,
-		'menu_order' => $ofg->menu_order,
-	);
+    // construct the location rules
+    $rules    = get_post_meta($ofg->ID, 'rule', false);
+    $anyorall = get_post_meta($ofg->ID, 'allorany', true);
+    if (is_array($rules)) {
+        // if field group was duplicated, rules may be a serialized string!
+        $rules = array_map('acf_maybe_unserialize', $rules);
 
-	// construct the location rules
-	$rules    = get_post_meta( $ofg->ID, 'rule', false );
-	$anyorall = get_post_meta( $ofg->ID, 'allorany', true );
-	if ( is_array( $rules ) ) {
+        // convert rules to groups
+        $nfg['location'] = acf_convert_rules_to_groups($rules, $anyorall);
+    }
 
-		// if field group was duplicated, rules may be a serialized string!
-		$rules = array_map( 'acf_maybe_unserialize', $rules );
+    // settings
+    if ($position = get_post_meta($ofg->ID, 'position', true)) {
+        $nfg['position'] = $position;
+    }
 
-		// convert rules to groups
-		$nfg['location'] = acf_convert_rules_to_groups( $rules, $anyorall );
-	}
+    if ($layout = get_post_meta($ofg->ID, 'layout', true)) {
+        $nfg['layout'] = $layout;
+    }
 
-	// settings
-	if ( $position = get_post_meta( $ofg->ID, 'position', true ) ) {
-		$nfg['position'] = $position;
-	}
+    if ($hide_on_screen = get_post_meta($ofg->ID, 'hide_on_screen', true)) {
+        $nfg['hide_on_screen'] = acf_maybe_unserialize($hide_on_screen);
+    }
 
-	if ( $layout = get_post_meta( $ofg->ID, 'layout', true ) ) {
-		$nfg['layout'] = $layout;
-	}
+    // save field group
+    // acf_upgrade_field_group will call the acf_get_valid_field_group function and apply 'compatibility' changes
+    $nfg = acf_update_field_group($nfg);
 
-	if ( $hide_on_screen = get_post_meta( $ofg->ID, 'hide_on_screen', true ) ) {
-		$nfg['hide_on_screen'] = acf_maybe_unserialize( $hide_on_screen );
-	}
+    // log
+    acf_dev_log('> Complete.', $nfg);
 
-	// save field group
-	// acf_upgrade_field_group will call the acf_get_valid_field_group function and apply 'compatibility' changes
-	$nfg = acf_update_field_group( $nfg );
+    // action for 3rd party
+    do_action('acf/upgrade_500_field_group', $nfg, $ofg);
 
-	// log
-	acf_dev_log( '> Complete.', $nfg );
+    // upgrade fields
+    acf_upgrade_500_fields($ofg, $nfg);
 
-	// action for 3rd party
-	do_action( 'acf/upgrade_500_field_group', $nfg, $ofg );
+    // trash?
+    if ($ofg->post_status == 'trash') {
+        acf_trash_field_group($nfg['ID']);
+    }
 
-	// upgrade fields
-	acf_upgrade_500_fields( $ofg, $nfg );
-
-	// trash?
-	if ( $ofg->post_status == 'trash' ) {
-		acf_trash_field_group( $nfg['ID'] );
-	}
-
-	// return
-	return $nfg;
+    // return
+    return $nfg;
 }
 
 /**
@@ -239,50 +255,50 @@ function acf_upgrade_500_field_group( $ofg ) {
  * Upgrades all ACF4 fields to ACF5 from a specific field group
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
- * @param   object $ofg The old field group post object.
- * @param   array  $nfg The new field group array.
- * @return  void
+ * @param object $ofg The old field group post object.
+ * @param array $nfg The new field group array.
+ *
+ * @return void
  */
-function acf_upgrade_500_fields( $ofg, $nfg ) {
+function acf_upgrade_500_fields($ofg, $nfg)
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.0.0 Fields.');
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.0.0 Fields.' );
+    // global
+    global $wpdb;
 
-	// global
-	global $wpdb;
+    // get field from postmeta
+    $rows = $wpdb->get_results($wpdb->prepare("SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key LIKE %s", $ofg->ID, 'field_%'), ARRAY_A);
 
-	// get field from postmeta
-	$rows = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM $wpdb->postmeta WHERE post_id = %d AND meta_key LIKE %s", $ofg->ID, 'field_%' ), ARRAY_A );
+    // check
+    if ($rows) {
+        // vars
+        $checked = [];
 
-	// check
-	if ( $rows ) {
+        // loop
+        foreach ($rows as $row) {
+            // vars
+            $field = $row['meta_value'];
+            $field = acf_maybe_unserialize($field);
+            $field = acf_maybe_unserialize($field); // run again for WPML
 
-		// vars
-		$checked = array();
+            // bail early if key already migrated (potential duplicates in DB)
+            if (isset($checked[ $field['key'] ])) {
+                continue;
+            }
+            $checked[ $field['key'] ] = 1;
 
-		// loop
-		foreach ( $rows as $row ) {
+            // add parent
+            $field['parent'] = $nfg['ID'];
 
-			// vars
-			$field = $row['meta_value'];
-			$field = acf_maybe_unserialize( $field );
-			$field = acf_maybe_unserialize( $field ); // run again for WPML
-
-			// bail early if key already migrated (potential duplicates in DB)
-			if ( isset( $checked[ $field['key'] ] ) ) {
-				continue;
-			}
-			$checked[ $field['key'] ] = 1;
-
-			// add parent
-			$field['parent'] = $nfg['ID'];
-
-			// migrate field
-			$field = acf_upgrade_500_field( $field );
-		}
-	}
+            // migrate field
+            $field = acf_upgrade_500_field($field);
+        }
+    }
 }
 
 /**
@@ -291,82 +307,81 @@ function acf_upgrade_500_fields( $ofg, $nfg ) {
  * Upgrades a ACF4 field to ACF5
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
- * @param   array $field The old field.
- * @return  array $field The new field.
+ * @param array $field The old field.
+ *
+ * @return array $field The new field.
  */
-function acf_upgrade_500_field( $field ) {
+function acf_upgrade_500_field($field)
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.0.0 Field.', $field);
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.0.0 Field.', $field );
+    // order_no is now menu_order
+    $field['menu_order'] = acf_extract_var($field, 'order_no', 0);
 
-	// order_no is now menu_order
-	$field['menu_order'] = acf_extract_var( $field, 'order_no', 0 );
+    // correct very old field keys (field2 => field_2)
+    if (substr($field['key'], 0, 6) !== 'field_') {
+        $field['key'] = 'field_' . str_replace('field', '', $field['key']);
+    }
 
-	// correct very old field keys (field2 => field_2)
-	if ( substr( $field['key'], 0, 6 ) !== 'field_' ) {
-		$field['key'] = 'field_' . str_replace( 'field', '', $field['key'] );
-	}
+    // extract sub fields
+    $sub_fields = [];
+    if ($field['type'] == 'repeater') {
+        // loop over sub fields
+        if (! empty($field['sub_fields'])) {
+            foreach ($field['sub_fields'] as $sub_field) {
+                $sub_fields[] = $sub_field;
+            }
+        }
 
-	// extract sub fields
-	$sub_fields = array();
-	if ( $field['type'] == 'repeater' ) {
+        // remove sub fields from field
+        unset($field['sub_fields']);
+    } elseif ($field['type'] == 'flexible_content') {
+        // loop over layouts
+        if (is_array($field['layouts'])) {
+            foreach ($field['layouts'] as $i => $layout) {
+                // generate key
+                $layout['key'] = uniqid('layout_');
 
-		// loop over sub fields
-		if ( ! empty( $field['sub_fields'] ) ) {
-			foreach ( $field['sub_fields'] as $sub_field ) {
-				$sub_fields[] = $sub_field;
-			}
-		}
+                // loop over sub fields
+                if (! empty($layout['sub_fields'])) {
+                    foreach ($layout['sub_fields'] as $sub_field) {
+                        $sub_field['parent_layout'] = $layout['key'];
+                        $sub_fields[]               = $sub_field;
+                    }
+                }
 
-		// remove sub fields from field
-		unset( $field['sub_fields'] );
-	} elseif ( $field['type'] == 'flexible_content' ) {
+                // remove sub fields from layout
+                unset($layout['sub_fields']);
 
-		// loop over layouts
-		if ( is_array( $field['layouts'] ) ) {
-			foreach ( $field['layouts'] as $i => $layout ) {
+                // update
+                $field['layouts'][ $i ] = $layout;
+            }
+        }
+    }
 
-				// generate key
-				$layout['key'] = uniqid( 'layout_' );
+    // save field
+    $field = acf_update_field($field);
 
-				// loop over sub fields
-				if ( ! empty( $layout['sub_fields'] ) ) {
-					foreach ( $layout['sub_fields'] as $sub_field ) {
-						$sub_field['parent_layout'] = $layout['key'];
-						$sub_fields[]               = $sub_field;
-					}
-				}
+    // log
+    acf_dev_log('> Complete.', $field);
 
-				// remove sub fields from layout
-				unset( $layout['sub_fields'] );
+    // sub fields
+    if ($sub_fields) {
+        foreach ($sub_fields as $sub_field) {
+            $sub_field['parent'] = $field['ID'];
+            acf_upgrade_500_field($sub_field);
+        }
+    }
 
-				// update
-				$field['layouts'][ $i ] = $layout;
-			}
-		}
-	}
+    // action for 3rd party
+    do_action('acf/update_500_field', $field);
 
-	// save field
-	$field = acf_update_field( $field );
-
-	// log
-	acf_dev_log( '> Complete.', $field );
-
-	// sub fields
-	if ( $sub_fields ) {
-		foreach ( $sub_fields as $sub_field ) {
-			$sub_field['parent'] = $field['ID'];
-			acf_upgrade_500_field( $sub_field );
-		}
-	}
-
-	// action for 3rd party
-	do_action( 'acf/update_500_field', $field );
-
-	// return
-	return $field;
+    // return
+    return $field;
 }
 
 /**
@@ -375,24 +390,26 @@ function acf_upgrade_500_field( $field ) {
  * Version 5.5 adds support for the wp_termmeta table added in WP 4.4.
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
  * @param   void
- * @return  void
+ *
+ * @return void
  */
-function acf_upgrade_550() {
+function acf_upgrade_550()
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.5.0.');
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.5.0.' );
+    // action
+    do_action('acf/upgrade_550');
 
-	// action
-	do_action( 'acf/upgrade_550' );
+    // do tasks
+    acf_upgrade_550_termmeta();
 
-	// do tasks
-	acf_upgrade_550_termmeta();
-
-	// update version
-	acf_update_db_version( '5.5.0' );
+    // update version
+    acf_update_db_version('5.5.0');
 }
 
 /**
@@ -401,53 +418,58 @@ function acf_upgrade_550() {
  * Upgrades all ACF4 termmeta saved in wp_options to the wp_termmeta table.
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
  * @param   void
- * @return  void
+ *
+ * @return void
  */
-function acf_upgrade_550_termmeta() {
+function acf_upgrade_550_termmeta()
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.5.0 Termmeta.');
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.5.0 Termmeta.' );
+    // bail early if no wp_termmeta table
+    if (get_option('db_version') < 34370) {
+        return;
+    }
 
-	// bail early if no wp_termmeta table
-	if ( get_option( 'db_version' ) < 34370 ) {
-		return;
-	}
+    // get all taxonomies
+    $taxonomies = get_taxonomies(false, 'objects');
 
-	// get all taxonomies
-	$taxonomies = get_taxonomies( false, 'objects' );
+    // loop
+    if ($taxonomies) {
+        foreach ($taxonomies as $taxonomy) {
+            acf_upgrade_550_taxonomy($taxonomy->name);
+        }
+    }
 
-	// loop
-	if ( $taxonomies ) {
-		foreach ( $taxonomies as $taxonomy ) {
-			acf_upgrade_550_taxonomy( $taxonomy->name );
-		}
-	}
-
-	// action for 3rd party
-	do_action( 'acf/upgrade_550_termmeta' );
+    // action for 3rd party
+    do_action('acf/upgrade_550_termmeta');
 }
 
 /**
  * When the database is updated to support term meta, migrate ACF term meta data across.
  *
  * @date    23/8/18
+ *
  * @since   5.7.4
  *
- * @param   string $wp_db_version         The new $wp_db_version.
- * @param   string $wp_current_db_version The old (current) $wp_db_version.
- * @return  void
+ * @param string $wp_db_version The new $wp_db_version.
+ * @param string $wp_current_db_version The old (current) $wp_db_version.
+ *
+ * @return void
  */
-function acf_wp_upgrade_550_termmeta( $wp_db_version, $wp_current_db_version ) {
-	if ( $wp_db_version >= 34370 && $wp_current_db_version < 34370 ) {
-		if ( acf_version_compare( acf_get_db_version(), '>', '5.5.0' ) ) {
-			acf_upgrade_550_termmeta();
-		}
-	}
+function acf_wp_upgrade_550_termmeta($wp_db_version, $wp_current_db_version)
+{
+    if ($wp_db_version >= 34370 && $wp_current_db_version < 34370) {
+        if (acf_version_compare(acf_get_db_version(), '>', '5.5.0')) {
+            acf_upgrade_550_termmeta();
+        }
+    }
 }
-add_action( 'wp_upgrade', 'acf_wp_upgrade_550_termmeta', 10, 2 );
+add_action('wp_upgrade', 'acf_wp_upgrade_550_termmeta', 10, 2);
 
 /**
  * acf_upgrade_550_taxonomy
@@ -455,129 +477,132 @@ add_action( 'wp_upgrade', 'acf_wp_upgrade_550_termmeta', 10, 2 );
  * Upgrades all ACF4 termmeta for a specific taxonomy.
  *
  * @date    24/8/18
+ *
  * @since   5.7.4
  *
- * @param   string $taxonomy The taxonomy name.
- * @return  void
+ * @param string $taxonomy The taxonomy name.
+ *
+ * @return void
  */
-function acf_upgrade_550_taxonomy( $taxonomy ) {
+function acf_upgrade_550_taxonomy($taxonomy)
+{
+    // log
+    acf_dev_log('ACF Upgrade 5.5.0 Taxonomy.', $taxonomy);
 
-	// log
-	acf_dev_log( 'ACF Upgrade 5.5.0 Taxonomy.', $taxonomy );
+    // global
+    global $wpdb;
 
-	// global
-	global $wpdb;
+    // vars
+    $search  = $taxonomy . '_%';
+    $_search = '_' . $search;
 
-	// vars
-	$search  = $taxonomy . '_%';
-	$_search = '_' . $search;
+    // escape '_'
+    // http://stackoverflow.com/questions/2300285/how-do-i-escape-in-sql-server
+    $search  = str_replace('_', '\_', $search);
+    $_search = str_replace('_', '\_', $_search);
 
-	// escape '_'
-	// http://stackoverflow.com/questions/2300285/how-do-i-escape-in-sql-server
-	$search  = str_replace( '_', '\_', $search );
-	$_search = str_replace( '_', '\_', $_search );
-
-	// search
-	// results show faster query times using 2 LIKE vs 2 wildcards
-	$rows = $wpdb->get_results(
-		$wpdb->prepare(
-			"SELECT * 
+    // search
+    // results show faster query times using 2 LIKE vs 2 wildcards
+    $rows = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT * 
 		FROM $wpdb->options 
 		WHERE option_name LIKE %s 
 		OR option_name LIKE %s",
-			$search,
-			$_search
-		),
-		ARRAY_A
-	);
+            $search,
+            $_search
+        ),
+        ARRAY_A
+    );
 
-	// loop
-	if ( $rows ) {
-		foreach ( $rows as $row ) {
+    // loop
+    if ($rows) {
+        foreach ($rows as $row) {
+            /**
+             *  Use regex to find "(_)taxonomy_(term_id)_(field_name)" and populate $matches:
+             *  Array
+             *  (
+             *  [0] => _category_3_color
+             *  [1] => _
+             *  [2] => 3
+             *  [3] => color
+             *  )
+             */
+            if (! preg_match("/^(_?){$taxonomy}_(\d+)_(.+)/", is_null($row['option_name']) ? '' : $row['option_name'], $matches)) {
+                continue;
+            }
 
-			/**
-			*  Use regex to find "(_)taxonomy_(term_id)_(field_name)" and populate $matches:
-			*  Array
-			*  (
-			*  [0] => _category_3_color
-			*  [1] => _
-			*  [2] => 3
-			*  [3] => color
-			*  )
-			*/
-			if ( ! preg_match( "/^(_?){$taxonomy}_(\d+)_(.+)/", is_null( $row['option_name'] ) ? '' : $row['option_name'], $matches ) ) {
-				continue;
-			}
+            // vars
+            $term_id    = $matches[2];
+            $meta_key   = $matches[1] . $matches[3];
+            $meta_value = $row['option_value'];
 
-			// vars
-			$term_id    = $matches[2];
-			$meta_key   = $matches[1] . $matches[3];
-			$meta_value = $row['option_value'];
+            // update
+            // memory usage reduced by 50% by using a manual insert vs update_metadata() function.
+            // update_metadata( 'term', $term_id, $meta_name, $meta_value );
+            $wpdb->insert(
+                $wpdb->termmeta,
+                [
+                    'term_id'    => $term_id,
+                    'meta_key'   => $meta_key,
+                    'meta_value' => $meta_value,
+                ]
+            );
 
-			// update
-			// memory usage reduced by 50% by using a manual insert vs update_metadata() function.
-			// update_metadata( 'term', $term_id, $meta_name, $meta_value );
-			$wpdb->insert(
-				$wpdb->termmeta,
-				array(
-					'term_id'    => $term_id,
-					'meta_key'   => $meta_key,
-					'meta_value' => $meta_value,
-				)
-			);
+            // log
+            acf_dev_log('ACF Upgrade 5.5.0 Term.', $term_id, $meta_key);
 
-			// log
-			acf_dev_log( 'ACF Upgrade 5.5.0 Term.', $term_id, $meta_key );
+            // action
+            do_action('acf/upgrade_550_taxonomy_term', $term_id);
+        }
+    }
 
-			// action
-			do_action( 'acf/upgrade_550_taxonomy_term', $term_id );
-		}
-	}
-
-	// action for 3rd party
-	do_action( 'acf/upgrade_550_taxonomy', $taxonomy );
+    // action for 3rd party
+    do_action('acf/upgrade_550_taxonomy', $taxonomy);
 }
 
 /**
  * Unsets ACF from reporting back to the WP.org API.
  *
- * @param array  $args An array of HTTP request arguments.
- * @param string $url  The request URL.
+ * @param array $args An array of HTTP request arguments.
+ * @param string $url The request URL.
+ *
  * @return array|mixed
  */
-function acf_unset_plugin_from_org_reporting( $args, $url ) {
-	// Bail if not a plugins request.
-	if ( empty( $args['body']['plugins'] ) ) {
-		return $args;
-	}
+function acf_unset_plugin_from_org_reporting($args, $url)
+{
+    // Bail if not a plugins request.
+    if (empty($args['body']['plugins'])) {
+        return $args;
+    }
 
-	// Bail if not a request to the wp.org API.
-	$parsed_url = wp_parse_url( $url );
-	if ( empty( $parsed_url['host'] ) || 'api.wordpress.org' !== $parsed_url['host'] ) {
-		return $args;
-	}
+    // Bail if not a request to the wp.org API.
+    $parsed_url = wp_parse_url($url);
+    if (empty($parsed_url['host']) || 'api.wordpress.org' !== $parsed_url['host']) {
+        return $args;
+    }
 
-	$plugins = json_decode( $args['body']['plugins'], true );
-	if ( empty( $plugins ) ) {
-		return $args;
-	}
+    $plugins = json_decode($args['body']['plugins'], true);
+    if (empty($plugins)) {
+        return $args;
+    }
 
-	// Remove ACF from reporting.
-	if ( ! empty( $plugins['plugins'][ ACF_BASENAME ] ) ) {
-		unset( $plugins['plugins'][ ACF_BASENAME ] );
-	}
+    // Remove ACF from reporting.
+    if (! empty($plugins['plugins'][ ACF_BASENAME ])) {
+        unset($plugins['plugins'][ ACF_BASENAME ]);
+    }
 
-	if ( ! empty( $plugins['active'] ) && is_array( $plugins['active'] ) ) {
-		$is_active = array_search( ACF_BASENAME, $plugins['active'], true );
-		if ( $is_active !== false ) {
-			unset( $plugins['active'][ $is_active ] );
-			$plugins['active'] = array_values( $plugins['active'] );
-		}
-	}
+    if (! empty($plugins['active']) && is_array($plugins['active'])) {
+        $is_active = array_search(ACF_BASENAME, $plugins['active'], true);
+        if ($is_active !== false) {
+            unset($plugins['active'][ $is_active ]);
+            $plugins['active'] = array_values($plugins['active']);
+        }
+    }
 
-	// Add the plugins list (minus ACF) back to $args.
-	$args['body']['plugins'] = wp_json_encode( $plugins );
+    // Add the plugins list (minus ACF) back to $args.
+    $args['body']['plugins'] = wp_json_encode($plugins);
 
-	return $args;
+    return $args;
 }
-add_filter( 'http_request_args', 'acf_unset_plugin_from_org_reporting', 10, 2 );
+add_filter('http_request_args', 'acf_unset_plugin_from_org_reporting', 10, 2);

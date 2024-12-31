@@ -6,169 +6,169 @@ namespace Cores\Traits;
 
 trait Arr
 {
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param string|null $string
-	 * @param string $separator
-	 *
-	 * @return array
-	 */
-	public static function separatedToArray(?string $string, string $separator = ','): array
-	{
-		if (empty($string)) {
-			return [];
-		}
+    /**
+     * @param string|null $string
+     * @param string $separator
+     *
+     * @return array
+     */
+    public static function separatedToArray(?string $string, string $separator = ','): array
+    {
+        if (empty($string)) {
+            return [];
+        }
 
-		$vars = explode($separator, $string);
+        $vars = explode($separator, $string);
 
-		return array_filter(array_map('trim', $vars), static function ($value) {
-			return $value !== '';
-		});
-	}
+        return array_filter(array_map('trim', $vars), static function ($value) {
+            return $value !== '';
+        });
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param array $arr1
-	 * @param array $arr2
-	 *
-	 * @return bool
-	 */
-	public static function compare(array $arr1, array $arr2): bool
-	{
-		if (count($arr1) !== count($arr2)) {
-			return false;
-		}
+    /**
+     * @param array $arr1
+     * @param array $arr2
+     *
+     * @return bool
+     */
+    public static function compare(array $arr1, array $arr2): bool
+    {
+        if (count($arr1) !== count($arr2)) {
+            return false;
+        }
 
-		sort($arr1);
-		sort($arr2);
+        sort($arr1);
+        sort($arr2);
 
-		return $arr1 === $arr2;
-	}
+        return $arr1 === $arr2;
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param $value
-	 * @param $callback
-	 *
-	 * @return array
-	 */
-	public static function convertFromString($value, $callback = null): array
-	{
-		if (is_scalar($value)) {
-			if (trim($value) === '') {
-				return [];
-			}
+    /**
+     * @param $value
+     * @param $callback
+     *
+     * @return array
+     */
+    public static function convertFromString($value, $callback = null): array
+    {
+        if (is_scalar($value)) {
+            if (trim($value) === '') {
+                return [];
+            }
 
-			$value = array_map('trim', explode(',', (string) $value));
-		}
+            $value = array_map('trim', explode(',', (string) $value));
+        }
 
-		return self::reIndex(array_filter((array) $value, $callback));
-	}
+        return self::reIndex(array_filter((array) $value, $callback));
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param $array
-	 *
-	 * @return array
-	 */
-	public static function reIndex($array): array
-	{
-		return self::isIndexedAndFlat($array) ? array_values($array) : $array;
-	}
+    /**
+     * @param $array
+     *
+     * @return array
+     */
+    public static function reIndex($array): array
+    {
+        return self::isIndexedAndFlat($array) ? array_values($array) : $array;
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param $array
-	 *
-	 * @return bool
-	 */
-	public static function isIndexedAndFlat($array): bool
-	{
-		if (! is_array($array) || array_filter($array, 'is_array')) {
-			return false;
-		}
+    /**
+     * @param $array
+     *
+     * @return bool
+     */
+    public static function isIndexedAndFlat($array): bool
+    {
+        if (! is_array($array) || array_filter($array, 'is_array')) {
+            return false;
+        }
 
-		return wp_is_numeric_array($array);
-	}
+        return wp_is_numeric_array($array);
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param string|null $key
-	 * @param array $array
-	 * @param array $insert_array
-	 *
-	 * @return array
-	 */
-	public static function insertAfter(?string $key, array $array, array $insert_array): array
-	{
-		return self::insert($array, $insert_array, $key, 'after');
-	}
+    /**
+     * @param string|null $key
+     * @param array $array
+     * @param array $insert_array
+     *
+     * @return array
+     */
+    public static function insertAfter(?string $key, array $array, array $insert_array): array
+    {
+        return self::insert($array, $insert_array, $key, 'after');
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param string|null $key
-	 * @param array $array
-	 * @param array $insert_array
-	 *
-	 * @return array
-	 */
-	public static function insertBefore(?string $key, array $array, array $insert_array): array
-	{
-		return self::insert($array, $insert_array, $key, 'before');
-	}
+    /**
+     * @param string|null $key
+     * @param array $array
+     * @param array $insert_array
+     *
+     * @return array
+     */
+    public static function insertBefore(?string $key, array $array, array $insert_array): array
+    {
+        return self::insert($array, $insert_array, $key, 'before');
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param array $array
-	 * @param array $insert_array
-	 * @param string|null $key
-	 * @param string $position
-	 *
-	 * @return array
-	 */
-	public static function insert(array $array, array $insert_array, ?string $key, string $position = 'before'): array
-	{
-		$keyPosition = array_search($key, array_keys($array), true);
-		if ($keyPosition === false) {
-			return array_merge($array, $insert_array);
-		}
+    /**
+     * @param array $array
+     * @param array $insert_array
+     * @param string|null $key
+     * @param string $position
+     *
+     * @return array
+     */
+    public static function insert(array $array, array $insert_array, ?string $key, string $position = 'before'): array
+    {
+        $keyPosition = array_search($key, array_keys($array), true);
+        if ($keyPosition === false) {
+            return array_merge($array, $insert_array);
+        }
 
-		if ('after' === $position) {
-			$keyPosition++;
-		}
+        if ('after' === $position) {
+            $keyPosition++;
+        }
 
-		return array_merge(
-			array_slice($array, 0, $keyPosition),
-			$insert_array,
-			array_slice($array, $keyPosition)
-		);
-	}
+        return array_merge(
+            array_slice($array, 0, $keyPosition),
+            $insert_array,
+            array_slice($array, $keyPosition)
+        );
+    }
 
-	// --------------------------------------------------
+    // --------------------------------------------------
 
-	/**
-	 * @param array $array
-	 * @param $value
-	 * @param $key
-	 *
-	 * @return array
-	 */
-	public static function prepend(array &$array, $value, $key = null): array
-	{
-		if (isset($key)) {
-			$array = [$key => $value] + $array;
-		} else {
-			array_unshift($array, $value);
-		}
+    /**
+     * @param array $array
+     * @param $value
+     * @param $key
+     *
+     * @return array
+     */
+    public static function prepend(array &$array, $value, $key = null): array
+    {
+        if (isset($key)) {
+            $array = [$key => $value] + $array;
+        } else {
+            array_unshift($array, $value);
+        }
 
-		return $array;
-	}
+        return $array;
+    }
 }

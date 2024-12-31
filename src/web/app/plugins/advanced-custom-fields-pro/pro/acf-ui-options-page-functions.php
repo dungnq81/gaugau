@@ -1,8 +1,9 @@
 <?php
+
 /**
  * Helper/wrapper Functions for ACF UI Options pages.
  *
- * @package ACF
+ * @param mixed $id
  */
 
 /**
@@ -11,10 +12,12 @@
  * @since 6.2
  *
  * @param integer|string $id The post ID being queried.
+ *
  * @return array|false The UI options page array.
  */
-function acf_get_ui_options_page( $id ) {
-	return acf_get_internal_post_type( $id, 'acf-ui-options-page' );
+function acf_get_ui_options_page($id)
+{
+    return acf_get_internal_post_type($id, 'acf-ui-options-page');
 }
 
 /**
@@ -23,10 +26,12 @@ function acf_get_ui_options_page( $id ) {
  * @since   6.2
  *
  * @param integer|string $id The post ID.
+ *
  * @return array|false The UI options page array.
  */
-function acf_get_raw_ui_options_page( $id ) {
-	return acf_get_raw_internal_post_type( $id, 'acf-ui-options-page' );
+function acf_get_raw_ui_options_page($id)
+{
+    return acf_get_raw_internal_post_type($id, 'acf-ui-options-page');
 }
 
 /**
@@ -35,10 +40,12 @@ function acf_get_raw_ui_options_page( $id ) {
  * @since 6.2
  *
  * @param integer|string $id The post ID, key, or name.
+ *
  * @return object|boolean The post object, or false on failure.
  */
-function acf_get_ui_options_page_post( $id ) {
-	return acf_get_internal_post_type_post( $id, 'acf-ui-options-page' );
+function acf_get_ui_options_page_post($id)
+{
+    return acf_get_internal_post_type_post($id, 'acf-ui-options-page');
 }
 
 /**
@@ -47,10 +54,12 @@ function acf_get_ui_options_page_post( $id ) {
  * @since 6.2
  *
  * @param string $id The identifier.
+ *
  * @return boolean
  */
-function acf_is_ui_options_page_key( $id ) {
-	return acf_is_internal_post_type_key( $id, 'acf-ui-options-page' );
+function acf_is_ui_options_page_key($id)
+{
+    return acf_is_internal_post_type_key($id, 'acf-ui-options-page');
 }
 
 /**
@@ -59,10 +68,12 @@ function acf_is_ui_options_page_key( $id ) {
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array to validate.
+ *
  * @return array|boolean
  */
-function acf_validate_ui_options_page( array $ui_options_page = array() ) {
-	return acf_validate_internal_post_type( $ui_options_page, 'acf-ui-options-page' );
+function acf_validate_ui_options_page(array $ui_options_page = [])
+{
+    return acf_validate_internal_post_type($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -71,10 +82,12 @@ function acf_validate_ui_options_page( array $ui_options_page = array() ) {
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array.
+ *
  * @return array
  */
-function acf_translate_ui_options_page( array $ui_options_page ) {
-	return acf_translate_internal_post_type( $ui_options_page, 'acf-ui-options-page' );
+function acf_translate_ui_options_page(array $ui_options_page)
+{
+    return acf_translate_internal_post_type($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -83,10 +96,12 @@ function acf_translate_ui_options_page( array $ui_options_page ) {
  * @since 6.2
  *
  * @param array $filter An array of args to filter results by.
+ *
  * @return array
  */
-function acf_get_ui_options_pages( array $filter = array() ) {
-	return acf_get_internal_post_type_posts( 'acf-ui-options-page', $filter );
+function acf_get_ui_options_pages(array $filter = [])
+{
+    return acf_get_internal_post_type_posts('acf-ui-options-page', $filter);
 }
 
 /**
@@ -96,8 +111,9 @@ function acf_get_ui_options_pages( array $filter = array() ) {
  *
  * @return array
  */
-function acf_get_raw_ui_options_pages() {
-	return acf_get_raw_internal_post_type_posts( 'acf-ui-options-page' );
+function acf_get_raw_ui_options_pages()
+{
+    return acf_get_raw_internal_post_type_posts('acf-ui-options-page');
 }
 
 /**
@@ -106,11 +122,13 @@ function acf_get_raw_ui_options_pages() {
  * @since 6.2
  *
  * @param array $ui_options_pages An array of ACF UI options pages.
- * @param array $args             An array of args to filter by.
+ * @param array $args An array of args to filter by.
+ *
  * @return array
  */
-function acf_filter_ui_options_pages( array $ui_options_pages, array $args = array() ) {
-	return acf_filter_internal_post_type_posts( $ui_options_pages, $args, 'acf-ui-options-page' );
+function acf_filter_ui_options_pages(array $ui_options_pages, array $args = [])
+{
+    return acf_filter_internal_post_type_posts($ui_options_pages, $args, 'acf-ui-options-page');
 }
 
 /**
@@ -119,10 +137,12 @@ function acf_filter_ui_options_pages( array $ui_options_pages, array $args = arr
  * @since 6.2
  *
  * @param array $ui_options_page The main ACF UI options page array.
+ *
  * @return array
  */
-function acf_update_ui_options_page( array $ui_options_page ) {
-	return acf_update_internal_post_type( $ui_options_page, 'acf-ui-options-page' );
+function acf_update_ui_options_page(array $ui_options_page)
+{
+    return acf_update_internal_post_type($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -131,10 +151,12 @@ function acf_update_ui_options_page( array $ui_options_page ) {
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array.
+ *
  * @return void
  */
-function acf_flush_ui_options_page_cache( array $ui_options_page ) {
-	acf_flush_internal_post_type_cache( $ui_options_page, 'acf-ui-options-page' );
+function acf_flush_ui_options_page_cache(array $ui_options_page)
+{
+    acf_flush_internal_post_type_cache($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -143,10 +165,12 @@ function acf_flush_ui_options_page_cache( array $ui_options_page ) {
  * @since 6.2
  *
  * @param integer|string $id The ACF UI options page ID, key or name.
+ *
  * @return boolean True if the options page was deleted.
  */
-function acf_delete_ui_options_page( $id = 0 ) {
-	return acf_delete_internal_post_type( $id, 'acf-ui-options-page' );
+function acf_delete_ui_options_page($id = 0)
+{
+    return acf_delete_internal_post_type($id, 'acf-ui-options-page');
 }
 
 /**
@@ -155,10 +179,12 @@ function acf_delete_ui_options_page( $id = 0 ) {
  * @since 6.2
  *
  * @param integer|string $id The UI options page ID, key, or name.
+ *
  * @return boolean True if the options page was trashed.
  */
-function acf_trash_ui_options_page( $id = 0 ) {
-	return acf_trash_internal_post_type( $id, 'acf-ui-options-page' );
+function acf_trash_ui_options_page($id = 0)
+{
+    return acf_trash_internal_post_type($id, 'acf-ui-options-page');
 }
 
 /**
@@ -167,10 +193,12 @@ function acf_trash_ui_options_page( $id = 0 ) {
  * @since 6.2
  *
  * @param integer|string $id The UI options page ID, key, or name.
+ *
  * @return boolean True if the options page was untrashed.
  */
-function acf_untrash_ui_options_page( $id = 0 ) {
-	return acf_untrash_internal_post_type( $id, 'acf-ui-options-page' );
+function acf_untrash_ui_options_page($id = 0)
+{
+    return acf_untrash_internal_post_type($id, 'acf-ui-options-page');
 }
 
 /**
@@ -179,10 +207,12 @@ function acf_untrash_ui_options_page( $id = 0 ) {
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array.
+ *
  * @return boolean
  */
-function acf_is_ui_options_page( $ui_options_page ) {
-	return acf_is_internal_post_type( $ui_options_page, 'acf-ui-options-page' );
+function acf_is_ui_options_page($ui_options_page)
+{
+    return acf_is_internal_post_type($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -190,12 +220,14 @@ function acf_is_ui_options_page( $ui_options_page ) {
  *
  * @since 6.2
  *
- * @param integer|string $id          The ACF UI options page ID, key or name.
- * @param integer        $new_post_id Optional ID to override.
+ * @param integer|string $id The ACF UI options page ID, key or name.
+ * @param integer $new_post_id Optional ID to override.
+ *
  * @return array|boolean The new ACF UI options page, or false on failure.
  */
-function acf_duplicate_ui_options_page( $id = 0, $new_post_id = 0 ) {
-	return acf_duplicate_internal_post_type( $id, $new_post_id, 'acf-ui-options-page' );
+function acf_duplicate_ui_options_page($id = 0, $new_post_id = 0)
+{
+    return acf_duplicate_internal_post_type($id, $new_post_id, 'acf-ui-options-page');
 }
 
 /**
@@ -203,12 +235,14 @@ function acf_duplicate_ui_options_page( $id = 0, $new_post_id = 0 ) {
  *
  * @since 6.2
  *
- * @param integer|string $id       The ACF UI options page ID, key or name.
- * @param boolean        $activate True if the UI options page should be activated.
+ * @param integer|string $id The ACF UI options page ID, key or name.
+ * @param boolean $activate True if the UI options page should be activated.
+ *
  * @return boolean
  */
-function acf_update_ui_options_page_active_status( $id, $activate = true ) {
-	return acf_update_internal_post_type_active_status( $id, $activate, 'acf-ui-options-page' );
+function acf_update_ui_options_page_active_status($id, $activate = true)
+{
+    return acf_update_internal_post_type_active_status($id, $activate, 'acf-ui-options-page');
 }
 
 /**
@@ -217,10 +251,12 @@ function acf_update_ui_options_page_active_status( $id, $activate = true ) {
  * @since 6.2
  *
  * @param integer $post_id The ACF UI options page ID.
+ *
  * @return string
  */
-function acf_get_ui_options_page_edit_link( $post_id ) {
-	return acf_get_internal_post_type_edit_link( $post_id, 'acf-ui-options-page' );
+function acf_get_ui_options_page_edit_link($post_id)
+{
+    return acf_get_internal_post_type_edit_link($post_id, 'acf-ui-options-page');
 }
 
 /**
@@ -229,10 +265,12 @@ function acf_get_ui_options_page_edit_link( $post_id ) {
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array.
+ *
  * @return array
  */
-function acf_prepare_ui_options_page_for_export( array $ui_options_page = array() ) {
-	return acf_prepare_internal_post_type_for_export( $ui_options_page, 'acf-ui-options-page' );
+function acf_prepare_ui_options_page_for_export(array $ui_options_page = [])
+{
+    return acf_prepare_internal_post_type_for_export($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -241,10 +279,12 @@ function acf_prepare_ui_options_page_for_export( array $ui_options_page = array(
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array.
+ *
  * @return string|boolean
  */
-function acf_export_ui_options_page_as_php( array $ui_options_page ) {
-	return acf_export_internal_post_type_as_php( $ui_options_page, 'acf-ui-options-page' );
+function acf_export_ui_options_page_as_php(array $ui_options_page)
+{
+    return acf_export_internal_post_type_as_php($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -253,10 +293,12 @@ function acf_export_ui_options_page_as_php( array $ui_options_page ) {
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array.
+ *
  * @return array
  */
-function acf_prepare_ui_options_page_for_import( array $ui_options_page = array() ) {
-	return acf_prepare_internal_post_type_for_import( $ui_options_page, 'acf-ui-options-page' );
+function acf_prepare_ui_options_page_for_import(array $ui_options_page = [])
+{
+    return acf_prepare_internal_post_type_for_import($ui_options_page, 'acf-ui-options-page');
 }
 
 /**
@@ -265,8 +307,10 @@ function acf_prepare_ui_options_page_for_import( array $ui_options_page = array(
  * @since 6.2
  *
  * @param array $ui_options_page The ACF UI options page array.
+ *
  * @return array The imported options page.
  */
-function acf_import_ui_options_page( array $ui_options_page ) {
-	return acf_import_internal_post_type( $ui_options_page, 'acf-ui-options-page' );
+function acf_import_ui_options_page(array $ui_options_page)
+{
+    return acf_import_internal_post_type($ui_options_page, 'acf-ui-options-page');
 }

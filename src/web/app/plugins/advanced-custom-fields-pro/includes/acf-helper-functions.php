@@ -4,73 +4,83 @@
  * Returns true if the value provided is considered "empty". Allows numbers such as 0.
  *
  * @date    6/7/16
+ *
  * @since   5.4.0
  *
- * @param   mixed $var The value to check.
- * @return  boolean
+ * @param mixed $var The value to check.
+ *
+ * @return boolean
  */
-function acf_is_empty( $var ) {
-	return ( ! $var && ! is_numeric( $var ) );
+function acf_is_empty($var)
+{
+    return (! $var && ! is_numeric($var));
 }
 
 /**
  * Returns true if the value provided is considered "not empty". Allows numbers such as 0.
  *
  * @date    15/7/19
+ *
  * @since   5.8.1
  *
- * @param   mixed $var The value to check.
- * @return  boolean
+ * @param mixed $var The value to check.
+ *
+ * @return boolean
  */
-function acf_not_empty( $var ) {
-	return ( $var || is_numeric( $var ) );
+function acf_not_empty($var)
+{
+    return ($var || is_numeric($var));
 }
 
 /**
  * Returns a unique numeric based id.
  *
  * @date    9/1/19
+ *
  * @since   5.7.10
  *
- * @param   string $prefix The id prefix. Defaults to 'acf'.
- * @return  string
+ * @param string $prefix The id prefix. Defaults to 'acf'.
+ *
+ * @return string
  */
-function acf_uniqid( $prefix = 'acf' ) {
+function acf_uniqid($prefix = 'acf')
+{
+    // Instantiate global counter.
+    global $acf_uniqid;
+    if (! isset($acf_uniqid)) {
+        $acf_uniqid = 1;
+    }
 
-	// Instantiate global counter.
-	global $acf_uniqid;
-	if ( ! isset( $acf_uniqid ) ) {
-		$acf_uniqid = 1;
-	}
-
-	// Return id.
-	return $prefix . '-' . $acf_uniqid++;
+    // Return id.
+    return $prefix . '-' . $acf_uniqid++;
 }
 
 /**
  * Merges together two arrays but with extra functionality to append class names.
  *
  * @date    22/1/19
+ *
  * @since   5.7.10
  *
- * @param   array $array1 An array of attributes.
- * @param   array $array2 An array of attributes.
- * @return  array
+ * @param array $array1 An array of attributes.
+ * @param array $array2 An array of attributes.
+ *
+ * @return array
  */
-function acf_merge_attributes( $array1, $array2 ) {
+function acf_merge_attributes($array1, $array2)
+{
+    // Merge together attributes.
+    $array3 = array_merge($array1, $array2);
 
-	// Merge together attributes.
-	$array3 = array_merge( $array1, $array2 );
+    // Append together special attributes.
+    foreach (['class', 'style'] as $key) {
+        if (isset($array1[ $key ]) && isset($array2[ $key ])) {
+            $array3[ $key ] = trim($array1[ $key ]) . ' ' . trim($array2[ $key ]);
+        }
+    }
 
-	// Append together special attributes.
-	foreach ( array( 'class', 'style' ) as $key ) {
-		if ( isset( $array1[ $key ] ) && isset( $array2[ $key ] ) ) {
-			$array3[ $key ] = trim( $array1[ $key ] ) . ' ' . trim( $array2[ $key ] );
-		}
-	}
-
-	// Return.
-	return $array3;
+    // Return.
+    return $array3;
 }
 
 /**
@@ -79,23 +89,26 @@ function acf_merge_attributes( $array1, $array2 ) {
  * Returns a filtered cache key.
  *
  * @date    25/1/19
+ *
  * @since   5.7.11
  *
- * @param   string $key The cache key.
- * @return  string
+ * @param string $key The cache key.
+ *
+ * @return string
  */
-function acf_cache_key( $key = '' ) {
-
-	/**
-	 * Filters the cache key.
-	 *
-	 * @date    25/1/19
-	 * @since   5.7.11
-	 *
-	 * @param   string $key The cache key.
-	 * @param   string $original_key The original cache key.
-	 */
-	return apply_filters( 'acf/get_cache_key', $key, $key );
+function acf_cache_key($key = '')
+{
+    /**
+     * Filters the cache key.
+     *
+     * @date    25/1/19
+     *
+     * @since   5.7.11
+     *
+     * @param string $key The cache key.
+     * @param string $original_key The original cache key.
+     */
+    return apply_filters('acf/get_cache_key', $key, $key);
 }
 
 /**
@@ -104,34 +117,42 @@ function acf_cache_key( $key = '' ) {
  * Returns an array of $_REQUEST values using the provided defaults.
  *
  * @date    28/2/19
+ *
  * @since   5.7.13
  *
- * @param   array $args An array of args.
- * @return  array
+ * @param array $args An array of args.
+ *
+ * @return array
  */
-function acf_request_args( $args = array() ) {
-	foreach ( $args as $k => $v ) {
-		$args[ $k ] = isset( $_REQUEST[ $k ] ) ? acf_sanitize_request_args( $_REQUEST[ $k ] ) : $args[ $k ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
-	}
-	return $args;
+function acf_request_args($args = [])
+{
+    foreach ($args as $k => $v) {
+        $args[ $k ] = isset($_REQUEST[ $k ]) ? acf_sanitize_request_args($_REQUEST[ $k ]) : $args[ $k ]; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Verified elsewhere.
+    }
+
+    return $args;
 }
 
 /**
  * Returns a single $_REQUEST arg with fallback.
  *
  * @date    23/10/20
+ *
  * @since   5.9.2
  *
- * @param   string $key     The property name.
- * @param   mixed  $default The default value to fallback to.
- * @return  mixed
+ * @param string $key The property name.
+ * @param mixed $default The default value to fallback to.
+ * @param mixed $name
+ *
+ * @return mixed
  */
-function acf_request_arg( $name = '', $default = null ) {
-	return isset( $_REQUEST[ $name ] ) ? acf_sanitize_request_args( $_REQUEST[ $name ] ) : $default; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+function acf_request_arg($name = '', $default = null)
+{
+    return isset($_REQUEST[ $name ]) ? acf_sanitize_request_args($_REQUEST[ $name ]) : $default; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 }
 
 // Register store.
-acf_register_store( 'filters' );
+acf_register_store('filters');
 
 /**
  * acf_enable_filter
@@ -139,13 +160,17 @@ acf_register_store( 'filters' );
  * Enables a filter with the given name.
  *
  * @date    14/7/16
+ *
  * @since   5.4.0
  *
  * @param   string name The modifer name.
- * @return  void
+ * @param mixed $name
+ *
+ * @return void
  */
-function acf_enable_filter( $name = '' ) {
-	acf_get_store( 'filters' )->set( $name, true );
+function acf_enable_filter($name = '')
+{
+    acf_get_store('filters')->set($name, true);
 }
 
 /**
@@ -154,13 +179,17 @@ function acf_enable_filter( $name = '' ) {
  * Disables a filter with the given name.
  *
  * @date    14/7/16
+ *
  * @since   5.4.0
  *
  * @param   string name The modifer name.
- * @return  void
+ * @param mixed $name
+ *
+ * @return void
  */
-function acf_disable_filter( $name = '' ) {
-	acf_get_store( 'filters' )->set( $name, false );
+function acf_disable_filter($name = '')
+{
+    acf_get_store('filters')->set($name, false);
 }
 
 /**
@@ -169,13 +198,17 @@ function acf_disable_filter( $name = '' ) {
  * Returns the state of a filter for the given name.
  *
  * @date    14/7/16
+ *
  * @since   5.4.0
  *
  * @param   string name The modifer name.
- * @return  array
+ * @param mixed $name
+ *
+ * @return array
  */
-function acf_is_filter_enabled( $name = '' ) {
-	return acf_get_store( 'filters' )->get( $name );
+function acf_is_filter_enabled($name = '')
+{
+    return acf_get_store('filters')->get($name);
 }
 
 /**
@@ -184,13 +217,16 @@ function acf_is_filter_enabled( $name = '' ) {
  * Returns an array of filters in their current state.
  *
  * @date    14/7/16
+ *
  * @since   5.4.0
  *
  * @param   void
- * @return  array
+ *
+ * @return array
  */
-function acf_get_filters() {
-	return acf_get_store( 'filters' )->get();
+function acf_get_filters()
+{
+    return acf_get_store('filters')->get();
 }
 
 /**
@@ -199,13 +235,16 @@ function acf_get_filters() {
  * Sets an array of filter states.
  *
  * @date    14/7/16
+ *
  * @since   5.4.0
  *
- * @param   array $filters An Array of modifers
- * @return  array
+ * @param array $filters An Array of modifers
+ *
+ * @return array
  */
-function acf_set_filters( $filters = array() ) {
-	acf_get_store( 'filters' )->set( $filters );
+function acf_set_filters($filters = [])
+{
+    acf_get_store('filters')->set($filters);
 }
 
 /**
@@ -214,21 +253,23 @@ function acf_set_filters( $filters = array() ) {
  * Disables all filters and returns the previous state.
  *
  * @date    14/7/16
+ *
  * @since   5.4.0
  *
  * @param   void
- * @return  array
+ *
+ * @return array
  */
-function acf_disable_filters() {
+function acf_disable_filters()
+{
+    // Get state.
+    $prev_state = acf_get_filters();
 
-	// Get state.
-	$prev_state = acf_get_filters();
+    // Set all modifers as false.
+    acf_set_filters(array_map('__return_false', $prev_state));
 
-	// Set all modifers as false.
-	acf_set_filters( array_map( '__return_false', $prev_state ) );
-
-	// Return prev state.
-	return $prev_state;
+    // Return prev state.
+    return $prev_state;
 }
 
 /**
@@ -237,27 +278,29 @@ function acf_disable_filters() {
  * Enables all or an array of specific filters and returns the previous state.
  *
  * @date    14/7/16
+ *
  * @since   5.4.0
  *
- * @param   array $filters An Array of modifers
- * @return  array
+ * @param array $filters An Array of modifers
+ *
+ * @return array
  */
-function acf_enable_filters( $filters = array() ) {
+function acf_enable_filters($filters = [])
+{
+    // Get state.
+    $prev_state = acf_get_filters();
 
-	// Get state.
-	$prev_state = acf_get_filters();
+    // Allow specific filters to be enabled.
+    if ($filters) {
+        acf_set_filters($filters);
 
-	// Allow specific filters to be enabled.
-	if ( $filters ) {
-		acf_set_filters( $filters );
+        // Set all modifers as true.
+    } else {
+        acf_set_filters(array_map('__return_true', $prev_state));
+    }
 
-		// Set all modifers as true.
-	} else {
-		acf_set_filters( array_map( '__return_true', $prev_state ) );
-	}
-
-	// Return prev state.
-	return $prev_state;
+    // Return prev state.
+    return $prev_state;
 }
 
 /**
@@ -266,28 +309,30 @@ function acf_enable_filters( $filters = array() ) {
  * Parses the provided value for an ID.
  *
  * @date    29/3/19
+ *
  * @since   5.7.14
  *
- * @param   mixed $value A value to parse.
- * @return  integer
+ * @param mixed $value A value to parse.
+ *
+ * @return integer
  */
-function acf_idval( $value ) {
+function acf_idval($value)
+{
+    // Check if value is numeric.
+    if (is_numeric($value)) {
+        return (int) $value;
 
-	// Check if value is numeric.
-	if ( is_numeric( $value ) ) {
-		return (int) $value;
+        // Check if value is array.
+    } elseif (is_array($value)) {
+        return (int) isset($value['ID']) ? $value['ID'] : 0;
 
-		// Check if value is array.
-	} elseif ( is_array( $value ) ) {
-		return (int) isset( $value['ID'] ) ? $value['ID'] : 0;
+        // Check if value is object.
+    } elseif (is_object($value)) {
+        return (int) isset($value->ID) ? $value->ID : 0;
+    }
 
-		// Check if value is object.
-	} elseif ( is_object( $value ) ) {
-		return (int) isset( $value->ID ) ? $value->ID : 0;
-	}
-
-	// Return default.
-	return 0;
+    // Return default.
+    return 0;
 }
 
 /**
@@ -296,16 +341,20 @@ function acf_idval( $value ) {
  * Checks value for potential id value.
  *
  * @date    6/4/19
+ *
  * @since   5.7.14
  *
- * @param   mixed $value A value to parse.
- * @return  mixed
+ * @param mixed $value A value to parse.
+ *
+ * @return mixed
  */
-function acf_maybe_idval( $value ) {
-	if ( $id = acf_idval( $value ) ) {
-		return $id;
-	}
-	return $value;
+function acf_maybe_idval($value)
+{
+    if ($id = acf_idval($value)) {
+        return $id;
+    }
+
+    return $value;
 }
 
 /**
@@ -313,19 +362,21 @@ function acf_maybe_idval( $value ) {
  * work with both single values and arrays.
  *
  * @param mixed $value Either a single value or an array of values.
+ *
  * @return mixed
  */
-function acf_format_numerics( $value ) {
-	if ( is_array( $value ) ) {
-		return array_map(
-			function ( $v ) {
-				return is_numeric( $v ) ? $v + 0 : $v;
-			},
-			$value
-		);
-	}
+function acf_format_numerics($value)
+{
+    if (is_array($value)) {
+        return array_map(
+            function ($v) {
+                return is_numeric($v) ? $v + 0 : $v;
+            },
+            $value
+        );
+    }
 
-	return is_numeric( $value ) ? $value + 0 : $value;
+    return is_numeric($value) ? $value + 0 : $value;
 }
 
 /**
@@ -334,13 +385,16 @@ function acf_format_numerics( $value ) {
  * Casts the provided value as eiter an int or float using a simple hack.
  *
  * @date    11/4/19
+ *
  * @since   5.7.14
  *
- * @param   mixed $value A value to parse.
- * @return  (int|float)
+ * @param mixed $value A value to parse.
+ *
+ * @return (int|float)
  */
-function acf_numval( $value ) {
-	return ( intval( $value ) == floatval( $value ) ) ? intval( $value ) : floatval( $value );
+function acf_numval($value)
+{
+    return (intval($value) == floatval($value)) ? intval($value) : floatval($value);
 }
 
 /**
@@ -349,56 +403,66 @@ function acf_numval( $value ) {
  * Returns an id attribute friendly string.
  *
  * @date    24/12/17
+ *
  * @since   5.6.5
  *
- * @param   string $str The string to convert.
- * @return  string
+ * @param string $str The string to convert.
+ *
+ * @return string
  */
-function acf_idify( $str = '' ) {
-	return str_replace( array( '][', '[', ']' ), array( '-', '-', '' ), strtolower( $str ) );
+function acf_idify($str = '')
+{
+    return str_replace(['][', '[', ']'], ['-', '-', ''], strtolower($str));
 }
 
 /**
  * Returns a slug friendly string.
  *
  * @date    24/12/17
+ *
  * @since   5.6.5
  *
- * @param   string $str  The string to convert.
- * @param   string $glue The glue between each slug piece.
- * @return  string
+ * @param string $str The string to convert.
+ * @param string $glue The glue between each slug piece.
+ *
+ * @return string
  */
-function acf_slugify( $str = '', $glue = '-' ) {
-	$raw  = $str;
-	$slug = str_replace( array( '_', '-', '/', ' ' ), $glue, strtolower( remove_accents( $raw ) ) );
-	$slug = preg_replace( '/[^A-Za-z0-9' . preg_quote( $glue ) . ']/', '', $slug );
+function acf_slugify($str = '', $glue = '-')
+{
+    $raw  = $str;
+    $slug = str_replace(['_', '-', '/', ' '], $glue, strtolower(remove_accents($raw)));
+    $slug = preg_replace('/[^A-Za-z0-9' . preg_quote($glue) . ']/', '', $slug);
 
-	/**
-	 * Filters the slug created by acf_slugify().
-	 *
-	 * @since 5.11.4
-	 *
-	 * @param string $slug The newly created slug.
-	 * @param string $raw  The original string.
-	 * @param string $glue The separator used to join the string into a slug.
-	 */
-	return apply_filters( 'acf/slugify', $slug, $raw, $glue );
+    /**
+     * Filters the slug created by acf_slugify().
+     *
+     * @since 5.11.4
+     *
+     * @param string $slug The newly created slug.
+     * @param string $raw The original string.
+     * @param string $glue The separator used to join the string into a slug.
+     */
+    return apply_filters('acf/slugify', $slug, $raw, $glue);
 }
 
 /**
  * Returns a string with correct full stop punctuation.
  *
  * @date    12/7/19
+ *
  * @since   5.8.2
  *
- * @param   string $str The string to format.
- * @return  string
+ * @param string $str The string to format.
+ *
+ * @return string
  */
-function acf_punctify( $str = '' ) {
-	if ( substr( trim( strip_tags( $str ) ), -1 ) !== '.' ) {
-		return trim( $str ) . '.';
-	}
-	return trim( $str );
+function acf_punctify($str = '')
+{
+    if (substr(trim(strip_tags($str)), -1) !== '.') {
+        return trim($str) . '.';
+    }
+
+    return trim($str);
 }
 
 /**
@@ -407,22 +471,25 @@ function acf_punctify( $str = '' ) {
  * Returns true if ACF already did an event.
  *
  * @date    30/8/19
+ *
  * @since   5.8.1
  *
- * @param   string $name The name of the event.
- * @return  boolean
+ * @param string $name The name of the event.
+ *
+ * @return boolean
  */
-function acf_did( $name ) {
+function acf_did($name)
+{
+    // Return true if already did the event (preventing event).
+    if (acf_get_data("acf_did_$name")) {
+        return true;
 
-	// Return true if already did the event (preventing event).
-	if ( acf_get_data( "acf_did_$name" ) ) {
-		return true;
+        // Otherwise, update store and return false (alowing event).
+    } else {
+        acf_set_data("acf_did_$name", true);
 
-		// Otherwise, update store and return false (alowing event).
-	} else {
-		acf_set_data( "acf_did_$name", true );
-		return false;
-	}
+        return false;
+    }
 }
 
 /**
@@ -435,61 +502,75 @@ function acf_did( $name ) {
  * 4. Use mb_strlen() to accomodate special characters.
  *
  * @date    04/06/2020
+ *
  * @since   5.9.0
  *
- * @param   string $str The string to review.
- * @return  integer
+ * @param string $str The string to review.
+ *
+ * @return integer
  */
-function acf_strlen( $str ) {
-	return mb_strlen( str_replace( "\r\n", "\n", wp_specialchars_decode( wp_unslash( $str ) ) ) );
+function acf_strlen($str)
+{
+    return mb_strlen(str_replace("\r\n", "\n", wp_specialchars_decode(wp_unslash($str))));
 }
 
 /**
  * Returns a value with default fallback.
  *
  * @date    6/4/20
+ *
  * @since   5.9.0
  *
- * @param   mixed $value         The value.
- * @param   mixed $default_value The default value.
- * @return  mixed
+ * @param mixed $value The value.
+ * @param mixed $default_value The default value.
+ *
+ * @return mixed
  */
-function acf_with_default( $value, $default_value ) {
-	return $value ? $value : $default_value;
+function acf_with_default($value, $default_value)
+{
+    return $value ? $value : $default_value;
 }
 
 /**
  * Returns the current priority of a running action.
  *
  * @date    14/07/2020
+ *
  * @since   5.9.0
  *
- * @param   string $action The action name.
- * @return  integer|boolean
+ * @param string $action The action name.
+ *
+ * @return integer|boolean
  */
-function acf_doing_action( $action ) {
-	global $wp_filter;
-	if ( isset( $wp_filter[ $action ] ) ) {
-		return $wp_filter[ $action ]->current_priority();
-	}
-	return false;
+function acf_doing_action($action)
+{
+    global $wp_filter;
+    if (isset($wp_filter[ $action ])) {
+        return $wp_filter[ $action ]->current_priority();
+    }
+
+    return false;
 }
 
 /**
  * Returns the current URL.
  *
  * @date    23/01/2015
+ *
  * @since   5.1.5
  *
  * @param   void
- * @return  string
+ *
+ * @return string
  */
-function acf_get_current_url() {
-	// Ensure props exist to avoid PHP Notice during CLI commands.
-	if ( isset( $_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'] ) ) {
-		return ( is_ssl() ? 'https' : 'http' ) . '://' . filter_var( $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL );
-	}
-	return '';
+function acf_get_current_url()
+{
+    // Ensure props exist to avoid PHP Notice during CLI commands.
+    if (isset($_SERVER['HTTP_HOST'], $_SERVER['REQUEST_URI'])) {
+        return (is_ssl() ? 'https' : 'http') . '://' . filter_var($_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL);
+    }
+
+    return '';
 }
 
 /**
@@ -497,43 +578,45 @@ function acf_get_current_url() {
  *
  * @since 6.0.0
  *
- * @param string  $url      The URL to be tagged.
- * @param string  $campaign The campaign tag.
- * @param string  $content  The UTM content tag.
- * @param boolean $anchor   An optional anchor ID.
- * @param string  $source   An optional UTM source tag.
- * @param string  $medium   An optional UTM medium tag.
+ * @param string $url The URL to be tagged.
+ * @param string $campaign The campaign tag.
+ * @param string $content The UTM content tag.
+ * @param boolean $anchor An optional anchor ID.
+ * @param string $source An optional UTM source tag.
+ * @param string $medium An optional UTM medium tag.
+ *
  * @return string
  */
-function acf_add_url_utm_tags( $url, $campaign, $content, $anchor = false, $source = '', $medium = '' ) {
-	$anchor_url = $anchor ? '#' . $anchor : '';
-	$medium     = ! empty( $medium ) ? $medium : 'insideplugin';
+function acf_add_url_utm_tags($url, $campaign, $content, $anchor = false, $source = '', $medium = '')
+{
+    $anchor_url = $anchor ? '#' . $anchor : '';
+    $medium     = ! empty($medium) ? $medium : 'insideplugin';
 
-	if ( empty( $source ) ) {
-		$source = acf_is_pro() ? 'ACF PRO' : 'ACF Free';
-	}
+    if (empty($source)) {
+        $source = acf_is_pro() ? 'ACF PRO' : 'ACF Free';
+    }
 
-	$query = http_build_query(
-		apply_filters(
-			'acf/admin/acf_url_utm_parameters',
-			array(
-				'utm_source'   => $source,
-				'utm_medium'   => $medium,
-				'utm_campaign' => $campaign,
-				'utm_content'  => $content,
-			)
-		)
-	);
+    $query = http_build_query(
+        apply_filters(
+            'acf/admin/acf_url_utm_parameters',
+            [
+                'utm_source'   => $source,
+                'utm_medium'   => $medium,
+                'utm_campaign' => $campaign,
+                'utm_content'  => $content,
+            ]
+        )
+    );
 
-	if ( $query ) {
-		if ( strpos( $url, '?' ) !== false ) {
-			$query = '&' . $query;
-		} else {
-			$query = '?' . $query;
-		}
-	}
+    if ($query) {
+        if (strpos($url, '?') !== false) {
+            $query = '&' . $query;
+        } else {
+            $query = '?' . $query;
+        }
+    }
 
-	return esc_url( $url . $query . $anchor_url );
+    return esc_url($url . $query . $anchor_url);
 }
 
 /**
@@ -543,27 +626,29 @@ function acf_add_url_utm_tags( $url, $campaign, $content, $anchor = false, $sour
  *
  * @return array|boolean|float|integer|mixed|string
  */
-function acf_sanitize_request_args( $args = array() ) {
-	switch ( gettype( $args ) ) {
-		case 'boolean':
-			return (bool) $args;
-		case 'integer':
-			return (int) $args;
-		case 'double':
-			return (float) $args;
-		case 'array':
-			$sanitized = array();
-			foreach ( $args as $key => $value ) {
-				$key               = sanitize_text_field( $key );
-				$sanitized[ $key ] = acf_sanitize_request_args( $value );
-			}
-			return $sanitized;
-		case 'object':
-			return wp_kses_post_deep( $args );
-		case 'string':
-		default:
-			return wp_kses( $args, 'acf' );
-	}
+function acf_sanitize_request_args($args = [])
+{
+    switch (gettype($args)) {
+        case 'boolean':
+            return (bool) $args;
+        case 'integer':
+            return (int) $args;
+        case 'double':
+            return (float) $args;
+        case 'array':
+            $sanitized = [];
+            foreach ($args as $key => $value) {
+                $key               = sanitize_text_field($key);
+                $sanitized[ $key ] = acf_sanitize_request_args($value);
+            }
+
+            return $sanitized;
+        case 'object':
+            return wp_kses_post_deep($args);
+        case 'string':
+        default:
+            return wp_kses($args, 'acf');
+    }
 }
 
 /**
@@ -575,39 +660,41 @@ function acf_sanitize_request_args( $args = array() ) {
  *
  * @return array
  */
-function acf_sanitize_files_array( array $args = array() ) {
-	$defaults = array(
-		'name'     => '',
-		'tmp_name' => '',
-		'type'     => '',
-		'size'     => 0,
-		'error'    => '',
-	);
+function acf_sanitize_files_array(array $args = [])
+{
+    $defaults = [
+        'name'     => '',
+        'tmp_name' => '',
+        'type'     => '',
+        'size'     => 0,
+        'error'    => '',
+    ];
 
-	$args = wp_parse_args( $args, $defaults );
+    $args = wp_parse_args($args, $defaults);
 
-	if ( empty( $args['name'] ) ) {
-		return $defaults;
-	}
+    if (empty($args['name'])) {
+        return $defaults;
+    }
 
-	if ( is_array( $args['name'] ) ) {
-		$files             = array();
-		$files['name']     = acf_sanitize_files_value_array( $args['name'], 'sanitize_file_name' );
-		$files['tmp_name'] = acf_sanitize_files_value_array( $args['tmp_name'], 'sanitize_text_field' );
-		$files['type']     = acf_sanitize_files_value_array( $args['type'], 'sanitize_text_field' );
-		$files['size']     = acf_sanitize_files_value_array( $args['size'], 'absint' );
-		$files['error']    = acf_sanitize_files_value_array( $args['error'], 'absint' );
-		return $files;
-	}
+    if (is_array($args['name'])) {
+        $files             = [];
+        $files['name']     = acf_sanitize_files_value_array($args['name'], 'sanitize_file_name');
+        $files['tmp_name'] = acf_sanitize_files_value_array($args['tmp_name'], 'sanitize_text_field');
+        $files['type']     = acf_sanitize_files_value_array($args['type'], 'sanitize_text_field');
+        $files['size']     = acf_sanitize_files_value_array($args['size'], 'absint');
+        $files['error']    = acf_sanitize_files_value_array($args['error'], 'absint');
 
-	$file             = array();
-	$file['name']     = sanitize_file_name( $args['name'] );
-	$file['tmp_name'] = sanitize_text_field( $args['tmp_name'] );
-	$file['type']     = sanitize_text_field( $args['type'] );
-	$file['size']     = absint( $args['size'] );
-	$file['error']    = absint( $args['error'] );
+        return $files;
+    }
 
-	return $file;
+    $file             = [];
+    $file['name']     = sanitize_file_name($args['name']);
+    $file['tmp_name'] = sanitize_text_field($args['tmp_name']);
+    $file['type']     = sanitize_text_field($args['type']);
+    $file['size']     = absint($args['size']);
+    $file['error']    = absint($args['error']);
+
+    return $file;
 }
 
 /**
@@ -617,28 +704,30 @@ function acf_sanitize_files_array( array $args = array() ) {
  *
  * @since 6.0.5
  *
- * @param array  $array             The file upload array.
+ * @param array $array The file upload array.
  * @param string $sanitize_function Callback used to sanitize array value.
+ *
  * @return array
  */
-function acf_sanitize_files_value_array( $array, $sanitize_function ) {
-	if ( ! function_exists( $sanitize_function ) ) {
-		return $array;
-	}
+function acf_sanitize_files_value_array($array, $sanitize_function)
+{
+    if (! function_exists($sanitize_function)) {
+        return $array;
+    }
 
-	if ( ! is_array( $array ) ) {
-		return $sanitize_function( $array );
-	}
+    if (! is_array($array)) {
+        return $sanitize_function($array);
+    }
 
-	foreach ( $array as $key => $value ) {
-		if ( is_array( $value ) ) {
-			$array[ $key ] = acf_sanitize_files_value_array( $value, $sanitize_function );
-		} else {
-			$array[ $key ] = $sanitize_function( $value );
-		}
-	}
+    foreach ($array as $key => $value) {
+        if (is_array($value)) {
+            $array[ $key ] = acf_sanitize_files_value_array($value, $sanitize_function);
+        } else {
+            $array[ $key ] = $sanitize_function($value);
+        }
+    }
 
-	return $array;
+    return $array;
 }
 
 /**
@@ -647,14 +736,16 @@ function acf_sanitize_files_value_array( $array, $sanitize_function ) {
  * @since 6.1
  *
  * @param string $data String to be unserialized, if serialized.
+ *
  * @return mixed The unserialized, or original data.
  */
-function acf_maybe_unserialize( $data ) {
-	if ( is_serialized( $data ) ) { // Don't attempt to unserialize data that wasn't serialized going in.
-		return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); //phpcs:ignore -- allowed classes is false.
-	}
+function acf_maybe_unserialize($data)
+{
+    if (is_serialized($data)) { // Don't attempt to unserialize data that wasn't serialized going in.
+        return @unserialize(trim($data), ['allowed_classes' => false]); //phpcs:ignore -- allowed classes is false.
+    }
 
-	return $data;
+    return $data;
 }
 
 /**
@@ -664,8 +755,9 @@ function acf_maybe_unserialize( $data ) {
  *
  * @return boolean True if the current install is ACF PRO
  */
-function acf_is_pro() {
-	return defined( 'ACF_PRO' ) && ACF_PRO;
+function acf_is_pro()
+{
+    return defined('ACF_PRO') && ACF_PRO;
 }
 
 /**
@@ -675,8 +767,9 @@ function acf_is_pro() {
  *
  * @return boolean True if the current install version contains a dash, indicating a alpha, beta or RC release.
  */
-function acf_is_beta() {
-	return defined( 'ACF_VERSION' ) && strpos( ACF_VERSION, '-' ) !== false;
+function acf_is_beta()
+{
+    return defined('ACF_VERSION') && strpos(ACF_VERSION, '-') !== false;
 }
 
 /**
@@ -688,24 +781,25 @@ function acf_is_beta() {
  *
  * @return string|boolean The (string) version of ACF when it was first activated, or false (boolean) if the version could not be determined.
  */
-function acf_get_version_when_first_activated() {
-	// Check if ACF is network-activated on a multisite.
-	if ( is_multisite() ) {
-		$acf_dir_and_filename = basename( ACF_PATH ) . '/acf.php';
-		$plugins              = get_site_option( 'active_sitewide_plugins' );
+function acf_get_version_when_first_activated()
+{
+    // Check if ACF is network-activated on a multisite.
+    if (is_multisite()) {
+        $acf_dir_and_filename = basename(ACF_PATH) . '/acf.php';
+        $plugins              = get_site_option('active_sitewide_plugins');
 
-		if ( isset( $plugins[ $acf_dir_and_filename ] ) ) {
-			$main_site_id = get_main_site_id();
+        if (isset($plugins[ $acf_dir_and_filename ])) {
+            $main_site_id = get_main_site_id();
 
-			if ( empty( $main_site_id ) ) {
-				return false;
-			}
+            if (empty($main_site_id)) {
+                return false;
+            }
 
-			// ACF is network activated, so get the version from main site's options.
-			return get_blog_option( $main_site_id, 'acf_first_activated_version', false );
-		}
-	}
+            // ACF is network activated, so get the version from main site's options.
+            return get_blog_option($main_site_id, 'acf_first_activated_version', false);
+        }
+    }
 
-	// Check if ACF is activated on this single site.
-	return get_option( 'acf_first_activated_version', false );
+    // Check if ACF is activated on this single site.
+    return get_option('acf_first_activated_version', false);
 }

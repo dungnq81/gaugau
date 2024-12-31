@@ -3,8 +3,6 @@
 /**
  * The template for displaying the footer.
  * Contains the body & HTML closing tags.
- *
- * @package HD
  */
 
 \defined('ABSPATH') || die;
@@ -34,7 +32,7 @@ do_action('before_footer_action');
      */
     do_action('footer_action');
 
-    ?>
+?>
 </footer><!-- #footer -->
 <?php
 
